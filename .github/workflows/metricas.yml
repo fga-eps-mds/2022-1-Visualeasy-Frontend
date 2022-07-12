@@ -1,0 +1,25 @@
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+
+      - name: Executar testes
+        run:  jest --coverage --outputFile=test.json --json
+
+      - name: Coletar métricas
+        run: python parser.py fga-eps-mds_${{ github.event.repository.name }}
+      
+      # Aqui fica a critério do grupo como disponibilizar o arquivo
+      # em uma release
+
+      # Aqui fica a critério do grupo como enviar o arquivo para o
+      # repositório de documentação
