@@ -15,10 +15,10 @@ jobs:
       run:  git fetch origin main
     - name: Instalar dependencias
       run:  npm install
-    - name: Instalar Jest
-      run:  npm install -g jest
-    - name: Executar testes
-      run:  jest --coverage
+    # - name: Instalar Jest
+    #   run:  npm install -g jest
+    # - name: Executar testes
+    #   run:  jest --coverage
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
