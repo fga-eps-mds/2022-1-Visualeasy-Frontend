@@ -1,8 +1,19 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
+import { ChakraProvider } from '@chakra-ui/react'
+import { extendTheme } from '@chakra-ui/react'
 
-import GlobalStyles from 'styles/global'
+// 2. Extend the theme to include custom colors, fonts, etc
+const colors = {
+  brand: {
+    900: '#1a365d',
+    800: '#153e75',
+    700: '#2a69ac'
+  }
+}
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const theme = extendTheme({ colors })
 function App({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -17,8 +28,9 @@ function App({ Component, pageProps }: AppProps) {
           content="A simple project starter to work with TypeScript, React, NextJS and Styled Components"
         />
       </Head>
-      <GlobalStyles />
-      <Component {...pageProps} />
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
     </>
   )
 }
