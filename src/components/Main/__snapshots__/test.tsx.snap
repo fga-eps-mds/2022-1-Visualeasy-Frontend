@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Main /> should render the heading 1`] = `
+<div
+  class="chakra-stack css-14witgw"
+>
+  <h1>
+    main
+  </h1>
+</div>
+`

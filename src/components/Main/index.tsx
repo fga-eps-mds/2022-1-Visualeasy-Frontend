@@ -3,7 +3,7 @@ const Main = () => {
   return (
     <>
       <VStack spacing={8}>
-        <p>MAin</p>
+        <h1>main</h1>
       </VStack>
     </>
   )
