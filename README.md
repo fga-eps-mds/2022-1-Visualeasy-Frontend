@@ -7,6 +7,7 @@ This is a [Next.js](https://nextjs.org/) boilerplate to be used in a course call
 
 This project uses lot of stuff as:
 
+
 - [TypeScript](https://www.typescriptlang.org/)
 - [NextJS](https://nextjs.org/)
 - [Styled Components](https://styled-components.com/)
