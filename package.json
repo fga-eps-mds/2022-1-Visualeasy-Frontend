@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.2",
-    "@chakra-ui/react": "^2.2.1",
+    "@chakra-ui/react": "^2.2.4",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "browserslist": "^4.21.1",
