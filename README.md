@@ -16,7 +16,7 @@
 
 ## ℹ️ Sobre o projeto
 <p align="justify">O Visualeasy é uma aplicação Web que fornece uma visualização gráfica de métricas históricas de variáveis de produção.</p>
-<p align="justify">O projeto é desenvolvido por alunos de gadruação em engenharia de Software da Universidade de Brasília - do Campus do Gama (FGA) - para a disciplina de Engenharia de Produto de Software (EPS).</p>
+<p align="justify">O projeto é desenvolvido por alunos de graduação em engenharia de Software da Universidade de Brasília - do Campus do Gama (FGA) - para a disciplina de Engenharia de Produto de Software (EPS).</p>
 <p align="justify">A aplicação Visualeasy proporciona a visualização de dados de forma gráfica ao longo do tempo, para auxiliar na tomada de decisões.</p>
 
 ## 🐳 Guia de Uso do Docker
@@ -38,7 +38,7 @@ O projeto é separado em diferentes pacotes, sendo que cada microserviço está 
 &emsp;&emsp; Caso entrar no bash no container (Ele tem que estar rodando):
 
  ```terminal
-  docker exec -it web /bin/bash
+  docker exec -it frontend /bin/bash
  ```
  &emsp;&emsp; Para rodar os testes dentro container, execute o comando anterior e depois:
 
