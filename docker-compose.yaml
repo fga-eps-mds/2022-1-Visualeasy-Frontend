@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  server:
+    container_name: web
+    build: .
+    volumes:
+      - .:/visualeasy-front 
+      - /visualeasy-front/node_modules
+    ports:
+      - '3010:3000'
+    environment:
+      - NODE_ENV=development
