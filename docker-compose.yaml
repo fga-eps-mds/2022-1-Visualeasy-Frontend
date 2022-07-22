@@ -1,12 +1,13 @@
 version: "3.9"
 services:
   server:
-    container_name: web
+    image: docker-nextjs-dev
     build: .
+    container_name: frontend
     volumes:
-      - .:/visualeasy-front 
-      - /visualeasy-front/node_modules
+      - ./src/pages:/visualeasy-front/src/pages
+      - ./src/public:/visualeasy-front/src/public
+      - ./src/styles:/visualeasy-front/src/styles
+
     ports:
       - '3000:3000'
-    environment:
-      - NODE_ENV=development
