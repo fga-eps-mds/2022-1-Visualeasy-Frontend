@@ -1,4 +1,4 @@
-# 2022.1-Visualeasy-Controle
+# 2022.1-Visualeasy-Frontend
 
 
 <p align="center">
@@ -38,7 +38,7 @@ O projeto é separado em diferentes pacotes, sendo que cada microserviço está 
 &emsp;&emsp; Caso entrar no bash no container (Ele tem que estar rodando):
 
  ```terminal
-  docker exec -it frontend /bin/bash
+  docker exec -it frontend /bin/sh
  ```
  &emsp;&emsp; Para rodar os testes dentro container, execute o comando anterior e depois:
 

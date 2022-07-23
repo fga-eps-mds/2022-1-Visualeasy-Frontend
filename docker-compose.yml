@@ -3,15 +3,15 @@
 version: "3"
 
 services:
-  web:
+  front-end:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: teste
+    container_name: frontend
     restart: always
     volumes:
-      - ./:/app
-      - /app/node_modules
-      - /app/.next
+      - ./:/visualeasy-front
+      - /visualeasy-front/node_modules
+      - /visualeasy-front/.next
     ports:
       - 3000:3000
