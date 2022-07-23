@@ -57,6 +57,17 @@ O projeto é separado em diferentes pacotes, sendo que cada microserviço está 
   docker ps -a
  ```
 
+ &emsp;&emsp; Instalando novas dependências:
+ 
+ ```terminal
+  npm install <dependência>
+ ```
+ &emsp;&emsp; Apague a pasta "node-modules" e rode o comando abaixo e depois o primeiro comando:
+ 
+ ```terminal
+  docker-compose build
+ ```
+
 
  Para acessar o site (development):
  
