@@ -1,6 +1,6 @@
 // __tests__/index.test.jsx
 
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import DisplayHome from '../src/pages/home'
 import '@testing-library/jest-dom'
 
@@ -21,10 +21,41 @@ describe('Tabs', () => {
   });
 });
 
-describe('TabPanel', () => {
-  test('TabPanel ', async() => {
+// describe('TabPanel', () => {
+//   test('TabPanel ', async() => {
+//     render(<DisplayHome />);
+//     const tabPanel = screen.getAllByText(/Dados/i)
+//     expect(tabPanel).toHaveLength(1)
+//   });
+// });
+
+describe('Title', () => { 
+  test('Title field should exists', async() => {
+    const home = render(<DisplayHome />);
+    const title = home.container.querySelector('#title');
+    expect(title).not.toBeNull();
+  });
+});
+
+describe('Select', () => { 
+  test('Select field should exists', async() => {
+    const home = render(<DisplayHome />);
+    const select = home.container.querySelector('#variables-select');
+    expect(select).not.toBeNull();
+  });
+});
+
+describe('Option', () => {
+  test('Options should exists', async() => {
     render(<DisplayHome />);
-    const tabPanel = screen.getAllByText(/Dados/i)
-    expect(tabPanel).toHaveLength(1)
+    fireEvent.click(screen.getByText("Selecione as variáveis"));
+
+    setTimeout(() => {
+      fireEvent.click(screen.getAllByDisplayValue('Charmander'));
+    }, 1000);
+
+    setTimeout(() => {
+      expect(widget.find('span').text().contains('Charmander').toBe(true));
+    }, 1000);
   });
 });
