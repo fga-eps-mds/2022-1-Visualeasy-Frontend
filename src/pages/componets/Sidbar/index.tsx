@@ -12,6 +12,8 @@ import {
   Center
 } from "@chakra-ui/react";
 
+import FormGraph from "../FormGraph";
+
 export default function Sidebar() {
   return (
 
@@ -32,7 +34,7 @@ export default function Sidebar() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            Dados
+            <FormGraph />
           </TabPanel>
         </TabPanels>
       </Tabs>
