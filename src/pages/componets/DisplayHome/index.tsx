@@ -1,6 +1,7 @@
 import React from "react";
 import { Grid, GridItem, HStack } from "@chakra-ui/react";
 import Sidebar from "../Sidbar";
+import Graph from "../Graph";
 // import Chart from "./componetes/Charts";
 // import FooterChart from "./componetes/FooterCharts";
 export default function DisplayHome() {
@@ -16,8 +17,8 @@ export default function DisplayHome() {
         <Sidebar/>
       </GridItem>
       <GridItem h="100%" colSpan={4}>
-        <HStack w="100%" h="100%"bg="tomato">
- 
+        <HStack w="100%" h="100%" align="start">
+          <Graph/>
         </HStack>
       </GridItem>
 
