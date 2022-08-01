@@ -1,7 +1,7 @@
 // __tests__/index.test.jsx
 
 import { fireEvent, render, screen } from '@testing-library/react'
-import DisplayHome from '../src/pages/home'
+import DisplayHome from '../src/pages/index'
 import Sidebar from '../src/pages/components/Sidebar';
 import '@testing-library/jest-dom'
 
@@ -15,7 +15,7 @@ describe('Logo', () => {
 });
 
 describe('Tabs', () => {
-  test('Tabs ', async() => {
+  test('Tabs ', async () => {
     render(<DisplayHome />);
     const button = screen.getByText(/Gráfico 1/i, { selector: 'button' });
     expect(button).not.toBeNull();
@@ -30,16 +30,16 @@ describe('Tabs', () => {
 //   });
 // });
 
-describe('Title', () => { 
-  test('Title field should exists', async() => {
+describe('Title', () => {
+  test('Title field should exists', async () => {
     const home = render(<DisplayHome />);
     const title = home.container.querySelector('#title');
     expect(title).not.toBeNull();
   });
 });
 
-describe('Select', () => { 
-  test('Select field should exists', async() => {
+describe('Select', () => {
+  test('Select field should exists', async () => {
     const home = render(<DisplayHome />);
     const select = home.container.querySelector('#variables-select');
     expect(select).not.toBeNull();
@@ -47,7 +47,7 @@ describe('Select', () => {
 });
 
 describe('Option', () => {
-  test('Options should exists', async() => {
+  test('Options should exists', async () => {
     render(<DisplayHome />);
     fireEvent.click(screen.getByText("Selecione as variáveis"));
 
