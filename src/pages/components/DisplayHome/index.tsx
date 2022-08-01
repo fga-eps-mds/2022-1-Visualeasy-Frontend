@@ -1,9 +1,10 @@
 import React from "react";
 import { Grid, GridItem, HStack } from "@chakra-ui/react";
-import Sidebar from "../Sidbar";
+import Sidebar from "../Sidebar";
 import Graph from "../Graph";
 // import Chart from "./componetes/Charts";
 // import FooterChart from "./componetes/FooterCharts";
+
 export default function DisplayHome() {
   return (
     <Grid

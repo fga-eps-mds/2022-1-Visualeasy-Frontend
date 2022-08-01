@@ -1,22 +1,10 @@
 import { 
     VStack,
-    Input,
-    Text,
-    Box,
-    HStack,
-    UnorderedList,
-    ListItem,
-    Tag,
-    TagLabel,
-    TagCloseButton,
-    
+    Input
 } from "@chakra-ui/react";
 
 import {
-    AsyncCreatableSelect,
-    AsyncSelect,
     ChakraStylesConfig,
-    CreatableSelect,
     Select
   } from "chakra-react-select";
 
@@ -40,13 +28,13 @@ const variables = [
 ]
 
 const selectStyles: ChakraStylesConfig = {
-    container: (provided, state) => ({
+    container: (provided) => ({
         ...provided,
         p: 0,
         w: "100%"
     }),
 
-    placeholder: (provided, state) => ({
+    placeholder: (provided) => ({
         ...provided,
         fontSize: "12px"
     })
@@ -69,7 +57,6 @@ export default function FormGraph() {
                 chakraStyles={selectStyles}
                 options={variables}
             />
-
         </VStack>
     );
 };

@@ -1,4 +1,4 @@
-import DisplayHome from "./componets/DisplayHome"
+import DisplayHome from "./components/DisplayHome"
 const Home = () => {
   return (
     <DisplayHome/>

@@ -8,8 +8,11 @@ import {
   Title,
   Tooltip,
   Legend,
+
 } from 'chart.js';
+
 import { Line } from 'react-chartjs-2';
+
 import {Box} from "@chakra-ui/react"
 ChartJS.register(
   CategoryScale,
@@ -38,9 +41,10 @@ export const data = {
     },
   ],
 };
+
 export default function Graph() {
     return (
-        <Box height="400px" w="100%">
+      <Box height="400px" w="100%">
       <Line data={data} />
     </Box>
     );
