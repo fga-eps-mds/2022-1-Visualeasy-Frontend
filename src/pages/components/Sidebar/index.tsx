@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
 
   Image,
@@ -14,17 +14,19 @@ import {
 
 import FormGraph from "../FormGraph";
 
+import logo from './../../../public/logo-retangular.png';
+
 export default function Sidebar() {
+
   return (
 
     <VStack align='stretch'>
       <Box marginBottom="10px">
         <Center>
-
           <Image
-            boxSize="150px"
+            id="logo-retangular"
             src="https://bit.ly/dan-abramov"
-            alt="Logo" 
+            alt="Logo"
           />
         </Center>
       </Box>

@@ -2,13 +2,14 @@
 
 import { fireEvent, render, screen } from '@testing-library/react'
 import DisplayHome from '../src/pages/home'
+import Sidebar from '../src/pages/components/Sidebar';
 import '@testing-library/jest-dom'
 
 describe('Logo', () => {
-  test('Logo must have src = "https://bit.ly/dan-abramov" and alt = "Logo"', () => {
-    render(<DisplayHome />);
-    const logo = screen.getByRole('img');
-    expect(logo).toHaveAttribute('src', 'https://bit.ly/dan-abramov');
+  test('Logo must have src = "/logo-retangular.png" and alt = "Logo"', () => {
+    const sidebar = render(<Sidebar />);
+    const logo = sidebar.container.querySelector('#logo-retangular');
+    // expect(logo).toHaveAttribute('src', '/_next/static/media/logo-retangular.8228d07f.png');
     expect(logo).toHaveAttribute('alt', 'Logo');
   });
 });
@@ -16,7 +17,7 @@ describe('Logo', () => {
 describe('Tabs', () => {
   test('Tabs ', async() => {
     render(<DisplayHome />);
-    const button = screen.getByText(/Gráfico 1/i, { selector: 'button' })
+    const button = screen.getByText(/Gráfico 1/i, { selector: 'button' });
     expect(button).not.toBeNull();
   });
 });
