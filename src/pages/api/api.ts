@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.baseURL = process.env.BASE_URL;
+axios.defaults.baseURL = "http://localhost:8080/";
 
 interface Variavel{
     id?: number,
@@ -9,19 +9,21 @@ interface Variavel{
     valor?: number;
 }
 
-const listaNomeVariaveis = async ()=>{
+async function listaNomeVariaveis(){
     try{
-        const res = await axios.get("/variableNames/");
-        return res
+        const resposta = await axios.get("/variavel/");
+        //console.log(resposta.data.variavels);
+        return resposta.data;
 
     }catch(e){
         return e
     }
-}
+
+};
 
 const listaVariaveis = async ()=>{
     try{
-        const resposta = await axios.get("/variables/");
+        const resposta = await axios.get("/variavel/");
         return resposta
 
     }catch(e){
@@ -29,6 +31,5 @@ const listaVariaveis = async ()=>{
     }
 }
 
-module.exports = {listaNomeVariaveis, 
-                  listaVariaveis};
+module.exports = {listaNomeVariaveis, listaVariaveis};
 
