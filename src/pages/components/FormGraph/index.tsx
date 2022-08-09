@@ -1,14 +1,9 @@
-import { 
-    VStack,
-    Input
-} from "@chakra-ui/react";
+import { VStack, Input} from "@chakra-ui/react";
+import {ChakraStylesConfig, Select} from "chakra-react-select";
+import { useState, useEffect } from "react";
+import { listaNomeVariaveis } from "../../api/api";
 
-import {
-    ChakraStylesConfig,
-    Select
-  } from "chakra-react-select";
-
-const variables = [
+/* const variables = [
     {
         label: "Charmander",
         value: "charmander",
@@ -25,7 +20,7 @@ const variables = [
         value: "bulbassauro",
         id: "bulbassauro"
     },
-]
+] */
 
 const selectStyles: ChakraStylesConfig = {
     container: (provided) => ({
@@ -41,7 +36,18 @@ const selectStyles: ChakraStylesConfig = {
 }
 
 export default function FormGraph() {
+    const [variables, setVariables] = useState([])
+    useEffect(() => {
+        const getListaNomes = async()=>{
+            const {variavels}= await listaNomeVariaveis();
 
+            console.log("ESSA  É A RESPOSTA", variavels);
+            setVariables(variavels)
+        }
+        getListaNomes()
+      });
+
+    
     return (
         <VStack w='100%'>
             <Input type="text" id={"title"} placeholder="Gráfico 1" value={""} />
