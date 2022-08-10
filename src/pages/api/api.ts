@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export interface Variavel{
     id?: number,
@@ -10,22 +10,12 @@ export interface Variavel{
 } 
 export interface Variavel extends Array<Variavel>{}
 
-export async function listaNomeVariaveis(){
+export const listaNomeVariaveis = async()=>{
     try{
-        const resposta = await axios.get("variavel/");
+        const resposta = await axios.get("/variavel");
         return resposta.data;
     }catch(e){
         return e
     }
 
 };
-
-export const listaVariaveis = async ()=>{
-    try{
-        const resposta = await axios.get("/variavel/");
-        return resposta
-
-    }catch(e){
-        return e
-    }
-}
