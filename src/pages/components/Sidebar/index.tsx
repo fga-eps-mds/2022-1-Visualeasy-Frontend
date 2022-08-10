@@ -14,8 +14,6 @@ import {
 
 import FormGraph from "../FormGraph";
 
-import logo from './../../../public/logo-retangular.png';
-
 export default function Sidebar() {
 
   return (
@@ -25,7 +23,7 @@ export default function Sidebar() {
         <Center>
           <Image
             id="logo-retangular"
-            src="https://bit.ly/dan-abramov"
+            src="images/logo-retangular.png"width="300px"  height="75px"
             alt="Logo"
           />
         </Center>
