@@ -35,22 +35,37 @@ const selectStyles: ChakraStylesConfig = {
     })
 }
 
-export default function FormGraph() {
-    const [variables, setVariables] = useState([])
+export default function FormGraph(this: any) {
+    const [variablesName, setVariablesName] = useState([{}])
     useEffect(() => {
-        const getListaNomes = async()=>{
-            const {variavels}= await listaNomeVariaveis();
-
-            console.log("ESSA  É A RESPOSTA", variavels);
-            setVariables(variavels)
-        }
         getListaNomes()
-      });
-
+    },[]);
+    const [graphName, setgraphName] = useState('')
     
+    
+    const getListaNomes = async()=>{
+        const {variavels} = await listaNomeVariaveis();
+        let variablesName = []
+
+        for(let i = 0; i<variavels.length; i++){
+            //console.log("ESSA  É A RESPOSTAaa", variavels[i].variavel);
+            let opition = {
+                label: variavels[i].variavel,
+                value: variavels[i].variavel,
+                id: variavels[i].variavel,
+            }
+            variablesName.push(opition)
+        }
+        variablesName[0] = {...variablesName[0], variant: "outline"}
+        //console.log("Esse é o objeto", variablesName)
+        setVariablesName(variablesName)
+    }
+    const handleInputChange = (event:React.ChangeEvent<HTMLInputElement>)=>{
+        setgraphName(event.target.value);
+    }
     return (
         <VStack w='100%'>
-            <Input type="text" id={"title"} placeholder="Gráfico 1" value={""} />
+            <Input type="text" id={"title"} placeholder="Gráfico 1" value={graphName} onChange={handleInputChange} />
             
             <Select
                 name="variables"
@@ -61,7 +76,7 @@ export default function FormGraph() {
                 size="md"
                 tagVariant="solid"
                 chakraStyles={selectStyles}
-                options={variables}
+                options={variablesName}
             />
         </VStack>
     );
