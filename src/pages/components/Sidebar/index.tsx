@@ -24,7 +24,6 @@ export default function Sidebar() {
           <Image
             id="logo-retangular"
             src="images/logo-retangular.png"width="300px"  height="75px"
-
             alt="Logo"
           />
         </Center>
