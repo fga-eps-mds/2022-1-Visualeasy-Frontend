@@ -2,19 +2,18 @@ import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8080";
 
-interface Variavel{
+export interface Variavel{
     id?: number,
     variavel?: string;
     data?: Date;
     valor?: number;
-}
+} 
+export interface Variavel extends Array<Variavel>{}
 
 export async function listaNomeVariaveis(){
     try{
         const resposta = await axios.get("variavel/");
-        console.log(resposta.data.variavels);
         return resposta.data;
-
     }catch(e){
         return e
     }
