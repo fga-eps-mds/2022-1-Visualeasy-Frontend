@@ -1,7 +1,9 @@
-import { VStack, Input} from "@chakra-ui/react";
-import {ChakraStylesConfig, Select} from "chakra-react-select";
+import { VStack, Input, Button } from "@chakra-ui/react";
+import { constants } from "buffer";
+import { ChakraStylesConfig, Select } from "chakra-react-select";
 import { useState, useEffect } from "react";
-import { listaNomeVariaveis } from "../../api/api";
+import { api, listaNomeVariaveis } from "../../api/api";
+import RatioSelect from "../RatioTimeChart/Index";
 
 /* const variables = [
     {
@@ -36,18 +38,37 @@ const selectStyles: ChakraStylesConfig = {
 }
 
 export default function FormGraph(this: any) {
+    const [GraphParameters, setGraphParameters] = useState('')
     const [variablesName, setVariablesName] = useState([{}])
-    useEffect(() => {
-        getListaNomes()
-    },[]);
     const [graphName, setgraphName] = useState('')
-    
-    
-    const getListaNomes = async()=>{
-        const {variavels} = await listaNomeVariaveis();
+    const [variavelSelect, setvariavelSelect] = useState([])
+
+    async function getData() {
+        const userData = {
+            variavel: 'Pikachu',
+            startDate: '2022-06-30T06:18:50',
+            endDate: '2022-06-30T06:26:14'
+        };
+        const { data } = await api.post('/filtered', userData)
+        console.log(data)
+    }
+
+
+    useEffect(() => {
+      
+        getListaNomes()
+    }, []);
+    var newArr = variavelSelect.map(function (val, index) {
+        return (val.value)
+    })
+
+
+
+    const getListaNomes = async () => {
+        const { variavels } = await listaNomeVariaveis();
         let variablesName = []
 
-        for(let i = 0; i<variavels.length; i++){
+        for (let i = 0; i < variavels.length; i++) {
             //console.log("ESSA  É A RESPOSTAaa", variavels[i].variavel);
             let opition = {
                 label: variavels[i].variavel,
@@ -56,17 +77,32 @@ export default function FormGraph(this: any) {
             }
             variablesName.push(opition)
         }
-        variablesName[0] = {...variablesName[0], variant: "outline"}
+        variablesName[0] = { ...variablesName[0], variant: "outline" }
         //console.log("Esse é o objeto", variablesName)
         setVariablesName(variablesName)
     }
-    const handleInputChange = (event:React.ChangeEvent<HTMLInputElement>)=>{
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setgraphName(event.target.value);
+    }
+
+    function Gerar() {
+        var variavel = [] = Object.keys(newArr)
+            .map(function (key) {
+                return newArr[key];
+            });
+
+
+        let remoteJob = {
+            ...GraphParameters,
+            variavel
+        };
+
+
     }
     return (
         <VStack w='100%'>
             <Input type="text" id={"title"} placeholder="Gráfico 1" value={graphName} onChange={handleInputChange} />
-            
+
             <Select
                 name="variables"
                 placeholder="Selecione as variáveis"
@@ -75,9 +111,12 @@ export default function FormGraph(this: any) {
                 closeMenuOnSelect={false}
                 size="md"
                 tagVariant="solid"
+                onChange={(e) => setvariavelSelect(e)}
                 chakraStyles={selectStyles}
                 options={variablesName}
             />
+            <RatioSelect RatioRange={(e) => setGraphParameters({ intervalo: e })} />
+            <Button onClick={() => Gerar()}>gerar</Button>
         </VStack>
     );
 };

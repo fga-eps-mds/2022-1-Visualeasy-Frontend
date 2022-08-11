@@ -14,13 +14,13 @@ import {
 
 import FormGraph from "../FormGraph";
 
-import logo from './../../../public/logo-retangular.png';
+import RatioSelect from "../RatioTimeChart/Index";
 
 export default function Sidebar() {
 
   return (
 
-    <VStack align='stretch'>
+    <VStack align='stretch'w="340px">
       <Box marginBottom="10px">
         <Center>
           <Image
