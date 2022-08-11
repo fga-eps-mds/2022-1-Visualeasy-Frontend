@@ -1,11 +1,11 @@
 
 import '@testing-library/jest-dom'
-import { cleanup, waitFor, render, screen } from "@testing-library/react";
+import { fireEvent, waitFor, render, screen } from "@testing-library/react";
 import axios from "axios";
 import {listaNomeVariaveis} from '../src/pages/api/api'
 import {rest} from "msw"
 import {setupServer} from "msw/node"
-import {FormGraph} from '../src/pages/components/FormGraph/'
+import FormGraph from '../src/pages/components/FormGraph/'
 
 
 const url = "http://localhost:8080/variavel"
@@ -38,8 +38,8 @@ afterAll(()=>server.close())
 describe('Axios Mocking',()=>{
   it('should return all variable names', async()=>{
     render(<FormGraph/>);
-    const dropdownIntem = await screen.findAllByPlaceholderText("Selecione as variáveis");
-    expect(dropdownIntem).toBeVisible();
+    const dropdownIntem = await screen.getByText("Selecione as variáveis");
+    expect(dropdownIntem).toBeVisible(); 
   })
   } 
 );
