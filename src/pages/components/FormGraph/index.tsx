@@ -46,6 +46,7 @@ export default function FormGraph(this: any) {
     const getListaNomes = async()=>{
         const {variavels} = await listaNomeVariaveis();
         let variablesName = []
+        console.log("LLLLLLENGTH", variavels)
 
         for(let i = 0; i<variavels.length; i++){
             //console.log("ESSA  É A RESPOSTAaa", variavels[i].variavel);
