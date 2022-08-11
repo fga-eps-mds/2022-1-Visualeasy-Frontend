@@ -1,9 +1,42 @@
 // __tests__/index.test.jsx
 
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import DisplayHome from '../src/pages/index'
 import Sidebar from '../src/pages/components/Sidebar';
 import '@testing-library/jest-dom'
+import {rest} from "msw"
+import {setupServer} from "msw/node"
+
+const url = `http://localhost/variavel`
+
+const variavelNameGet = rest.get(url, (req, res, ctx)=>{
+  return  res(
+    ctx.status(200),
+    ctx.json({
+    "variavels": [
+      {
+        "variavel": "Bulbassauro"
+      },
+      {
+        "variavel": "Charmander"
+      },
+      {
+        "variavel": "Pikachu"
+      },
+    ],
+    "resposta": "Sucesso!!"
+  }))
+})
+
+const handlers = [variavelNameGet]
+
+const server = new setupServer(...handlers);
+
+beforeAll(()=>server.listen({
+  onUnhandleRequest:'error'
+}));
+afterEach(()=>server.resetHandlers());
+afterAll(()=>server.close())
 
 describe('Logo', () => {
   test('Logo must have src = "/logo-retangular.png" and alt = "Logo"', () => {
@@ -42,7 +75,7 @@ describe('Select', () => {
   test('Select field should exists', async () => {
     const home = render(<DisplayHome />);
     const select = home.container.querySelector('#variables-select');
-    expect(select).not.toBeNull();
+    await waitFor(()=>expect(select).not.toBeNull()) 
   });
 });
 
