@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Radio, RadioGroup, SimpleGrid, Stack,Text } from '@chakra-ui/react'
+import { Box, Input, Radio, RadioGroup, SimpleGrid, Stack,Text } from '@chakra-ui/react'
 import {ChakraStylesConfig, Select} from "chakra-react-select";
 import { Container } from '@chakra-ui/react'
 
 const RatioSelect=({RatioRange})=> {
     const [SelectRatio, setSelectRatio] = useState('0')
+    const [BeginDate, setBeginDate] = useState('2022-08-10')
+    const [EndDate, setEndDate] = useState('2022-08-10')
+    // console.log(BeginDate)
+    // console.log(EndDate)
     useEffect(() => {
     RatioRange(parseInt(SelectRatio))
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -41,11 +45,22 @@ const RatioSelect=({RatioRange})=> {
         </SimpleGrid>
       </Stack>
     </RadioGroup>
+    {SelectRatio === "4" ? (    
+        <Stack spacing={1}>
+            <Text>Início:</Text>
+            <Input 
+                size="md" 
+                type="datetime-local" 
+                onChange={e => setBeginDate(e.currentTarget.value)}/>
+            <Text>Fim:</Text>
+            <Input 
+                size="md" 
+                type="datetime-local"
+                onChange={e => setBeginDate(e.currentTarget.value)}/>
+        </Stack>
+        ) : ([])}
     </Box>
     )
 
 }
 export default RatioSelect
-
-
-
