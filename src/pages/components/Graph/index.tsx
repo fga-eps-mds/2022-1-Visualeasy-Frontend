@@ -23,29 +23,44 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
-export const data = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: [33, 53, 85, 41, 44, 65],
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data: [11, 40, 40, 50, 40, 55],
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};
+export default function Graph(dataBase) {
+   const data = {
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: dataBase.dataBase.variavels,
+        lineTension: 0.5,  
+        backgroundColor: `${getRandomColor()}`,
+      },
 
-export default function Graph() {
+    ],
+  };
+  const options = {
+    type:"line",
+   
+    bezierCurve : false,
+      parsing: {
+        xAxisKey: 'data',
+        yAxisKey: 'valor'
+      },
+      elements: {
+        line: {
+            tension: 0
+        }
+    },
+  }
     return (
       <Box height="400px" w="100%">
-      <Line data={data} />
+      <Line data={data} options={options} />
     </Box>
     );
   };
