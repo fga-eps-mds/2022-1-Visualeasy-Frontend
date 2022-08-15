@@ -38,6 +38,16 @@ describe('Title', () => {
   });
 });
 
+//teste o ratiotimebutton
+describe('Ratiotimebutton', () => {
+  test('Ratiotimebutton ', async() => {
+    render(<DisplayHome />);
+    const ratiotimebutton = screen.getByText(/Ratio Time/i)
+    expect(ratiotimebutton).not.toBeNull();
+  });
+});
+
+
 describe('Select', () => {
   test('Select field should exists', async () => {
     const home = render(<DisplayHome />);
