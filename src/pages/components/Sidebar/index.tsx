@@ -25,7 +25,7 @@ export default function Sidebar({SidebarData}:any) {
         <Center>
           <Image
             id="logo-retangular"
-            src="https://bit.ly/dan-abramov"
+            src="images/logo-retangular.png"
             alt="Logo"
           />
         </Center>
