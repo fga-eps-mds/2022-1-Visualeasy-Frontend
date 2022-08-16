@@ -61,3 +61,24 @@ describe('Option', () => {
     }, 1000);
   });
 });
+
+describe('Radio', () => {
+  test('Radio intervalo ', async () => {
+    render(<DisplayHome />);
+    const TitleRadio = screen.getByText(/Selecione o intervalo:/i);
+    expect(TitleRadio).not.toBeNull();
+   const TitleRadio1 = screen.getByText(/1 Hora/i);
+    expect(TitleRadio1).not.toBeNull();
+    const TitleRadiop = screen.getByText(/Personalizado/i);
+    expect(TitleRadiop).not.toBeNull();
+  });
+});
+
+
+describe('Button', () => {
+  test('Button gerar grafico ', async () => {
+    render(<DisplayHome />);
+    const button = screen.getByText(/Gerar gráfico/i, { selector: 'button' });
+    expect(button).not.toBeNull();
+  });
+});

@@ -5,24 +5,6 @@ import { useState, useEffect } from "react";
 import { api, listaNomeVariaveis } from "../../api/api";
 import RatioSelect from "../RatioTimeChart/Index";
 
-/* const variables = [
-    {
-        label: "Charmander",
-        value: "charmander",
-        id: "charmander",
-        variant: "outline"
-    },
-    {
-        label: "Squirtle",
-        value: "squirtle",
-        id: "squirtle"
-    },
-    {
-        label: "Bulbassauro",
-        value: "bulbassauro",
-        id: "bulbassauro"
-    },
-] */
 
 const selectStyles: ChakraStylesConfig = {
     container: (provided) => ({
@@ -37,7 +19,7 @@ const selectStyles: ChakraStylesConfig = {
     })
 }
 
-export default function FormGraph(this: any) {
+export default function FormGraph({FormGraphProps}: any) {
     const [GraphParameters, setGraphParameters] = useState('')
     const [variablesName, setVariablesName] = useState([{}])
     const [graphName, setgraphName] = useState('')
@@ -52,8 +34,6 @@ export default function FormGraph(this: any) {
         const { data } = await api.post('/filtered', userData)
         console.log(data)
     }
-
-
     useEffect(() => {
       
         getListaNomes()
@@ -70,15 +50,14 @@ export default function FormGraph(this: any) {
 
         for (let i = 0; i < variavels.length; i++) {
             //console.log("ESSA  É A RESPOSTAaa", variavels[i].variavel);
-            let opition = {
+            let option = {
                 label: variavels[i].variavel,
                 value: variavels[i].variavel,
                 id: variavels[i].variavel,
             }
-            variablesName.push(opition)
+            variablesName.push(option)
         }
         variablesName[0] = { ...variablesName[0], variant: "outline" }
-        //console.log("Esse é o objeto", variablesName)
         setVariablesName(variablesName)
     }
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,17 +65,20 @@ export default function FormGraph(this: any) {
     }
 
     function Gerar() {
-        var variavel = [] = Object.keys(newArr)
+        const variavel = [] = Object.keys(newArr)
             .map(function (key) {
                 return newArr[key];
             });
 
 
-        let remoteJob = {
+        const FromGraphData = {
             ...GraphParameters,
             variavel
         };
-
+        
+        FormGraphProps({
+            ...FromGraphData
+          });
 
     }
     return (
@@ -107,7 +89,7 @@ export default function FormGraph(this: any) {
                 name="variables"
                 placeholder="Selecione as variáveis"
                 isMulti
-                id="variables-select"
+                id={1}
                 closeMenuOnSelect={false}
                 size="md"
                 tagVariant="solid"
@@ -116,7 +98,8 @@ export default function FormGraph(this: any) {
                 options={variablesName}
             />
             <RatioSelect RatioRange={(e) => setGraphParameters({ intervalo: e })} />
-            <Button onClick={() => Gerar()}>gerar</Button>
+            <Button colorScheme='red' size='lg' onClick={() => Gerar()}>Gerar gráfico</Button>
         </VStack>
     );
 };
+

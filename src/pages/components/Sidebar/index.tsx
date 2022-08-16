@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
 
   Image,
@@ -16,8 +16,8 @@ import FormGraph from "../FormGraph";
 
 import RatioSelect from "../RatioTimeChart/Index";
 
-export default function Sidebar() {
-
+export default function Sidebar({SidebarData}:any) {
+  
   return (
 
     <VStack align='stretch'w="340px">
@@ -36,7 +36,7 @@ export default function Sidebar() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <FormGraph />
+            <FormGraph FormGraphProps={(e)=>{SidebarData({...e})}} />
           </TabPanel>
         </TabPanels>
       </Tabs>
