@@ -5,12 +5,12 @@
   <img src="https://i.imgur.com/imVZeBV.jpeg" alt="logo" />
 </p>
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2022-1-Visualeasy-Core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2022-1-Visualeasy)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2022-1-Visualeasy-Core&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2022-1-Visualeasy)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2022-1-Visualeasy-Core&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2022-1-Visualeasy)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2022-1-Visualeasy-Core&metric=bugs)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2022-1-Visualeasy)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2022-1-Visualeasy-Core&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2022-1-Visualeasy)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2022-1-Visualeasy-Core&metric=coverage)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2022-1-Visualeasy)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2022-1-Visualeasy-Core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2022-1-Visualeasy-Core)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2022-1-Visualeasy-Core&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2022-1-Visualeasy-Core)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2022-1-Visualeasy-Core&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2022-1-Visualeasy-Core)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2022-1-Visualeasy-Core&metric=bugs)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2022-1-VisualVisualeasy-Coreeasy)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2022-1-Visualeasy-Core&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2022-1-Visualeasy-Core)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2022-1-Visualeasy-Core&metric=coverage)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2022-1-Visualeasy-Core)
 
 
 

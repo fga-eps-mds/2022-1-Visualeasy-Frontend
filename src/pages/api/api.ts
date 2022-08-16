@@ -29,3 +29,7 @@ export const listaVariaveis = async ()=>{
         return e
     }
 }
+
+export const api = axios.create({
+  baseURL: 'http://localhost:8080/variavel/'
+})  
