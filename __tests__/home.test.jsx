@@ -41,7 +41,7 @@ describe('Title', () => {
 describe('Select', () => {
   test('Select field should exists', async () => {
     const home = render(<DisplayHome />);
-    const select = home.container.querySelector('#variables-select');
+    const select = home.container.querySelectorAll('#select');
     expect(select).not.toBeNull();
   });
 });
@@ -68,6 +68,12 @@ describe('Radio', () => {
     expect(TitleRadio).not.toBeNull();
    const TitleRadio1 = screen.getByText(/1 Hora/i);
     expect(TitleRadio1).not.toBeNull();
+    const TitleRadio2 = screen.getByText(/1 Dia/i);
+    expect(TitleRadio2).not.toBeNull();
+    const TitleRadio3 = screen.getByText(/1 Sem/i);
+    expect(TitleRadio3).not.toBeNull();
+    const TitleRadio4 = screen.getByText(/1 Mês/i);
+    expect(TitleRadio4).not.toBeNull();
     const TitleRadiop = screen.getByText(/Personalizado/i);
     expect(TitleRadiop).not.toBeNull();
   });
