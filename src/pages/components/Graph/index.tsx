@@ -60,7 +60,7 @@ export default function Graph(dataBase) {
   }
     return (
       <Box height="400px" w="100%">
-      <Line data={data} options={options} />
+      <Line className='Grafico' data={data} options={options} />
     </Box>
     );
   };
