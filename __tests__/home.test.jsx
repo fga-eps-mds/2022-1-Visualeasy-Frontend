@@ -6,6 +6,7 @@ import Sidebar from '../src/pages/components/Sidebar';
 import '@testing-library/jest-dom'
 import {rest} from "msw"
 import {setupServer} from "msw/node"
+import FormGraph from '../src/pages/components/FormGraph';
 
 const url = `http://localhost/variavel`
 
@@ -71,13 +72,16 @@ describe('Title', () => {
   });
 });
 
+
 describe('Select', () => {
   test('Select field should exists', async () => {
     const home = render(<DisplayHome />);
     const select = home.container.querySelectorAll('#select');
-    expect(select).not.toBeNull();
+    await waitFor(()=>expect(select).not.toBeNull()) 
+
   });
 });
+
 
 describe('Option', () => {
   test('Options should exists', async () => {
@@ -131,4 +135,5 @@ describe('RatioSelect', () => {
     expect(screen.getByText('Fim:')).not.toBeNull();
   });
 });
+
 
