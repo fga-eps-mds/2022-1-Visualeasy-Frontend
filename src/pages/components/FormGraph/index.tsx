@@ -97,7 +97,7 @@ export default function FormGraph({FormGraphProps}: any) {
                 chakraStyles={selectStyles}
                 options={variablesName}
             />
-            <RatioSelect RatioRange={(e) => setGraphParameters({ intervalo: e })} />
+            <RatioSelect RatioRange={(e) => setGraphParameters(e)} />
             <Button colorScheme='red' size='lg' onClick={() => Gerar()}>Gerar gráfico</Button>
         </VStack>
     );

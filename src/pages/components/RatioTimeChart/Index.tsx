@@ -10,9 +10,11 @@ const RatioSelect=({RatioRange})=> {
     // console.log(BeginDate)
     // console.log(EndDate)
     useEffect(() => {
-    RatioRange(parseInt(SelectRatio))
+      console.log("teste", SelectRatio, BeginDate, EndDate);
+      debugger;
+      RatioRange({intervalo: parseInt(SelectRatio), BeginDate, EndDate})
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [SelectRatio]);
+    }, [SelectRatio, BeginDate, EndDate]);
     
     return(
         <Box
@@ -51,12 +53,12 @@ const RatioSelect=({RatioRange})=> {
             <Input 
                 size="md" 
                 type="datetime-local" 
-                onChange={e => setBeginDate(e.currentTarget.value)}/>
+                onChange={e => setBeginDate({dataInit: e.currentTarget.value})}/>
             <Text>Fim:</Text>
             <Input 
                 size="md" 
                 type="datetime-local"
-                onChange={e => setBeginDate(e.currentTarget.value)}/>
+                onChange={e => setEndDate({dataEnd: e.currentTarget.value})}/>
         </Stack>
         ) : ([])}
     </Box>
