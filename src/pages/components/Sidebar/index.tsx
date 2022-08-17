@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
 
   Image,
@@ -14,18 +14,16 @@ import {
 
 import FormGraph from "../FormGraph";
 
-import logo from './../../../public/logo-retangular.png';
-
-export default function Sidebar() {
-
+export default function Sidebar({SidebarData}:any) {
+  
   return (
 
-    <VStack align='stretch'>
+    <VStack align='stretch'w="340px">
       <Box marginBottom="10px">
         <Center>
           <Image
             id="logo-retangular"
-            src="https://bit.ly/dan-abramov"
+            src="images/logo-retangular.png"
             alt="Logo"
           />
         </Center>
@@ -36,7 +34,7 @@ export default function Sidebar() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <FormGraph />
+            <FormGraph FormGraphProps={(e)=>{SidebarData({...e})}} />
           </TabPanel>
         </TabPanels>
       </Tabs>
