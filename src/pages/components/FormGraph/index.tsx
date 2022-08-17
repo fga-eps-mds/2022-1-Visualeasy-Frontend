@@ -1,10 +1,8 @@
 import { VStack, Input, Button } from "@chakra-ui/react";
-import { constants } from "buffer";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
 import { useState, useEffect } from "react";
 import { api, listaNomeVariaveis } from "../../api/api";
 import RatioSelect from "../RatioTimeChart/Index";
-
 
 const selectStyles: ChakraStylesConfig = {
     container: (provided) => ({
@@ -34,15 +32,13 @@ export default function FormGraph({FormGraphProps}: any) {
         const { data } = await api.post('/filtered', userData)
         console.log(data)
     }
+    
     useEffect(() => {
-      
         getListaNomes()
     }, []);
     var newArr = variavelSelect.map(function (val, index) {
         return (val.value)
     })
-
-
 
     const getListaNomes = async () => {
         const { variavels } = await listaNomeVariaveis();
@@ -65,20 +61,23 @@ export default function FormGraph({FormGraphProps}: any) {
     }
 
     function Gerar() {
+        console.log("GraphParameters:", GraphParameters);
         const variavel = [] = Object.keys(newArr)
             .map(function (key) {
                 return newArr[key];
             });
 
-
-        const FromGraphData = {
+        const FormGraphData = {
             ...GraphParameters,
             variavel
         };
         
         FormGraphProps({
-            ...FromGraphData
+            ...FormGraphData
           });
+
+        // Se o valor de intervalo for entre 1 e 4, chamar a rota /variavel/filteredByPeriod.
+        // Se o valor de intervalo for 5, chamar a rota /variavel/filtered, enviando startDate e endDate
 
     }
     return (
@@ -97,7 +96,7 @@ export default function FormGraph({FormGraphProps}: any) {
                 chakraStyles={selectStyles}
                 options={variablesName}
             />
-            <RatioSelect RatioRange={(e) => setGraphParameters({ intervalo: e })} />
+            <RatioSelect RatioRange={(e) => setGraphParameters(e)} />
             <Button colorScheme='red' size='lg' onClick={() => Gerar()}>Gerar gráfico</Button>
         </VStack>
     );

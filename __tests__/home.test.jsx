@@ -125,3 +125,15 @@ describe('Button', () => {
     expect(button).not.toBeNull();
   });
 });
+
+describe('RatioSelect', () => { 
+  test('Deve renderizar os campos de Início e Fim', async() => { 
+    render(<DisplayHome />);
+    const TitleRadio = screen.getByText(/Personalizado/i);
+    fireEvent.click(TitleRadio);
+    expect(screen.getByText('Início:')).not.toBeNull();
+    expect(screen.getByText('Fim:')).not.toBeNull();
+  });
+});
+
+

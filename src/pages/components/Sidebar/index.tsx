@@ -14,8 +14,6 @@ import {
 
 import FormGraph from "../FormGraph";
 
-import RatioSelect from "../RatioTimeChart/Index";
-
 export default function Sidebar({SidebarData}:any) {
   
   return (
