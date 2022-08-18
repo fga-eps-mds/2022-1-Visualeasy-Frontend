@@ -49,12 +49,12 @@ const RatioSelect=({RatioRange})=> {
             <Input 
                 size="md" 
                 type="datetime-local" 
-                onChange={e => setStartDate({startDate: e.currentTarget.value})}/>
+                onChange={e => setStartDate(e.currentTarget.value)}/>
             <Text>Fim:</Text>
             <Input 
                 size="md" 
                 type="datetime-local"
-                onChange={e => setEndDate({endDate: e.currentTarget.value})}/>
+                onChange={e => setEndDate(e.currentTarget.value)}/>
           </Stack>
         ) : ([])}
       </Box>

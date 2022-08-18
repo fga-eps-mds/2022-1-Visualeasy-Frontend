@@ -45,7 +45,6 @@ export default function FormGraph({FormGraphProps}: any) {
         let variablesName = []
 
         for (let i = 0; i < variavels.length; i++) {
-            //console.log("ESSA  É A RESPOSTAaa", variavels[i].variavel);
             let option = {
                 label: variavels[i].variavel,
                 value: variavels[i].variavel,
@@ -61,7 +60,6 @@ export default function FormGraph({FormGraphProps}: any) {
     }
 
     function Gerar() {
-        console.log("GraphParameters:", GraphParameters);
         const variavel = [] = Object.keys(newArr)
             .map(function (key) {
                 return newArr[key];
@@ -88,7 +86,7 @@ export default function FormGraph({FormGraphProps}: any) {
                 name="variables"
                 placeholder="Selecione as variáveis"
                 isMulti
-                id={1}
+                id="1"
                 closeMenuOnSelect={false}
                 size="md"
                 tagVariant="solid"

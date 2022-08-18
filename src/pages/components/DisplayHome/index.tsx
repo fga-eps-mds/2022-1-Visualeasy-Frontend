@@ -3,7 +3,7 @@ import axios from "axios";
 import { Grid, GridItem, HStack } from "@chakra-ui/react";
 import Sidebar from "../Sidebar";
 import Graph from "../Graph";
-import { api, listaNomeVariaveis,  } from "../../api/api";
+import { api, listaNomeVariaveis, postAllData,  } from "../../api/api";
 // import Chart from "./componetes/Charts";
 // import FooterChart from "./componetes/FooterCharts";
 
@@ -38,6 +38,8 @@ import { api, listaNomeVariaveis,  } from "../../api/api";
   interface dataFormProps {
     intervalo:number
     variavel:EnumServiceGetOrderBy[]
+    startDate?:string
+    endDate?:string
   }
 
 export default function DisplayHome() {
@@ -49,20 +51,20 @@ export default function DisplayHome() {
 
  useEffect(() => {
   async function getData(alldata=[]) {
-     const userData = {
-         variavel:await alldata["variavel"],
-         // intervalo: 1
-         startDate: '2022-06-30T06:18:50',
-         endDate: '2022-06-30T06:26:14'
-     };
-     //const { data } = await api.post('/filteredByPeriod', userData)
-      await api.post('/filtered', userData).then(function (response) {
-        setDatabase(response.data)
-     })
-     .catch(function (error) {
-       console.log(error);
-     });
-    
+    let teste 
+    const userData = {
+      variavel:alldata["variavel"],
+      intervalo: dataForm.intervalo,
+      startDate: dataForm["startDate"],
+      endDate: dataForm["endDate"]
+  };
+  if (dataForm.intervalo!==5) {
+    teste = await postAllData("filteredByPeriod",userData)
+  } else {
+    teste = await postAllData("filtered",userData)
+  }
+
+  setDatabase(teste)
    }
    getData(dataForm)
 
