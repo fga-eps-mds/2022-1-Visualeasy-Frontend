@@ -11,6 +11,10 @@ import {
 
 } from 'chart.js';
 
+import { Button } from '@chakra-ui/react'
+
+import { CSVLink, CSVDownload } from "react-csv";
+
 import { Line } from 'react-chartjs-2';
 
 import { Box } from "@chakra-ui/react"
@@ -94,9 +98,16 @@ export default function Graph(dataForm) {
       }
     },
   }
+
+    
   return (
-    <Box height="400px" w="100%">
-      <Line className='Grafico' data={data} options={options} />
-    </Box>
-  );
-};
+      <Box height="400px" w="100%">
+        <Line className='Grafico' data={data} options={options} />
+          
+        <Button colorScheme='red' size='sm'>Baixar CSV</Button>    
+        
+      </Box>
+    );
+  };
+
+  
