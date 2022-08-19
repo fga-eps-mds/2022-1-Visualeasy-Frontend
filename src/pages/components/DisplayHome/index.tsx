@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Grid, GridItem, HStack } from "@chakra-ui/react";
 import Sidebar from "../Sidebar";
 import Graph from "../Graph";
-import { api, listaNomeVariaveis, postAllData,  } from "../../api/api";
+import { postAllData } from "../../api/api";
 // import Chart from "./componetes/Charts";
 // import FooterChart from "./componetes/FooterCharts";
 
@@ -26,53 +25,45 @@ import { api, listaNomeVariaveis, postAllData,  } from "../../api/api";
   
 // }
 
+interface EnumServiceGetOrderBy {
+  [index: number]: string;
+}
 
-
-   
-
-
-
-    interface EnumServiceGetOrderBy {
-      [index: number]: string;
-  }
-  interface dataFormProps {
-    intervalo:number
-    variavel:EnumServiceGetOrderBy[]
-    startDate?:string
-    endDate?:string
-  }
+interface dataFormProps {
+  intervalo:number
+  variavel:EnumServiceGetOrderBy[]
+  startDate?:string
+  endDate?:string
+}
 
 export default function DisplayHome() {
   const [database, setDatabase] = useState([])
   const [dataForm, setDataForm] = useState<dataFormProps>({
     intervalo:0,
     variavel:[]
-})
+  })
 
- useEffect(() => {
-  async function getData(alldata=[]) {
-    let teste 
-    const userData = {
-      variavel:alldata["variavel"],
-      intervalo: dataForm.intervalo,
-      startDate: dataForm["startDate"],
-      endDate: dataForm["endDate"]
-  };
-  if (dataForm.intervalo!==5) {
-    teste = await postAllData("filteredByPeriod",userData)
-  } else {
-    teste = await postAllData("filtered",userData)
-  }
+  useEffect(() => {
+    async function getData(alldata=[]) {
+      let teste 
+      const userData = {
+        variavel:alldata["variavel"],
+        intervalo: dataForm.intervalo,
+        startDate: dataForm["startDate"],
+        endDate: dataForm["endDate"]
+    };
 
-  setDatabase(teste)
-   }
-   getData(dataForm)
+    if (dataForm.intervalo!==5) {
+      teste = await postAllData("filteredByPeriod", userData)
+    } else {
+      teste = await postAllData("filtered", userData)
+    }
 
- }, [dataForm])
- 
+    setDatabase(teste)
+    }
 
-  
-
+    getData(dataForm)
+  }, [dataForm])
   
   return (
     <Grid

@@ -87,6 +87,7 @@ export default function FormGraph({FormGraphProps}: any) {
                 placeholder="Selecione as variáveis"
                 isMulti
                 id="1"
+                instanceId={"1"}
                 closeMenuOnSelect={false}
                 size="md"
                 tagVariant="solid"
