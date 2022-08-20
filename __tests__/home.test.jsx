@@ -126,6 +126,14 @@ describe('Button', () => {
   });
 });
 
+describe('CSV Button', () => {
+  test('CSV Button ', async () => {
+    render(<DisplayHome />);
+    const button = screen.getByText(/Baixar CSV/i, { selector: 'button' });
+    expect(button).not.toBeNull();
+  });
+});
+
 describe('RatioSelect', () => { 
   test('Deve renderizar os campos de Início e Fim', async() => { 
     render(<DisplayHome />);
