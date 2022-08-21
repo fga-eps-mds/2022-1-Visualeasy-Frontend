@@ -13,7 +13,7 @@ import {
 
 import { Button } from '@chakra-ui/react'
 
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 
 import { Line } from 'react-chartjs-2';
 
@@ -98,6 +98,13 @@ export default function Graph(dataForm) {
       }
     },
   }
+
+  
+  const getFileName = () => {
+    let d = new Date();
+    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, "");
+    return `${dformat}`;
+  }
     
   return (
       <Box height="400px" w="100%">
@@ -105,8 +112,9 @@ export default function Graph(dataForm) {
         
         <CSVLink
           data={dataBase.dataBase.variavels || ""}
-          filename="results.csv"
+          filename={getFileName()}
           target="_blank"
+          separator={";"}
           > <Button colorScheme='red' size='sm' > Baixar CSV </Button>    
         </CSVLink>
         
