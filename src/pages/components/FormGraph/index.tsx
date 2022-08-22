@@ -1,7 +1,7 @@
 import { VStack, Input, Button } from "@chakra-ui/react";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
 import { useState, useEffect } from "react";
-import { api, listaNomeVariaveis } from "../../api/api";
+import { listaNomeVariaveis } from "../../api/api";
 import RatioSelect from "../RatioTimeChart/Index";
 
 const selectStyles: ChakraStylesConfig = {
@@ -22,16 +22,6 @@ export default function FormGraph({FormGraphProps}: any) {
     const [variablesName, setVariablesName] = useState([{}])
     const [graphName, setgraphName] = useState('')
     const [variavelSelect, setvariavelSelect] = useState([])
-
-    async function getData() {
-        const userData = {
-            variavel: 'Pikachu',
-            startDate: '2022-06-30T06:18:50',
-            endDate: '2022-06-30T06:26:14'
-        };
-        const { data } = await api.post('/filtered', userData)
-        console.log(data)
-    }
     
     useEffect(() => {
         getListaNomes()
