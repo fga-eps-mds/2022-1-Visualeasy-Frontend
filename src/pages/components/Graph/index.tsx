@@ -13,7 +13,9 @@ import {
 
 import { FiDownload } from 'react-icons/fi';
 
-import { IconButton } from '@chakra-ui/react'
+import { BiSelectMultiple } from 'react-icons/bi';
+
+import { Button, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
 
 import { CSVLink } from "react-csv";
 
@@ -39,6 +41,8 @@ function getRandomColor() {
 }
 
 export default function Graph(dataBase) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
    const data = {
     datasets: [
       {
@@ -88,8 +92,33 @@ export default function Graph(dataBase) {
               size="sm" 
               icon={<FiDownload />} 
               variant='outline'
-            />    
-          </CSVLink>}     
+            />
+          </CSVLink>}
+          
+          <IconButton 
+            aria-label="expand" 
+            icon={<BiSelectMultiple />} 
+            variant="outline"
+            size="sm"
+            onClick={onOpen}
+            />
+
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Selecione os gráficos que deseja visualizar</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                Checklist aqui
+              </ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme='red' mr={3} onClick={onClose}>
+                  Fechar
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
       </Box>
     );
   };
