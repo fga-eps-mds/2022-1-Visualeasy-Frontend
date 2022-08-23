@@ -11,6 +11,12 @@ import {
 
 } from 'chart.js';
 
+import { FiDownload } from 'react-icons/fi';
+
+import { IconButton } from '@chakra-ui/react'
+
+import { CSVLink } from "react-csv";
+
 import { Line } from 'react-chartjs-2';
 
 import {Box} from "@chakra-ui/react"
@@ -58,9 +64,34 @@ export default function Graph(dataBase) {
         }
     },
   }
-    return (
+
+  
+  const getFileName = () => {
+    let d = new Date();
+    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, "");
+    return `${dformat}`;
+  }
+    
+  return (
+      
       <Box height="400px" w="100%">
         <Line className='Grafico' data={data} options={options} />
+        
+        {dataBase.dataBase.variavels && 
+          <CSVLink
+            data={dataBase.dataBase.variavels}
+            filename={getFileName()}
+            target="_blank"
+            separator={";"}> 
+            <IconButton 
+              aria-label='download'
+              size="sm" 
+              icon={<FiDownload />} 
+              variant='outline'
+            />    
+          </CSVLink>}     
       </Box>
     );
   };
+
+  
