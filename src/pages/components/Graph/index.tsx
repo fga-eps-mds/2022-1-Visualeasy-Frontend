@@ -107,17 +107,18 @@ export default function Graph(dataForm) {
   }
     
   return (
+      
       <Box height="400px" w="100%">
         <Line className='Grafico' data={data} options={options} />
         
-        <CSVLink
-          data={dataBase.dataBase.variavels || ""}
+        {dataBase.dataBase.variavels && <CSVLink
+          data={dataBase.dataBase.variavels}
           filename={getFileName()}
           target="_blank"
           separator={";"}
           > <Button colorScheme='red' size='sm' > Baixar CSV </Button>    
-        </CSVLink>
-        
+        </CSVLink>}
+       
       </Box>
     );
   };
