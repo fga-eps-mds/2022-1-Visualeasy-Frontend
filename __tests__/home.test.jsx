@@ -126,6 +126,7 @@ describe('Button', () => {
   });
 });
 
+
 describe('RatioSelect', () => { 
   test('Deve renderizar os campos de Início e Fim', async() => { 
     render(<DisplayHome />);
