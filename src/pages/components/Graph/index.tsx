@@ -11,7 +11,9 @@ import {
 
 } from 'chart.js';
 
-import { Button } from '@chakra-ui/react'
+import { FiDownload } from 'react-icons/fi';
+
+import { IconButton } from '@chakra-ui/react'
 
 import { CSVLink } from "react-csv";
 
@@ -111,14 +113,19 @@ export default function Graph(dataForm) {
       <Box height="400px" w="100%">
         <Line className='Grafico' data={data} options={options} />
         
-        {dataBase.dataBase.variavels && <CSVLink
-          data={dataBase.dataBase.variavels}
-          filename={getFileName()}
-          target="_blank"
-          separator={";"}
-          > <Button colorScheme='red' size='sm' > Baixar CSV </Button>    
-        </CSVLink>}
-       
+        {dataBase.dataBase.variavels && 
+          <CSVLink
+            data={dataBase.dataBase.variavels}
+            filename={getFileName()}
+            target="_blank"
+            separator={";"}> 
+            <IconButton 
+              aria-label='download'
+              size="sm" 
+              icon={<FiDownload />} 
+              variant='outline'
+            />    
+          </CSVLink>}     
       </Box>
     );
   };
