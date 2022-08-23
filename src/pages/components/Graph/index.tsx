@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,7 +13,7 @@ import {
 
 import { Line } from 'react-chartjs-2';
 
-import {Box} from "@chakra-ui/react"
+import {Box, Button, IconButton, Image} from "@chakra-ui/react"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -33,34 +33,67 @@ function getRandomColor() {
 }
 
 export default function Graph(dataBase) {
-   const data = {
+  const ref = useRef(); 
+  const data = {
     datasets: [
       {
         label: 'Dataset 1',
         data: dataBase.dataBase.variavels,
         lineTension: 0.5,  
         backgroundColor: `${getRandomColor()}`,
+        
       },
 
     ],
   };
+  const downloadImage = useCallback (() => {
+    const link = document.createElement("a");
+    link.download = "chart.png";
+    link.href = ref.current.toBase64Image();
+    link.click(); 
+  }, []);
+  
+
+  const plugin = {
+      beforeDraw: (chartCtx) => {
+        const ctx = chartCtx.canvas.getContext('2d');
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, chartCtx.width, chartCtx.height);
+        ctx.restore();
+      }
+  };
+
   const options = {
     type:"line",
-   
     bezierCurve : false,
-      parsing: {
-        xAxisKey: 'data',
-        yAxisKey: 'valor'
-      },
-      elements: {
-        line: {
-            tension: 0
-        }
+    parsing: {
+      xAxisKey: 'data',
+      yAxisKey: 'valor'
     },
+    elements: {
+      line: {
+        tension: 0
+      }
+    },
+    
   }
+
     return (
       <Box height="400px" w="100%">
-        <Line className='Grafico' data={data} options={options} />
+        <Line plugins={[plugin]} ref={ref} className='Grafico' data={data} options={options} />
+        <Box as='button'
+          borderColor="#FFFFFF"
+          border="1px"
+          borderRadius='md'
+          w='60px'
+          h='50px'
+          placeholder='Download'
+          onClick={downloadImage}
+        >
+          <Image id='screenshot-icon' src='images/screenshot-icon.svg' boxSize='100%' />
+        </Box>
       </Box>
     );
   };
