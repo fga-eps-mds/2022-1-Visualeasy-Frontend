@@ -66,7 +66,8 @@ export default function Graph(dataForm:any) {
           //console.log("RESPOSTA DA REQ", response)
         }
 
-        const dados = response.variavels.map((element:any)=> element.valor)
+        const dados = response.variavels.map((element:any)=> { return {data:element.date, valor:Number(element.valor)} })
+        console.log("DADOS GRAFICOS", dados)
         const linhaTempo = response.variavels.map((element:any)=>element.date)
         //console.error(`Tamanho TIMELINE ${dataForm.dataForm.variavel[i]}: ${linhaTempo.length}`)
     
@@ -80,12 +81,8 @@ export default function Graph(dataForm:any) {
         listaRecebida.push(dataset);
         
         linhaTempo.forEach((element:any)=>{
-          //console.log("Valor da linha do tempo", element)
-          //console.log("Valor da xAxis", xAxis[index])
           if(!linhaTempoTotal.includes(element)){
-            //console.log("Entrou")
             linhaTempoTotal.push(element)
-            //setXAxis([...xAxis, element])
           }
         })
         console.error(`Tamanho TIMELINE TOTAL: ${xAxis.length}`)
@@ -104,20 +101,16 @@ export default function Graph(dataForm:any) {
 
   const data = {
     datasets: listaVariaveis,
-    labels: xAxis
   };
-  //console.log("DATA", data)
+  console.log("DATA", listaVariaveis)
   const options = {
     type: "line",
-
     bezierCurve: false,
-    parsing: {
-      xAxisKey: 'data',
-      yAxisKey: 'valor'
-    },
+    parsing: {xAxisKey: 'data', yAxisKey:'valor'},
     elements: {
       line: {
-        tension: 0
+        tension: 0.1,
+        fill:true
       }
     },
   }
