@@ -43,8 +43,9 @@ export default function Graph(dataForm:any) {
   useEffect( () => {
     const geraDadosGraficos = async () => {
 
-      //setXAxis([])
+      setXAxis([])
       let listaRecebida = [];
+      let linhaTempoTotal:any = [];
 
       for( let i = 0; i < dataForm.dataForm.variavel.length; i++ ) {
     
@@ -77,31 +78,35 @@ export default function Graph(dataForm:any) {
         }
     
         listaRecebida.push(dataset);
-
+        
         linhaTempo.forEach((element:any)=>{
           //console.log("Valor da linha do tempo", element)
           //console.log("Valor da xAxis", xAxis[index])
-          if(!xAxis.includes(element)){
+          if(!linhaTempoTotal.includes(element)){
             //console.log("Entrou")
-            xAxis.push(element)
+            linhaTempoTotal.push(element)
+            //setXAxis([...xAxis, element])
           }
         })
         console.error(`Tamanho TIMELINE TOTAL: ${xAxis.length}`)
       }
-      
+      console.log("Linha tempo total", linhaTempoTotal);
       setListaVariaveis(listaRecebida);
-      console.log("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ",xAxis)
+      setXAxis(linhaTempoTotal)
+      //console.log("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ",xAxis)
     }
     
     geraDadosGraficos()
     //console.log("Todos os dados", listaVariaveis)
   }, [dataForm] )
 
+  //console.log("AXIOS", xAxis)
+
   const data = {
     datasets: listaVariaveis,
     labels: xAxis
   };
-  console.log("DATA", data)
+  //console.log("DATA", data)
   const options = {
     type: "line",
 
