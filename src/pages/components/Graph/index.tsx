@@ -13,13 +13,11 @@ import {
 
 import { FiDownload } from 'react-icons/fi';
 
-import { IconButton } from '@chakra-ui/react'
-
 import { CSVLink } from "react-csv";
 
 import { Line } from 'react-chartjs-2';
 
-import {Box, Button, IconButton, Image} from "@chakra-ui/react"
+import { Box, Button, IconButton, Image, Stack } from "@chakra-ui/react"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -39,41 +37,41 @@ function getRandomColor() {
 }
 
 export default function Graph(dataBase) {
-  const ref = useRef(); 
+  const ref = useRef();
   const data = {
     datasets: [
       {
         label: 'Dataset 1',
         data: dataBase.dataBase.variavels,
-        lineTension: 0.5,  
+        lineTension: 0.5,
         backgroundColor: `${getRandomColor()}`,
-        
+
       },
 
     ],
   };
-  const downloadImage = useCallback (() => {
+  const downloadImage = useCallback(() => {
     const link = document.createElement("a");
     link.download = "chart.png";
     link.href = ref.current.toBase64Image();
-    link.click(); 
+    link.click();
   }, []);
-  
+
 
   const plugin = {
-      beforeDraw: (chartCtx) => {
-        const ctx = chartCtx.canvas.getContext('2d');
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-over';
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, chartCtx.width, chartCtx.height);
-        ctx.restore();
-      }
+    beforeDraw: (chartCtx) => {
+      const ctx = chartCtx.canvas.getContext('2d');
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-over';
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, chartCtx.width, chartCtx.height);
+      ctx.restore();
+    }
   };
 
   const options = {
-    type:"line",
-    bezierCurve : false,
+    type: "line",
+    bezierCurve: false,
     parsing: {
       xAxisKey: 'data',
       yAxisKey: 'valor'
@@ -85,44 +83,45 @@ export default function Graph(dataBase) {
     },
   }
 
-  
+
   const getFileName = () => {
     let d = new Date();
     let dformat = d.toLocaleString('pt-BR').replace(/\D/g, "");
     return `${dformat}`;
   }
-    
+
   return (
-      
-      <Box height="400px" w="100%">
-        <Line plugins={[plugin]} ref={ref} className='Grafico' data={data} options={options} />
+
+    <Box height="400px" w="100%">
+      <Line plugins={[plugin]} ref={ref} className='Grafico' data={data} options={options} />
+      <Stack borderRadius="5px" border="1px" p="5px" marginTop="1.5rem" direction='row' spacing={5}>
         <Box as='button'
           borderColor="#FFFFFF"
           border="1px"
           borderRadius='md'
-          w='60px'
-          h='50px'
+          w='40px'
+          h='40px'
           placeholder='Download'
           onClick={downloadImage}
         >
-          <Image id='screenshot-icon' src='images/screenshot-icon.svg' boxSize='100%' />
+          <Image
+            objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
         </Box>
-        
-        {dataBase.dataBase.variavels && 
+        {dataBase.dataBase.variavels &&
           <CSVLink
             data={dataBase.dataBase.variavels}
             filename={getFileName()}
             target="_blank"
-            separator={";"}> 
-            <IconButton 
+            separator={";"}>
+            <IconButton
               aria-label='download'
-              size="sm" 
-              icon={<FiDownload />} 
+              size="md"
+              icon={<FiDownload />}
               variant='outline'
-            />    
-          </CSVLink>}     
-      </Box>
-    );
-  };
+            />
+          </CSVLink>}
+      </Stack>
+    </Box>
+  );
+};
 
-  
