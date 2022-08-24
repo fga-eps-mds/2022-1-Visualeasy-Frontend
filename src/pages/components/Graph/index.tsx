@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Chart as ChartJS,
@@ -16,13 +16,13 @@ import { FiDownload } from 'react-icons/fi';
 
 import { BiSelectMultiple } from 'react-icons/bi';
 
-import { Button, Checkbox, CheckboxGroup, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useDisclosure } from '@chakra-ui/react'
+import { Button, Checkbox, CheckboxGroup, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useDisclosure } from '@chakra-ui/react';
 
 import { CSVLink } from 'react-csv';
 
 import { Line } from 'react-chartjs-2';
 
-import {Box} from '@chakra-ui/react'
+import {Box} from '@chakra-ui/react';
 
 ChartJS.register(
   CategoryScale,
@@ -77,8 +77,9 @@ function getRandomColor() {
 
 export default function Graph(dataBase) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [ graficos, setGraficos ] = useState([]);
 
-   const data = {
+  const data = {
     datasets: [
       {
         label: 'Dataset 1',
@@ -86,7 +87,6 @@ export default function Graph(dataBase) {
         lineTension: 0.5,  
         backgroundColor: `${getRandomColor()}`,
       },
-
     ],
   };
 
@@ -94,17 +94,16 @@ export default function Graph(dataBase) {
     type:'line',
    
     bezierCurve : false,
-      parsing: {
-        xAxisKey: 'data',
-        yAxisKey: 'valor'
-      },
-      elements: {
-        line: {
-            tension: 0
-        }
+    parsing: {
+      xAxisKey: 'data',
+      yAxisKey: 'valor'
     },
+    elements: {
+      line: {
+          tension: 0
+      }
+    }
   }
-
   
   const getFileName = () => {
     let d = new Date();
@@ -112,59 +111,57 @@ export default function Graph(dataBase) {
     return `${dformat}`;
   }
     
-  return (
+  return (  
+    <Box height='400px' w='100%'>
+      <Line className='Grafico' data={data} options={options} />
       
-      <Box height='400px' w='100%'>
-        <Line className='Grafico' data={data} options={options} />
-        
-        {dataBase.dataBase.variavels && 
-          <CSVLink
-            data={dataBase.dataBase.variavels}
-            filename={getFileName()}
-            target='_blank'
-            separator={';'}> 
-            <IconButton 
-              aria-label='download'
-              size='sm' 
-              icon={<FiDownload />} 
-              variant='outline'
-            />
-          </CSVLink>}
-          
+      {dataBase.dataBase.variavels && 
+        <CSVLink
+          data={dataBase.dataBase.variavels}
+          filename={getFileName()}
+          target='_blank'
+          separator={';'}> 
           <IconButton 
-            aria-label='expand' 
-            icon={<BiSelectMultiple />} 
+            aria-label='download'
+            size='sm' 
+            icon={<FiDownload />} 
             variant='outline'
-            size='sm'
-            onClick={onOpen}
-            />
+          />
+        </CSVLink>}
+        
+      <IconButton 
+        aria-label='expand' 
+        icon={<BiSelectMultiple />} 
+        variant='outline'
+        size='sm'
+        onClick={onOpen}
+        />
 
-          <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Selecione os gráficos que deseja visualizar</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <CheckboxGroup defaultValue={tabs.map(tab => tab.id)}>
-                  <Stack spacing={[1, 5]} direction={['column']}>
-                    {
-                      tabs.map(tab => {
-                        return <Checkbox value={tab.id}>{tab.titulo}</Checkbox>
-                      })
-                    }
-                  </Stack>
-                </CheckboxGroup>
-              </ModalBody>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Selecione os gráficos que deseja visualizar</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
 
-              <ModalFooter>
-                <Button colorScheme='red' mr={3} onClick={onClose}>
-                  Fechar
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
-      </Box>
-    );
-  };
+            <CheckboxGroup defaultValue={tabs.map(tab => tab.id)} onChange={(e) => setGraficos(e)} >
+              <Stack spacing={[1, 5]} direction={['column']}>
+                {
+                  tabs.map(tab => {
+                    return <Checkbox value={tab.id} key={tab.id}>{tab.titulo}</Checkbox>
+                  })
+                }
+              </Stack>
+            </CheckboxGroup>
 
-  
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme='red' mr={3} onClick={onClose}>
+              Fechar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </Box>
+  );
+};
