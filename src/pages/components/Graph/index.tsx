@@ -35,51 +35,73 @@ function getRandomColor() {
   return color;
 }
 
-export default function Graph(dataForm) {
+export default function Graph(dataForm:any) {
 
-  const [ listaVariaveis, setListaVariaveis ] = useState([{}]); 
+  const [ listaVariaveis, setListaVariaveis ] = useState([{}]);
+  const [xAxis, setXAxis] = useState([''])
 
   useEffect( () => {
-    const doEstevaoSeuAmigao = async () => {
+    const geraDadosGraficos = async () => {
 
+      //setXAxis([])
       let listaRecebida = [];
 
       for( let i = 0; i < dataForm.dataForm.variavel.length; i++ ) {
     
-        let teste;
+        let response;
 
-        const userData = {
+        const bodyRequest = {
           variavel: dataForm.dataForm.variavel[i],
           intervalo: dataForm.dataForm.intervalo,
           startDate: dataForm.dataForm.startDate,
-          endDate: dataForm.dataForm.endDate
+          endDate: dataForm.dataForm.endDate,
+          granularity: dataForm.dataForm.granularity
         };
     
         if (dataForm.dataForm.intervalo!==5) {
-          teste = await postAllData("filteredByPeriod", userData)
+          response = await postAllData("filteredByPeriod", bodyRequest)
         } else {
-          teste = await postAllData("filtered", userData)
+          response = await postAllData("filtered", bodyRequest)
+          //console.log("RESPOSTA DA REQ", response)
         }
+
+        const dados = response.variavels.map((element:any)=> element.valor)
+        const linhaTempo = response.variavels.map((element:any)=>element.date)
+        //console.error(`Tamanho TIMELINE ${dataForm.dataForm.variavel[i]}: ${linhaTempo.length}`)
     
-        const show = {
+        const dataset = {
           label: dataForm.dataForm.variavel[i],
-          data: teste.variavels,
+          data: dados,
           lineTension: 0.5,
           backgroundColor: `${getRandomColor()}`,
         }
     
-        listaRecebida.push(show);
+        listaRecebida.push(dataset);
+
+        linhaTempo.forEach((element:any)=>{
+          //console.log("Valor da linha do tempo", element)
+          //console.log("Valor da xAxis", xAxis[index])
+          if(!xAxis.includes(element)){
+            //console.log("Entrou")
+            xAxis.push(element)
+          }
+        })
+        console.error(`Tamanho TIMELINE TOTAL: ${xAxis.length}`)
       }
       
       setListaVariaveis(listaRecebida);
+      console.log("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ",xAxis)
     }
-
-    doEstevaoSeuAmigao()
+    
+    geraDadosGraficos()
+    //console.log("Todos os dados", listaVariaveis)
   }, [dataForm] )
 
   const data = {
-    datasets: listaVariaveis
+    datasets: listaVariaveis,
+    labels: xAxis
   };
+  console.log("DATA", data)
   const options = {
     type: "line",
 
