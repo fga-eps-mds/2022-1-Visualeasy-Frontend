@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,13 +16,14 @@ import { FiDownload } from 'react-icons/fi';
 
 import { BiSelectMultiple } from 'react-icons/bi';
 
-import { Button, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
+import { Button, Checkbox, CheckboxGroup, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useDisclosure } from '@chakra-ui/react'
 
-import { CSVLink } from "react-csv";
+import { CSVLink } from 'react-csv';
 
 import { Line } from 'react-chartjs-2';
 
-import {Box} from "@chakra-ui/react"
+import {Box} from '@chakra-ui/react'
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -31,6 +33,39 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+// constante temporária p/ escolha dos gráficos
+const tabs = [
+  {
+    id: '1',
+    titulo: 'Gráfico 1',
+    variaveis: [
+      'Charmander',
+      'Pikachu'
+    ],
+    intervalo: 3
+  },
+  {
+    id: '2',
+    titulo: 'Gráfico 2',
+    variaveis: [
+      'Squirtle'
+    ],
+    intervalo: 5,
+    startDate: '2022-08-23T01:43',
+    endDate: '2022-08-24T01:43'
+  },
+  {
+    id: '3',
+    titulo: 'Gráfico 3',
+    variaveis: [
+      'Bulbassauro',
+      'Charmander'
+    ],
+    intervalo: 2
+  }
+];
+
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
@@ -54,8 +89,9 @@ export default function Graph(dataBase) {
 
     ],
   };
+
   const options = {
-    type:"line",
+    type:'line',
    
     bezierCurve : false,
       parsing: {
@@ -72,34 +108,34 @@ export default function Graph(dataBase) {
   
   const getFileName = () => {
     let d = new Date();
-    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, "");
+    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, '');
     return `${dformat}`;
   }
     
   return (
       
-      <Box height="400px" w="100%">
+      <Box height='400px' w='100%'>
         <Line className='Grafico' data={data} options={options} />
         
         {dataBase.dataBase.variavels && 
           <CSVLink
             data={dataBase.dataBase.variavels}
             filename={getFileName()}
-            target="_blank"
-            separator={";"}> 
+            target='_blank'
+            separator={';'}> 
             <IconButton 
               aria-label='download'
-              size="sm" 
+              size='sm' 
               icon={<FiDownload />} 
               variant='outline'
             />
           </CSVLink>}
           
           <IconButton 
-            aria-label="expand" 
+            aria-label='expand' 
             icon={<BiSelectMultiple />} 
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={onOpen}
             />
 
@@ -109,7 +145,15 @@ export default function Graph(dataBase) {
               <ModalHeader>Selecione os gráficos que deseja visualizar</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                Checklist aqui
+                <CheckboxGroup defaultValue={tabs.map(tab => tab.id)}>
+                  <Stack spacing={[1, 5]} direction={['column']}>
+                    {
+                      tabs.map(tab => {
+                        return <Checkbox value={tab.id}>{tab.titulo}</Checkbox>
+                      })
+                    }
+                  </Stack>
+                </CheckboxGroup>
               </ModalBody>
 
               <ModalFooter>
