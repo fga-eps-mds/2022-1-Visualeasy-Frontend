@@ -137,4 +137,11 @@ describe('RatioSelect', () => {
   });
 });
 
+describe('Download button', () => {
+  test('Button download do gráfico ', async () => {
+    render(<DisplayHome />);
+    const button = screen.getByPlaceholderText(/Download/)
+    expect(button).not.toBeNull();
+  });
+});
 

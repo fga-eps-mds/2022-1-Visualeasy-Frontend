@@ -82,9 +82,9 @@ export default function DisplayHome() {
         </HStack>
       </GridItem>
 
-      <GridItem h="70px" colSpan={4} bg="tomato">
-        <HStack h="100%">{/* <FooterChart /> */}</HStack>
-      </GridItem>
+      {/* <GridItem h="70px" colSpan={4} bg="tomato">
+        <HStack h="100%"></HStack>
+      </GridItem> */}
     </Grid>
   );
 };
