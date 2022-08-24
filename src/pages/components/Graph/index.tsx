@@ -17,7 +17,7 @@ import { CSVLink } from "react-csv";
 
 import { Line } from 'react-chartjs-2';
 
-import { Box, Button, IconButton, Image, Stack } from "@chakra-ui/react"
+import { Box, IconButton, Image, Stack } from "@chakra-ui/react"
 ChartJS.register(
   CategoryScale,
   LinearScale,
