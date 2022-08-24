@@ -43,7 +43,8 @@ const tabs = [
       'Charmander',
       'Pikachu'
     ],
-    intervalo: 3
+    intervalo: 3,
+    mostrar: true
   },
   {
     id: '2',
@@ -53,7 +54,8 @@ const tabs = [
     ],
     intervalo: 5,
     startDate: '2022-08-23T01:43',
-    endDate: '2022-08-24T01:43'
+    endDate: '2022-08-24T01:43',
+    mostrar: false
   },
   {
     id: '3',
@@ -62,7 +64,8 @@ const tabs = [
       'Bulbassauro',
       'Charmander'
     ],
-    intervalo: 2
+    intervalo: 2,
+    mostrar: false
   }
 ];
 
@@ -110,10 +113,32 @@ export default function Graph(dataBase) {
     let dformat = d.toLocaleString('pt-BR').replace(/\D/g, '');
     return `${dformat}`;
   }
-    
+
+  const confirmarGraficos = () => {
+    tabs.forEach(tab => {
+      if(graficos.includes(tab.id)) {
+        tab.mostrar = true;
+      } else {
+        tab.mostrar = false;
+      }
+    });
+    onClose();
+  }
+
   return (  
     <Box height='400px' w='100%'>
-      <Line className='Grafico' data={data} options={options} />
+
+      { 
+        tabs.map(tab => {
+          if(tab.mostrar) {
+            return(
+              // Nessa parte só falta pensar e implementar uma maneira de atualizar os dados e os options de acordo com cada gráfico
+              // Mas isso depende de como esses dados virão dos componentes da sidebar/tabs.
+              <Line className='Grafico' key={tab.id} id={tab.id} data={data} options={options} />
+            )
+          }
+        })
+      }
       
       {dataBase.dataBase.variavels && 
         <CSVLink
@@ -156,9 +181,10 @@ export default function Graph(dataBase) {
 
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme='red' mr={3} onClick={onClose}>
-              Fechar
+            <Button colorScheme='red' mr={3} onClick={confirmarGraficos}>
+              Confirmar
             </Button>
+
           </ModalFooter>
         </ModalContent>
       </Modal>
