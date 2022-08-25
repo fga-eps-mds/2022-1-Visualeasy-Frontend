@@ -36,7 +36,6 @@ function getRandomColor() {
 }
 
 export default function Graph(dataForm:any) {
-
   const [ listaVariaveis, setListaVariaveis ] = useState([{}]);
 
   useEffect( () => {
@@ -61,8 +60,6 @@ export default function Graph(dataForm:any) {
         }
 
         const dados = response.variavels.map((element:any)=> { return {data:element.date, valor:Number(element.valor)} })
-        const linhaTempo = response.variavels.map((element:any)=>element.date)
-    
         const dataset = {
           label: dataForm.dataForm.variavel[i],
           data: dados,
@@ -81,7 +78,6 @@ export default function Graph(dataForm:any) {
   const data = {
     datasets: listaVariaveis,
   };
-  console.log("DATA", listaVariaveis)
   const options = {
     type: "line",
     bezierCurve: false,

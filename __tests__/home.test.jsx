@@ -2,12 +2,13 @@
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import DisplayHome from '../src/pages/index'
+import Graph from '../src/pages/components/Graph';
 import Sidebar from '../src/pages/components/Sidebar';
 import '@testing-library/jest-dom'
 import {rest} from "msw"
 import {setupServer} from "msw/node"
 
-const url = `http://localhost/variavel`
+const url = `http://localhost:8080/variavel`
 
 const variavelNameGet = rest.get(url, (req, res, ctx)=>{
   return  res(
@@ -28,7 +29,45 @@ const variavelNameGet = rest.get(url, (req, res, ctx)=>{
   }))
 })
 
-const handlers = [variavelNameGet]
+const postAllData  = rest.post(`${url}/filtered`, (req, res, ctx)=>{
+  return res(
+    ctx.status(200),
+    ctx.json({
+      "variavels": [
+        {
+          "date": "30-6-2022",
+          "valor": "5.08"
+        },
+        {
+          "date": "1-7-2022",
+          "valor": "5.04"
+        }
+      ],
+      "resposta": "Sucesso!!"
+    })
+  )
+})
+
+const postAllDataPredefinido  = rest.post(`${url}/filteredByPeriod`, (req, res, ctx)=>{
+  return res(
+    ctx.status(200),
+    ctx.json({
+      "variavels": [
+        {
+          "date": "30-6-2022",
+          "valor": "5.08"
+        },
+        {
+          "date": "1-7-2022",
+          "valor": "5.04"
+        }
+      ],
+      "resposta": "Sucesso!!"
+    })
+  )
+})
+
+const handlers = [variavelNameGet, postAllData, postAllDataPredefinido]
 
 const server = new setupServer(...handlers);
 
@@ -128,4 +167,30 @@ describe('RatioSelect', () => {
   });
 });
 
+describe('Graph Tempo Personalizado', ()=>{
+  test('Deve renderizar o grafico com a opção de tempo personalizado', async()=>{
+    const dataForm = {
+        variavel: ["Pikashu", "Outro"],
+        intervalo: 5,
+        startDate: "30-04-2022",
+        endDate: "30-06-2022",
+        granularity: "month"
+    }
+    const graph = render(<Graph dataForm={dataForm}/>)
+    expect(graph).not.toBeNull();
+  })
+})
 
+describe('Graph Tempo Predefinido', ()=>{
+  test('Deve renderizar o grafico com a opção de tempo predefinido', async()=>{
+    const dataForm = {
+        variavel: ["Pikashu"],
+        intervalo: 2,
+        startDate: "30-04-2022",
+        endDate: "30-06-2022",
+        granularity: "month"
+    }
+    const graph = render(<Graph dataForm={dataForm}/>)
+    expect(graph).not.toBeNull();
+  })
+})
