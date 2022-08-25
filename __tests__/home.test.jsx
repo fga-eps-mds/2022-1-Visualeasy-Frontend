@@ -4,9 +4,12 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import DisplayHome from '../src/pages/index'
 import Graph from '../src/pages/components/Graph';
 import Sidebar from '../src/pages/components/Sidebar';
+import RatioSelect from '../src/pages/components/RatioTimeChart/Index';
+import FormGraph from '../src/pages/components/FormGraph';
 import '@testing-library/jest-dom'
 import {rest} from "msw"
 import {setupServer} from "msw/node"
+
 
 const url = `http://localhost:8080/variavel`
 
@@ -88,34 +91,17 @@ describe('Logo', () => {
 
 describe('Tabs', () => {
   test('Tabs ', async () => {
-    render(<DisplayHome />);
+    const setDataForm = ()=> console.log("MOCK FUNÇÃO")
+    render(<Sidebar SidebarData={(e)=>{setDataForm(e)}}/>);
     const button = screen.getByText(/Gráfico 1/i, { selector: 'button' });
     expect(button).not.toBeNull();
   });
 });
 
-describe('Title', () => {
-  test('Title field should exists', async () => {
-    const home = render(<DisplayHome />);
-    const title = home.container.querySelector('#title');
-    expect(title).not.toBeNull();
-  });
-});
-
-
-describe('Select', () => {
-  test('Select field should exists', async () => {
-    const home = render(<DisplayHome />);
-    const select = home.container.querySelectorAll('#select');
-    await waitFor(()=>expect(select).not.toBeNull()) 
-
-  });
-});
-
-
 describe('Option', () => {
   test('Options should exists', async () => {
-    render(<DisplayHome />);
+    const SidebarData = ()=> console.log("MOCK FUNÇÃO")
+    render(<FormGraph FormGraphProps={(e)=>{SidebarData({...e})}} />);
     fireEvent.click(screen.getByText("Selecione as variáveis"));
 
     setTimeout(() => {
@@ -131,7 +117,8 @@ describe('Option', () => {
 
 describe('Radio', () => {
   test('Radio intervalo ', async () => {
-    render(<DisplayHome />);
+    const setGraphParameters = ()=> console.log("MOCK FUNÇÃO")
+    render(<RatioSelect RatioRange={(e) => setGraphParameters(e)} />);
     const TitleRadio = screen.getByText(/Selecione o intervalo:/i);
     expect(TitleRadio).not.toBeNull();
    const TitleRadio1 = screen.getByText(/1 Hora/i);
@@ -150,7 +137,8 @@ describe('Radio', () => {
 
 describe('Button', () => {
   test('Button gerar grafico ', async () => {
-    render(<DisplayHome />);
+    const SidebarData = ()=> console.log("MOCK FUNÇÃO")
+    render(<FormGraph FormGraphProps={(e)=>{SidebarData({...e})}} />);
     const button = screen.getByText(/Gerar gráfico/i, { selector: 'button' });
     expect(button).not.toBeNull();
   });
@@ -159,7 +147,8 @@ describe('Button', () => {
 
 describe('RatioSelect', () => { 
   test('Deve renderizar os campos de Início e Fim', async() => { 
-    render(<DisplayHome />);
+    const setGraphParameters = ()=> console.log("MOCK FUNÇÃO")
+    render(<RatioSelect RatioRange={(e) => setGraphParameters(e)} />);
     const TitleRadio = screen.getByText(/Personalizado/i);
     fireEvent.click(TitleRadio);
     expect(screen.getByText('Início:')).not.toBeNull();
