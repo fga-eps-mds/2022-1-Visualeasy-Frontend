@@ -6,7 +6,6 @@ import Sidebar from '../src/pages/components/Sidebar';
 import '@testing-library/jest-dom'
 import {rest} from "msw"
 import {setupServer} from "msw/node"
-import FormGraph from '../src/pages/components/FormGraph';
 
 const url = `http://localhost/variavel`
 
@@ -55,14 +54,6 @@ describe('Tabs', () => {
     expect(button).not.toBeNull();
   });
 });
-
-// describe('TabPanel', () => {
-//   test('TabPanel ', async() => {
-//     render(<DisplayHome />);
-//     const tabPanel = screen.getAllByText(/Dados/i)
-//     expect(tabPanel).toHaveLength(1)
-//   });
-// });
 
 describe('Title', () => {
   test('Title field should exists', async () => {

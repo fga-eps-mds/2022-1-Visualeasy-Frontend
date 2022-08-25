@@ -38,17 +38,12 @@ function getRandomColor() {
 export default function Graph(dataForm:any) {
 
   const [ listaVariaveis, setListaVariaveis ] = useState([{}]);
-  const [xAxis, setXAxis] = useState([''])
 
   useEffect( () => {
     const geraDadosGraficos = async () => {
-
-      setXAxis([])
       let listaRecebida = [];
-      let linhaTempoTotal:any = [];
 
       for( let i = 0; i < dataForm.dataForm.variavel.length; i++ ) {
-    
         let response;
 
         const bodyRequest = {
@@ -63,13 +58,10 @@ export default function Graph(dataForm:any) {
           response = await postAllData("filteredByPeriod", bodyRequest)
         } else {
           response = await postAllData("filtered", bodyRequest)
-          //console.log("RESPOSTA DA REQ", response)
         }
 
         const dados = response.variavels.map((element:any)=> { return {data:element.date, valor:Number(element.valor)} })
-        console.log("DADOS GRAFICOS", dados)
         const linhaTempo = response.variavels.map((element:any)=>element.date)
-        //console.error(`Tamanho TIMELINE ${dataForm.dataForm.variavel[i]}: ${linhaTempo.length}`)
     
         const dataset = {
           label: dataForm.dataForm.variavel[i],
@@ -79,25 +71,12 @@ export default function Graph(dataForm:any) {
         }
     
         listaRecebida.push(dataset);
-        
-        linhaTempo.forEach((element:any)=>{
-          if(!linhaTempoTotal.includes(element)){
-            linhaTempoTotal.push(element)
-          }
-        })
-        console.error(`Tamanho TIMELINE TOTAL: ${xAxis.length}`)
       }
-      console.log("Linha tempo total", linhaTempoTotal);
       setListaVariaveis(listaRecebida);
-      setXAxis(linhaTempoTotal)
-      //console.log("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ",xAxis)
     }
     
     geraDadosGraficos()
-    //console.log("Todos os dados", listaVariaveis)
   }, [dataForm] )
-
-  //console.log("AXIOS", xAxis)
 
   const data = {
     datasets: listaVariaveis,
