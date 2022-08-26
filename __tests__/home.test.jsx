@@ -126,6 +126,7 @@ describe('Button', () => {
   });
 });
 
+
 describe('RatioSelect', () => { 
   test('Deve renderizar os campos de Início e Fim', async() => { 
     render(<DisplayHome />);
@@ -136,4 +137,11 @@ describe('RatioSelect', () => {
   });
 });
 
+describe('Download button', () => {
+  test('Button download do gráfico ', async () => {
+    render(<DisplayHome />);
+    const button = screen.getByPlaceholderText(/Download/)
+    expect(button).not.toBeNull();
+  });
+});
 
