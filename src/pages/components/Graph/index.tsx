@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useCallback, useRef } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,9 +11,13 @@ import {
 
 } from 'chart.js';
 
+import { FiDownload } from 'react-icons/fi';
+
+import { CSVLink } from "react-csv";
+
 import { Line } from 'react-chartjs-2';
 
-import { Box } from "@chakra-ui/react"
+import { Box, IconButton, Image, Stack } from "@chakra-ui/react"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -36,6 +40,7 @@ function getRandomColor() {
 }
 
 export default function Graph(dataForm:any) {
+  const ref= useRef();
   const [ listaVariaveis, setListaVariaveis ] = useState([{}]);
 
   useEffect( () => {
@@ -75,9 +80,30 @@ export default function Graph(dataForm:any) {
     geraDadosGraficos()
   }, [dataForm] )
 
+  console.log("SUPER DEBUG", listaVariaveis[0].data);
+
   const data = {
     datasets: listaVariaveis,
   };
+  const downloadImage = useCallback(() => {
+    const link = document.createElement("a");
+    link.download = "chart.png";
+    link.href = ref.current.toBase64Image();
+    link.click();
+  }, []);
+
+
+  const plugin = {
+    beforeDraw: (chartCtx) => {
+      const ctx = chartCtx.canvas.getContext('2d');
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-over';
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, chartCtx.width, chartCtx.height);
+      ctx.restore();
+    }
+  };
+
   const options = {
     type: "line",
     bezierCurve: false,
@@ -89,9 +115,46 @@ export default function Graph(dataForm:any) {
       }
     },
   }
+
+
+  const getFileName = () => {
+    let d = new Date();
+    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, "");
+    return `${dformat}`;
+  }
+
   return (
+
     <Box height="400px" w="100%">
-      <Line className='Grafico' data={data} options={options} />
+      <Line plugins={[plugin]} ref={ref} className='Grafico' data={data} options={options} />
+      <Stack borderRadius="5px" border="1px" p="5px" marginTop="1.5rem" direction='row' spacing={5}>
+        <Box as='button'
+          borderColor="#FFFFFF"
+          border="1px"
+          borderRadius='md'
+          w='40px'
+          h='40px'
+          placeholder='Download'
+          onClick={downloadImage}
+        >
+          <Image
+            objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
+        </Box>
+        {listaVariaveis[0].data &&
+          <CSVLink
+            data={listaVariaveis[0].data}
+            filename={getFileName()}
+            target="_blank"
+            separator={";"}>
+            <IconButton
+              aria-label='download'
+              size="md"
+              icon={<FiDownload />}
+              variant='outline'
+            />
+          </CSVLink>}
+      </Stack>
     </Box>
   );
 };
+
