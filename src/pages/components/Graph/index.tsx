@@ -72,8 +72,6 @@ export default function Graph({dataBase}) {
       } else {
         teste = await postAllData("filtered", userData)
       }
-console.log("grafico",teste)
-
 
       setDatabase(teste)
     }
@@ -150,9 +148,9 @@ console.log("grafico",teste)
           <Image
             objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
         </Box>
-        {/* {dataBase.dataBase.variavels &&
+        { database.variavels &&
           <CSVLink
-            data={dataBase.dataBase.variavels}
+            data={ database.variavels}
             filename={getFileName()}
             target="_blank"
             separator={";"}>
@@ -162,7 +160,7 @@ console.log("grafico",teste)
               icon={<FiDownload />}
               variant='outline'
             />
-          </CSVLink>} */}
+          </CSVLink>}
       </Stack>
     </Box>
   );

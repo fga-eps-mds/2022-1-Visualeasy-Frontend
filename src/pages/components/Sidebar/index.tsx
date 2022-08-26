@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
 
   Image,
   Box,
-  VStack,
+
   Tabs,
   TabList,
   Tab,
   TabPanels,
   TabPanel,
   Center,
-  Button,
+
   Grid,
-  GridItem
+  GridItem,
+  CloseButton
 } from "@chakra-ui/react";
 
-import { AiOutlineClose } from 'react-icons/ai';
 
 import FormGraph from "../FormGraph";
+import FormGraphinfo from "../FormShowInfo";
+
 import Graph from "../Graph";
-import { postAllData } from "../../api/api";
 interface EnumServiceGetOrderBy {
   [index: number]: string;
 }
@@ -36,24 +37,19 @@ export default function Sidebar({ SidebarData }: any) {
     intervalo: 0,
     variavel: []
   })
-  const [dataForm1, setDataForm1] = useState<dataFormProps>({
-    intervalo: 0,
-    variavel: []
-  })
-  const [dataForm2, setDataForm2] = useState<dataFormProps>({
-    intervalo: 0,
-    variavel: []
-  })
-  const [dataForm3, setDataForm3] = useState<dataFormProps>({
-    intervalo: 0,
-    variavel: []
-  })
 
 
+  const [postList, setPostList] = useState([]);
 
 
+  const addPostlist = (postitem) => setPostList([...postList, postitem]);
 
 
+  function deletPostList(deletitem) {
+    var filtered =  postList.filter((e)=>(e.id!==deletitem))
+    setPostList(filtered)
+   // setPostList(postList.filter((e) => { e.id !== deletitem }));
+  }
 
 
   return (
@@ -79,61 +75,48 @@ export default function Sidebar({ SidebarData }: any) {
                 alt="Logo"
               />
             </Center>
-          </Box>
-          <TabList mb="1em">
+          </Box >
+          <TabList  mb="1em" overflowY="hidden" overflowX="auto" >
             <Tab>
               Gráfico 1
             </Tab>
-            <Tab>
-              Gráfico 2
-            </Tab>
-            <Tab>
-              Gráfico 3
-            </Tab>
-            <Tab>
-              Gráfico 4
-            </Tab>
-          </TabList>
+            {
+              postList.map((e, index) => (
+                <Tab key={index}>
+                  {e.graphName}
+                  <CloseButton size='sm' onClick={() => { deletPostList(e.id) }} />
+                </Tab>
+              ))
 
+            }
+          </TabList>
           <TabPanels>
             <TabPanel>
-              <FormGraph FormGraphProps={(e) => { setDataForm({ ...e }) }} />
+              <FormGraph FormGraphProps={addPostlist} disablebutton />
             </TabPanel>
-            <TabPanel>
-              <FormGraph FormGraphProps={(e) => { setDataForm1({ ...e }) }} />
-            </TabPanel>
-            <TabPanel>
-              <FormGraph FormGraphProps={(e) => { setDataForm2({ ...e }) }} />
-            </TabPanel>
-            <TabPanel>
-              <FormGraph FormGraphProps={(e) => { setDataForm3({ ...e }) }} />
-            </TabPanel>
+            {postList.map((e,index) => (
+              <TabPanel key={index}>
+                <FormGraphinfo getDataFrom={e} />
+              </TabPanel>
+            ))}
           </TabPanels>
         </GridItem>
-
-
-
         <TabPanels>
+
           <TabPanel>
             <GridItem pl='2' area={'main'}>
               <Graph dataBase={dataForm} />
             </GridItem>
           </TabPanel>
-          <TabPanel>
-            <GridItem pl='2' area={'main'}>
-              <Graph dataBase={dataForm1} />
-            </GridItem>
-          </TabPanel>
-          <TabPanel>
-            <GridItem pl='2' area={'main'}>
-              <Graph dataBase={dataForm2} />
-            </GridItem>
-          </TabPanel>
-          <TabPanel>
-            <GridItem pl='2' area={'main'}>
-              <Graph dataBase={dataForm3} />
-            </GridItem>
-          </TabPanel>
+          {postList.map((e, index) => (
+            <TabPanel key={index}>
+              <GridItem pl='2' area={'main'}>
+                <Graph dataBase={e} />
+              </GridItem>
+            </TabPanel>
+          ))
+          }
+
         </TabPanels>
 
       </Grid>
