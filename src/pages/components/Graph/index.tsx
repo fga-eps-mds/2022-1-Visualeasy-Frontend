@@ -138,7 +138,7 @@ export default function Graph(dataForm:any) {
           <Image
             objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
         </Box>
-        {listaVariaveis[0].data &&
+        {/* {listaVariaveis[0].data &&
           <CSVLink
             data={listaVariaveis[0].data}
             filename={getFileName()}
@@ -150,7 +150,7 @@ export default function Graph(dataForm:any) {
               icon={<FiDownload />}
               variant='outline'
             />
-          </CSVLink>}
+          </CSVLink>} */}
       </Stack>
     </Box>
   );
