@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useEffect, useState , useCallback, useRef } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -27,6 +27,9 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+import { postAllData } from "../../api/api";
+
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
@@ -36,19 +39,49 @@ function getRandomColor() {
   return color;
 }
 
-export default function Graph(dataBase) {
-  const ref = useRef();
+export default function Graph(dataForm:any) {
+  const ref= useRef();
+  const [ listaVariaveis, setListaVariaveis ] = useState([{}]);
+
+  useEffect( () => {
+    const geraDadosGraficos = async () => {
+      let listaRecebida = [];
+
+      for( let i = 0; i < dataForm.dataForm.variavel.length; i++ ) {
+        let response;
+
+        const bodyRequest = {
+          variavel: dataForm.dataForm.variavel[i],
+          intervalo: dataForm.dataForm.intervalo,
+          startDate: dataForm.dataForm.startDate,
+          endDate: dataForm.dataForm.endDate,
+          granularity: dataForm.dataForm.granularity
+        };
+    
+        if (dataForm.dataForm.intervalo!==5) {
+          response = await postAllData("filteredByPeriod", bodyRequest)
+        } else {
+          response = await postAllData("filtered", bodyRequest)
+        }
+
+        const dados = response.variavels.map((element:any)=> { return {data:element.date, valor:Number(element.valor)} })
+        const dataset = {
+          label: dataForm.dataForm.variavel[i],
+          data: dados,
+          lineTension: 0.5,
+          backgroundColor: `${getRandomColor()}`,
+        }
+    
+        listaRecebida.push(dataset);
+      }
+      setListaVariaveis(listaRecebida);
+    }
+    
+    geraDadosGraficos()
+  }, [dataForm] )
+
   const data = {
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: dataBase.dataBase.variavels,
-        lineTension: 0.5,
-        backgroundColor: `${getRandomColor()}`,
-
-      },
-
-    ],
+    datasets: listaVariaveis,
   };
   const downloadImage = useCallback(() => {
     const link = document.createElement("a");
@@ -72,13 +105,11 @@ export default function Graph(dataBase) {
   const options = {
     type: "line",
     bezierCurve: false,
-    parsing: {
-      xAxisKey: 'data',
-      yAxisKey: 'valor'
-    },
+    parsing: {xAxisKey: 'data', yAxisKey:'valor'},
     elements: {
       line: {
-        tension: 0
+        tension: 0.1,
+        fill:true
       }
     },
   }
@@ -107,9 +138,9 @@ export default function Graph(dataBase) {
           <Image
             objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
         </Box>
-        {dataBase.dataBase.variavels &&
+        {/* {listaVariaveis[0].data &&
           <CSVLink
-            data={dataBase.dataBase.variavels}
+            data={listaVariaveis[0].data}
             filename={getFileName()}
             target="_blank"
             separator={";"}>
@@ -119,7 +150,7 @@ export default function Graph(dataBase) {
               icon={<FiDownload />}
               variant='outline'
             />
-          </CSVLink>}
+          </CSVLink>} */}
       </Stack>
     </Box>
   );
