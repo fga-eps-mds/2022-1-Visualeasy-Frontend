@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Get file name
         id: name
-        run: echo "::set-output name=file_name::fga-eps-mds-2022-1-Visualeasy-Frontend-$(TZ='America/Sao_Paulo' date +'%m-%d-%Y-%H-%M-%S')-${{github.ref_name}}"
+        run: echo "::set-output name=file_name::fga-eps-mds-2022-1-Visualeasy-Frontend-$(TZ='America/Sao_Paulo' date +'%m-%d-%Y-%H-%M-%S')"
 
       - name: Copy repository
         uses: actions/checkout@v2

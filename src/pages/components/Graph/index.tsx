@@ -80,8 +80,6 @@ export default function Graph(dataForm:any) {
     geraDadosGraficos()
   }, [dataForm] )
 
-  console.log("SUPER DEBUG", listaVariaveis[0].data);
-
   const data = {
     datasets: listaVariaveis,
   };
