@@ -41,11 +41,13 @@ function getRandomColor() {
 
 export default function Graph(dataForm:any) {
   const ref= useRef();
-  const [ listaVariaveis, setListaVariaveis ] = useState([{}]);
+  const [ listaVariaveis, setListaVariaveis] = useState([{}]);
+  const [ listaDados, setListaDados ] = useState([{}]);
 
   useEffect( () => {
     const geraDadosGraficos = async () => {
       let listaRecebida = [];
+      let listaDados = [];
 
       for( let i = 0; i < dataForm.dataForm.variavel.length; i++ ) {
         let response;
@@ -64,17 +66,23 @@ export default function Graph(dataForm:any) {
           response = await postAllData("filtered", bodyRequest)
         }
 
-        const dados = response.variavels.map((element:any)=> { return {data:element.date, valor:Number(element.valor)} })
+        const dados = response.variavels.map((element:any)=> { return {nome: dataForm.dataForm.variavel[i],data:element.date, valor:Number(element.valor)} })
         const dataset = {
           label: dataForm.dataForm.variavel[i],
           data: dados,
           lineTension: 0.5,
           backgroundColor: `${getRandomColor()}`,
         }
-    
-        listaRecebida.push(dataset);
-      }
-      setListaVariaveis(listaRecebida);
+
+        // laço para gerar os dados para o csv
+        for( let j = 0; j < dados.length; j++ ) {
+          listaDados.push(dados[j]);
+        }          
+          listaRecebida.push(dataset);
+          
+        }
+        setListaVariaveis(listaRecebida);
+        setListaDados(listaDados);
     }
     
     geraDadosGraficos()
@@ -114,12 +122,15 @@ export default function Graph(dataForm:any) {
     },
   }
 
+console.log(data.datasets)
 
   const getFileName = () => {
     let d = new Date();
     let dformat = d.toLocaleString('pt-BR').replace(/\D/g, "");
     return `${dformat}`;
   }
+
+
 
   return (
 
@@ -138,9 +149,10 @@ export default function Graph(dataForm:any) {
           <Image
             objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
         </Box>
-        {/* {listaVariaveis[0].data &&
+
+        
           <CSVLink
-            data={listaVariaveis[0].data}
+            data={listaDados || []}
             filename={getFileName()}
             target="_blank"
             separator={";"}>
@@ -150,7 +162,7 @@ export default function Graph(dataForm:any) {
               icon={<FiDownload />}
               variant='outline'
             />
-          </CSVLink>} */}
+          </CSVLink>
       </Stack>
     </Box>
   );
