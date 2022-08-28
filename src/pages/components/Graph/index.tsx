@@ -73,12 +73,12 @@ export default function Graph(dataForm:any) {
           lineTension: 0.5,
           backgroundColor: `${getRandomColor()}`,
         }
-        
+
         //for-of para gerar os dados para o csv
         for (const element of dados) {
           listaDados.push([element.nome, element.data, element.valor]);
         }
-                
+        
           listaRecebida.push(dataset);
           
         }
