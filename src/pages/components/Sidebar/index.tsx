@@ -46,11 +46,10 @@ export default function Sidebar({ SidebarData }: any) {
 
 
   function deletPostList(deletitem) {
-    var filtered =  postList.filter((e)=>(e.id!==deletitem))
+    var filtered = postList.filter((e) => (e.id !== deletitem))
     setPostList(filtered)
-   // setPostList(postList.filter((e) => { e.id !== deletitem }));
+    // setPostList(postList.filter((e) => { e.id !== deletitem }));
   }
-
 
   return (
     <Tabs isFitted defaultIndex={0} className="Tabs" variant='enclosed'>
@@ -76,7 +75,7 @@ export default function Sidebar({ SidebarData }: any) {
               />
             </Center>
           </Box >
-          <TabList  mb="1em" overflowY="hidden" overflowX="auto" >
+          <TabList mb="1em" overflowY="hidden" overflowX="auto" >
             <Tab>
               Gráfico 1
             </Tab>
@@ -94,7 +93,7 @@ export default function Sidebar({ SidebarData }: any) {
             <TabPanel>
               <FormGraph FormGraphProps={addPostlist} disablebutton />
             </TabPanel>
-            {postList.map((e,index) => (
+            {postList.map((e, index) => (
               <TabPanel key={index}>
                 <FormGraphinfo getDataFrom={e} />
               </TabPanel>
@@ -105,13 +104,13 @@ export default function Sidebar({ SidebarData }: any) {
 
           <TabPanel>
             <GridItem pl='2' area={'main'}>
-              <Graph dataBase={dataForm} />
+              {/* <Graph dataBase={dataForm} /> */}
             </GridItem>
           </TabPanel>
           {postList.map((e, index) => (
             <TabPanel key={index}>
               <GridItem pl='2' area={'main'}>
-                <Graph dataBase={e} />
+                <Graph dataForm={e} />
               </GridItem>
             </TabPanel>
           ))

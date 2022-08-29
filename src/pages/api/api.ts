@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "https://visualeasy-controle.herokuapp.com";
+axios.defaults.baseURL = "http://localhost:8080";
 
 export interface Variavel {
     id?: number,
@@ -25,16 +25,6 @@ export async function listaNomeVariaveis() {
     }
 
 };
-
-export const listaVariaveis = async () => {
-    try {
-        const resposta = await axios.get("/variavel/");
-        return resposta
-
-    } catch (e) {
-        return e
-    }
-}
 
 export const postAllData = async (params, dataapi = paramstype) => {
     try {

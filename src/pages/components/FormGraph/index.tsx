@@ -17,13 +17,13 @@ const selectStyles: ChakraStylesConfig = {
     })
 }
 
-export default function FormGraph({FormGraphProps,disablebutton}: any) {
+export default function FormGraph({ FormGraphProps, disablebutton }: any) {
     const [GraphParameters, setGraphParameters] = useState('')
     const [variablesName, setVariablesName] = useState([{}])
     const [graphName, setgraphName] = useState("Gráfico")
     const [variavelSelect, setvariavelSelect] = useState([])
 
-    
+
     useEffect(() => {
         getListaNomes()
     }, []);
@@ -62,7 +62,7 @@ export default function FormGraph({FormGraphProps,disablebutton}: any) {
 
         FormGraphProps({
             ...FormGraphData
-          });
+        });
 
         // Se o valor de intervalo for entre 1 e 4, chamar a rota /variavel/filteredByPeriod.
         // Se o valor de intervalo for 5, chamar a rota /variavel/filtered, enviando startDate e endDate
@@ -70,7 +70,7 @@ export default function FormGraph({FormGraphProps,disablebutton}: any) {
     }
     return (
         <VStack w='100%'>
-            <Input type="text" id={"title"} placeholder="Gráfico 1" onChange={(e)=>{setgraphName(e.target.value)}} />
+            <Input type="text" id={"title"} placeholder="Gráfico 1" onChange={(e) => { setgraphName(e.target.value) }} />
 
             <Select
                 name="variables"
@@ -86,13 +86,13 @@ export default function FormGraph({FormGraphProps,disablebutton}: any) {
                 options={variablesName}
             />
             <RatioSelect RatioRange={(e) => setGraphParameters(e)} />
-            {disablebutton?
-            (<Button colorScheme='red' size='lg' onClick={() => Gerar()}>Gerar gráfico</Button>
-            ):(
-                <></>
-            )
+            {disablebutton ?
+                (<Button colorScheme='red' size='lg' onClick={() => Gerar()}>Gerar gráfico</Button>
+                ) : (
+                    <></>
+                )
             }
-            
+
         </VStack>
     );
 };

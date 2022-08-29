@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -18,7 +18,6 @@ import { CSVLink } from "react-csv";
 import { Line } from 'react-chartjs-2';
 
 import { Box, IconButton, Image, Stack } from "@chakra-ui/react"
-import { postAllData } from '../../api/api';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -28,6 +27,9 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+import { postAllData } from "../../api/api";
+
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
@@ -37,60 +39,59 @@ function getRandomColor() {
   return color;
 }
 
+export default function Graph({ dataForm }: any) {
 
-interface EnumServiceGetOrderBy {
-  [index: number]: string;
-}
-
-interface dataFormProps {
-  intervalo: number
-  variavel: EnumServiceGetOrderBy[]
-  startDate?: string
-  endDate?: string
-}
-
-
-export default function Graph({dataBase}) {
-  const [database, setDatabase] = useState([])
-  const [dataForm, setDataForm] = useState<dataFormProps>({
-    intervalo: 0,
-    variavel: []
-  })
+  const ref = useRef();
+  const [listaVariaveis, setListaVariaveis] = useState([{}]);
+  const [listaDados, setListaDados] = useState([{}]);
 
   useEffect(() => {
-   
-    async function getData() {
-      let teste
-      const userData = {
-        variavel: dataBase["variavel"],
-        intervalo: dataBase.intervalo,
-        startDate: '2022-06-30T06:18:50',
-        endDate: '2022-06-30T06:26:14'
-      };
-      if (dataBase.intervalo !== 5) {
-        teste = await postAllData("filteredByPeriod", userData)
-      } else {
-        teste = await postAllData("filtered", userData)
-      }
+    const geraDadosGraficos = async () => {
+      let listaRecebida = [];
+      let listaDados = [];
 
-      setDatabase(teste)
+      for (let i = 0; i < dataForm.variavel.length; i++) {
+        let response;
+
+        const bodyRequest = {
+          variavel: dataForm.variavel[i],
+          intervalo: dataForm.intervalo,
+          startDate: dataForm.startDate,
+          endDate: dataForm.endDate,
+          granularity: dataForm.granularity
+        };
+
+        if (dataForm.intervalo !== 5) {
+          response = await postAllData("filteredByPeriod", bodyRequest)
+        } else {
+          response = await postAllData("filtered", bodyRequest)
+        }
+
+        const dados = response.variavels.map((element: any) => { return { nome: dataForm.variavel[i], data: element.date, valor: Number(element.valor) } })
+        const dataset = {
+          label: dataForm.variavel[i],
+          data: dados,
+          lineTension: 0.5,
+          backgroundColor: `${getRandomColor()}`,
+        }
+
+        //for-of para gerar os dados para o csv
+        for (const element of dados) {
+          listaDados.push([element.nome, element.data, element.valor]);
+        }
+
+        listaRecebida.push(dataset);
+
+      }
+      setListaVariaveis(listaRecebida);
+      setListaDados(listaDados);
     }
 
-    getData(dataForm)
-  }, [dataBase])
-  // =======================
-  const ref = useRef();
+    geraDadosGraficos()
+  }, [dataForm])
+
   const data = {
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: database.variavels,
-        lineTension: 0.5,
-        backgroundColor: `${getRandomColor()}`,
-
-      },
-
-    ],
+    datasets: listaVariaveis,
   };
   const downloadImage = useCallback(() => {
     const link = document.createElement("a");
@@ -110,26 +111,28 @@ export default function Graph({dataBase}) {
       ctx.restore();
     }
   };
-  
+
   const options = {
     type: "line",
     bezierCurve: false,
-    parsing: {
-      xAxisKey: 'data',
-      yAxisKey: 'valor'
-    },
+    parsing: { xAxisKey: 'data', yAxisKey: 'valor' },
     elements: {
       line: {
-        tension: 0
+        tension: 0.1,
+        fill: true
       }
     },
   }
+
+
 
   const getFileName = () => {
     let d = new Date();
     let dformat = d.toLocaleString('pt-BR').replace(/\D/g, "");
     return `${dformat}`;
   }
+
+
 
   return (
 
@@ -148,19 +151,20 @@ export default function Graph({dataBase}) {
           <Image
             objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
         </Box>
-        { database.variavels &&
-          <CSVLink
-            data={ database.variavels}
-            filename={getFileName()}
-            target="_blank"
-            separator={";"}>
-            <IconButton
-              aria-label='download'
-              size="md"
-              icon={<FiDownload />}
-              variant='outline'
-            />
-          </CSVLink>}
+
+
+        <CSVLink
+          data={listaDados || []}
+          filename={getFileName()}
+          target="_blank"
+          separator={";"}>
+          <IconButton
+            aria-label='download'
+            size="md"
+            icon={<FiDownload />}
+            variant='outline'
+          />
+        </CSVLink>
       </Stack>
     </Box>
   );
