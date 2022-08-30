@@ -9,6 +9,7 @@ import FormGraph from '../src/pages/components/FormShowInfo';
 import '@testing-library/jest-dom'
 import { rest } from "msw"
 import { setupServer } from "msw/node"
+import renderer from 'react-test-renderer';
 
 
 const url = `http://localhost:8080/variavel`
@@ -80,6 +81,15 @@ beforeAll(() => server.listen({
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close())
 
+
+describe('DisplayHome', () => {
+  test('DisplayHome deve existir', () => {
+    const displayHome = render(<DisplayHome />);
+    expect(displayHome).not.toBeNull();
+  });
+});
+
+
 describe('Logo', () => {
   test('Logo must have src = "/logo-retangular.png" and alt = "Logo"', () => {
     const sidebar = render(<Sidebar />);
@@ -141,6 +151,20 @@ describe('Button', () => {
     render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
     const button = screen.getByText(/Gerar Gráfico/i, { selector: 'button' });
     expect(button).not.toBeNull();
+  });
+});
+
+describe('closeButton', () => {
+  test('CloseButton está ativado nas abas', async () => {
+    const setDataForm = () => console.log("MOCK FUNÇÂO")
+    const sidebar = rendered.create(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
+    let tree = sidebar.toJSON();
+    expect(tree).toMatchSnapshot();
+    renderer.act(() => {
+      tree.props.deletPostList();
+    });
+    tree = sidebar.toJSON();
+    expect(tree).toMatchSnapshot();
   });
 });
 
