@@ -159,6 +159,9 @@ console.log(data.datasets)
             separator={";"}>
             <IconButton
               aria-label='download'
+              borderColor="#000000"
+              border="1px"
+              
               size="md"
               icon={<FiDownload />}
               variant='outline'
