@@ -26,10 +26,8 @@ export default function FormGraph({ FormGraphProps, disablebutton, getDataFrom }
     const [graphName, setgraphName] = useState("Gráfico")
     const [variavelSelect, setvariavelSelect] = useState([])
 
-    useEffect(() => {
-        getListaNomes()
-    }, []);
-    var newArr = variavelSelect.map(function (val, index) {
+    useEffect(() => { getListaNomes() }, []);
+    let newArr = variavelSelect.map(function (val, index) {
         return (val.value)
     })
 
