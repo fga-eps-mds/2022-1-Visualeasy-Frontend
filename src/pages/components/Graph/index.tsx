@@ -123,8 +123,6 @@ export default function Graph(dataForm:any) {
     },
   }
 
-console.log(data.datasets)
-
   const getFileName = () => {
     let d = new Date();
     let dformat = d.toLocaleString('pt-BR').replace(/\D/g, "");
@@ -144,6 +142,7 @@ console.log(data.datasets)
           borderRadius='md'
           w='40px'
           h='40px'
+          _hover={{ bg: "#b3b3cc"}}
           placeholder='Download'
           onClick={downloadImage}
         >
@@ -151,7 +150,6 @@ console.log(data.datasets)
             objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
         </Box>
 
-        
           <CSVLink
             data={listaDados || []}
             filename={getFileName()}
@@ -159,6 +157,9 @@ console.log(data.datasets)
             separator={";"}>
             <IconButton
               aria-label='download'
+              borderColor="#000000"
+              border="1px"
+              _hover={{ bg: "#b3b3cc"}}
               size="md"
               icon={<FiDownload />}
               variant='outline'
