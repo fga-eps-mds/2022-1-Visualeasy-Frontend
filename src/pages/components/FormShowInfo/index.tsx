@@ -17,17 +17,17 @@ const selectStyles: ChakraStylesConfig = {
     })
 }
 
-export default function FormGraph({ FormGraphProps, disablebutton }: any) {
-    const [GraphParameters, setGraphParameters] = useState('')
+export default function FormGraph({ FormGraphProps, disablebutton, getDataFrom }: any) {
+
+    const obj = getDataFrom?.variavel.map((e) => ({ label: e }))
+
+    const [GraphParameters, setGraphParameters] = useState(getDataFrom?.intervalo)
     const [variablesName, setVariablesName] = useState([{}])
     const [graphName, setgraphName] = useState("Gráfico")
     const [variavelSelect, setvariavelSelect] = useState([])
 
-
-    useEffect(() => {
-        getListaNomes()
-    }, []);
-    var newArr = variavelSelect.map(function (val, index) {
+    useEffect(() => { getListaNomes() }, []);
+    let newArr = variavelSelect.map(function (val, index) {
         return (val.value)
     })
 
@@ -35,11 +35,11 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
         const { variavels } = await listaNomeVariaveis();
         let variablesName = []
 
-        for (let i = 0; i < variavels.length; i++) {
+        for (const element of variavels) {
             let option = {
-                label: variavels[i].variavel,
-                value: variavels[i].variavel,
-                id: variavels[i].variavel,
+                label: element.variavel,
+                value: element.variavel,
+                id: element.variavel,
             }
             variablesName.push(option)
         }
@@ -48,7 +48,7 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
     }
 
     function Gerar() {
-        const variavel = [] = Object.keys(newArr)
+        const variavel = Object.keys(newArr)
             .map(function (key) {
                 return newArr[key];
             });
@@ -64,13 +64,12 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
             ...FormGraphData
         });
 
-        // Se o valor de intervalo for entre 1 e 4, chamar a rota /variavel/filteredByPeriod.
-        // Se o valor de intervalo for 5, chamar a rota /variavel/filtered, enviando startDate e endDate
 
     }
+
     return (
         <VStack w='100%'>
-            <Input type="text" id={"title"} placeholder="Gráfico 1" onChange={(e) => { setgraphName(e.target.value) }} />
+            <Input type="text" id={"title"} value={getDataFrom?.graphName} placeholder="Gráfico 1" onChange={(e) => { setgraphName(e.target.value) }} />
 
             <Select
                 name="variables"
@@ -79,6 +78,7 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
                 id="1"
                 instanceId={"1"}
                 closeMenuOnSelect={false}
+                defaultValue={obj}
                 size="md"
                 tagVariant="solid"
                 onChange={(e) => setvariavelSelect(e)}
