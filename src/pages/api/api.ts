@@ -1,10 +1,6 @@
 import axios from "axios";
 
-if (process.env.NEXT_PUBLIC_ENV == "development") {
-    axios.defaults.baseURL = "http://localhost:8080";
-} else {
-    axios.defaults.baseURL = "https://visualeasy-controle.herokuapp.com";
-}
+    axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 export interface Variavel {
     id?: number,
     variavel?: string;
