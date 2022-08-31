@@ -35,11 +35,11 @@ export default function FormGraph({ FormGraphProps, disablebutton, getDataFrom }
         const { variavels } = await listaNomeVariaveis();
         let variablesName = []
 
-        for (let i = 0; i < variavels.length; i++) {
+        for (const element of variavels) {
             let option = {
-                label: variavels[i].variavel,
-                value: variavels[i].variavel,
-                id: variavels[i].variavel,
+                label: element.variavel,
+                value: element.variavel,
+                id: element.variavel,
             }
             variablesName.push(option)
         }
