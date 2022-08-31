@@ -6,6 +6,8 @@ import Graph from '../src/pages/components/Graph';
 import Sidebar from '../src/pages/components/Sidebar';
 import RatioSelect from '../src/pages/components/RatioTimeChart/Index';
 import FormGraph from '../src/pages/components/FormShowInfo';
+import MyApp from '../src/pages/_app'
+import Document from '../src/pages/_document'
 import '@testing-library/jest-dom'
 import { rest } from "msw"
 import { setupServer } from "msw/node"
@@ -89,6 +91,23 @@ describe('DisplayHome', () => {
   });
 });
 
+describe('MyApp', () => {
+  it('MyApp deve existir"', () => {
+    const myApp =()=>{
+      render(<MyApp />)
+    } ;
+    expect(myApp).not.toBeNull();
+  });
+});
+
+describe('Document', () => {
+  it('Document deve existir"', () => {
+    const myApp =()=>{
+      render(<Document />)
+    } ;
+    expect(myApp).not.toBeNull();
+  });
+});
 
 describe('Logo', () => {
   test('Logo must have src = "/logo-retangular.png" and alt = "Logo"', () => {
