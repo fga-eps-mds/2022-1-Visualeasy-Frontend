@@ -48,7 +48,7 @@ export default function FormGraph({ FormGraphProps, disablebutton, getDataFrom }
     }
 
     function Gerar() {
-        let variavel, [] = Object.keys(newArr)
+        const variavel = Object.keys(newArr)
             .map(function (key) {
                 return newArr[key];
             });
