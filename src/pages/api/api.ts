@@ -1,35 +1,40 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "https://visualeasy-controle.herokuapp.com";
-
-export interface Variavel{
+    axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+export interface Variavel {
     id?: number,
     variavel?: string;
     data?: Date;
     valor?: number;
-} 
-export interface Variavel extends Array<Variavel>{}
+}
+export interface Variavel extends Array<Variavel> { }
 
-export async function listaNomeVariaveis(){
-    try{
+const paramstype = {
+    variavel: "Bulbassauro",
+    // intervalo: 1
+    startDate: '2022-06-30T06:18:50',
+    endDate: '2022-06-30T06:26:14'
+}
+export async function listaNomeVariaveis() {
+    try {
         const resposta = await axios.get("variavel/");
         return resposta.data;
-    }catch(e){
+    } catch (e) {
         return e
     }
 
 };
 
-export const listaVariaveis = async ()=>{
-    try{
-        const resposta = await axios.get("/variavel/");
-        return resposta
+export const postAllData = async (params, dataapi = paramstype) => {
+    try {
+      
+        const { data }:any = await axios.post(`/variavel/${params}`, dataapi).catch(function (error) {
+            console.error(error);
+        });
+        return data
 
-    }catch(e){
+    } catch (e) {
         return e
     }
 }
 
-export const api = axios.create({
-  baseURL: 'https://visualeasy-controle.herokuapp.com/variavel/'
-})  
