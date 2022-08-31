@@ -154,20 +154,27 @@ describe('Button', () => {
   });
 });
 
+
 describe('closeButton', () => {
   test('CloseButton está ativado nas abas', async () => {
-    const setDataForm = () => console.log("MOCK FUNÇÂO")
-    const sidebar = rendered.create(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
-    let tree = sidebar.toJSON();
-    expect(tree).toMatchSnapshot();
-    renderer.act(() => {
-      tree.props.deletPostList();
-    });
-    tree = sidebar.toJSON();
-    expect(tree).toMatchSnapshot();
+    const setDataForm = () => console.log("MOCK FUNÇÃO")
+    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
+    const button = screen.findByLabelText('button', { name: /Close/i });
+    expect(button).not.toBeNull();
   });
 });
 
+// describe('Delete gráfico', () => {
+//   test('Excluir gráfico', async () => {
+//     const close = jest.fn();
+//     const SidebarData = () => console.log("MOCK FUNÇÃO")
+//     const { del } = render(<deletPostList delete={close} />);
+
+//     fireEvent.click(findByLabelText('button', { name: /Close/i ));
+
+//     expect(close).toHaveBeenCalled();
+//   });
+// });
 
 describe('RatioSelect', () => {
   test('Deve renderizar os campos de Início e Fim', async () => {
