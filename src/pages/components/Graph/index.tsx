@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -39,36 +39,37 @@ function getRandomColor() {
   return color;
 }
 
-export default function Graph(dataForm:any) {
-  const ref= useRef();
-  const [ listaVariaveis, setListaVariaveis] = useState([{}]);
-  const [ listaDados, setListaDados ] = useState([{}]);
+export default function Graph({ dataForm }: any) {
 
-  useEffect( () => {
+  const ref = useRef();
+  const [listaVariaveis, setListaVariaveis] = useState([{}]);
+  const [listaDados, setListaDados] = useState([{}]);
+
+  useEffect(() => {
     const geraDadosGraficos = async () => {
       let listaRecebida = [];
       let listaDados = [];
 
-      for( let i = 0; i < dataForm.dataForm.variavel.length; i++ ) {
+      for (let i = 0; i < dataForm.variavel.length; i++) {
         let response;
 
         const bodyRequest = {
-          variavel: dataForm.dataForm.variavel[i],
-          intervalo: dataForm.dataForm.intervalo,
-          startDate: dataForm.dataForm.startDate,
-          endDate: dataForm.dataForm.endDate,
-          granularity: dataForm.dataForm.granularity
+          variavel: dataForm.variavel[i],
+          intervalo: dataForm.intervalo,
+          startDate: dataForm.startDate,
+          endDate: dataForm.endDate,
+          granularity: dataForm.granularity
         };
-    
-        if (dataForm.dataForm.intervalo!==5) {
+
+        if (dataForm.intervalo !== 5) {
           response = await postAllData("filteredByPeriod", bodyRequest)
         } else {
           response = await postAllData("filtered", bodyRequest)
         }
 
-        const dados = response.variavels.map((element:any)=> { return {nome: dataForm.dataForm.variavel[i],data:element.date, valor:Number(element.valor)} })
+        const dados = response.variavels.map((element: any) => { return { nome: dataForm.variavel[i], data: element.date, valor: Number(element.valor) } })
         const dataset = {
-          label: dataForm.dataForm.variavel[i],
+          label: dataForm.variavel[i],
           data: dados,
           lineTension: 0.5,
           backgroundColor: `${getRandomColor()}`,
@@ -78,16 +79,16 @@ export default function Graph(dataForm:any) {
         for (const element of dados) {
           listaDados.push([element.nome, element.data, element.valor]);
         }
-        
-          listaRecebida.push(dataset);
-          
-        }
-        setListaVariaveis(listaRecebida);
-        setListaDados(listaDados);
+
+        listaRecebida.push(dataset);
+
+      }
+      setListaVariaveis(listaRecebida);
+      setListaDados(listaDados);
     }
-    
+
     geraDadosGraficos()
-  }, [dataForm] )
+  }, [dataForm])
 
   const data = {
     datasets: listaVariaveis,
@@ -114,16 +115,14 @@ export default function Graph(dataForm:any) {
   const options = {
     type: "line",
     bezierCurve: false,
-    parsing: {xAxisKey: 'data', yAxisKey:'valor'},
+    parsing: { xAxisKey: 'data', yAxisKey: 'valor' },
     elements: {
       line: {
         tension: 0.1,
-        fill:true
+        fill: true
       }
     },
   }
-
-console.log(data.datasets)
 
   const getFileName = () => {
     let d = new Date();
@@ -144,6 +143,7 @@ console.log(data.datasets)
           borderRadius='md'
           w='40px'
           h='40px'
+          _hover={{ bg: "#b3b3cc"}}
           placeholder='Download'
           onClick={downloadImage}
         >
@@ -151,7 +151,6 @@ console.log(data.datasets)
             objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
         </Box>
 
-        
           <CSVLink
             data={listaDados || []}
             filename={getFileName()}
@@ -159,6 +158,9 @@ console.log(data.datasets)
             separator={";"}>
             <IconButton
               aria-label='download'
+              borderColor="#000000"
+              border="1px"
+              _hover={{ bg: "#b3b3cc"}}
               size="md"
               icon={<FiDownload />}
               variant='outline'

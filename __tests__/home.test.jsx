@@ -5,34 +5,37 @@ import DisplayHome from '../src/pages/index'
 import Graph from '../src/pages/components/Graph';
 import Sidebar from '../src/pages/components/Sidebar';
 import RatioSelect from '../src/pages/components/RatioTimeChart/Index';
-import FormGraph from '../src/pages/components/FormGraph';
+import FormGraph from '../src/pages/components/FormShowInfo';
+import MyApp from '../src/pages/_app'
+import Document from '../src/pages/_document'
 import '@testing-library/jest-dom'
-import {rest} from "msw"
-import {setupServer} from "msw/node"
+import { rest } from "msw"
+import { setupServer } from "msw/node"
+import renderer from 'react-test-renderer';
 
 
 const url = `http://localhost:8080/variavel`
 
-const variavelNameGet = rest.get(url, (req, res, ctx)=>{
-  return  res(
+const variavelNameGet = rest.get(url, (req, res, ctx) => {
+  return res(
     ctx.status(200),
     ctx.json({
-    "variavels": [
-      {
-        "variavel": "Bulbassauro"
-      },
-      {
-        "variavel": "Charmander"
-      },
-      {
-        "variavel": "Pikachu"
-      },
-    ],
-    "resposta": "Sucesso!!"
-  }))
+      "variavels": [
+        {
+          "variavel": "Bulbassauro"
+        },
+        {
+          "variavel": "Charmander"
+        },
+        {
+          "variavel": "Pikachu"
+        },
+      ],
+      "resposta": "Sucesso!!"
+    }))
 })
 
-const postAllData  = rest.post(`${url}/filtered`, (req, res, ctx)=>{
+const postAllData = rest.post(`${url}/filtered`, (req, res, ctx) => {
   return res(
     ctx.status(200),
     ctx.json({
@@ -51,7 +54,7 @@ const postAllData  = rest.post(`${url}/filtered`, (req, res, ctx)=>{
   )
 })
 
-const postAllDataPredefinido  = rest.post(`${url}/filteredByPeriod`, (req, res, ctx)=>{
+const postAllDataPredefinido = rest.post(`${url}/filteredByPeriod`, (req, res, ctx) => {
   return res(
     ctx.status(200),
     ctx.json({
@@ -74,11 +77,37 @@ const handlers = [variavelNameGet, postAllData, postAllDataPredefinido]
 
 const server = new setupServer(...handlers);
 
-beforeAll(()=>server.listen({
-  onUnhandleRequest:'error'
+beforeAll(() => server.listen({
+  onUnhandleRequest: 'error'
 }));
-afterEach(()=>server.resetHandlers());
-afterAll(()=>server.close())
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close())
+
+
+describe('DisplayHome', () => {
+  test('DisplayHome deve existir', () => {
+    const displayHome = render(<DisplayHome />);
+    expect(displayHome).not.toBeNull();
+  });
+});
+
+describe('MyApp', () => {
+  it('MyApp deve existir"', () => {
+    const myApp =()=>{
+      render(<MyApp />)
+    } ;
+    expect(myApp).not.toBeNull();
+  });
+});
+
+describe('Document', () => {
+  it('Document deve existir"', () => {
+    const myApp =()=>{
+      render(<Document />)
+    } ;
+    expect(myApp).not.toBeNull();
+  });
+});
 
 describe('Logo', () => {
   test('Logo must have src = "/logo-retangular.png" and alt = "Logo"', () => {
@@ -91,8 +120,8 @@ describe('Logo', () => {
 
 describe('Tabs', () => {
   test('Tabs ', async () => {
-    const setDataForm = ()=> console.log("MOCK FUNÇÃO")
-    render(<Sidebar SidebarData={(e)=>{setDataForm(e)}}/>);
+    const setDataForm = () => console.log("MOCK FUNÇÃO")
+    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
     const button = screen.getByText(/Gráfico 1/i, { selector: 'button' });
     expect(button).not.toBeNull();
   });
@@ -100,8 +129,8 @@ describe('Tabs', () => {
 
 describe('Option', () => {
   test('Options should exists', async () => {
-    const SidebarData = ()=> console.log("MOCK FUNÇÃO")
-    render(<FormGraph FormGraphProps={(e)=>{SidebarData({...e})}} />);
+    const SidebarData = () => console.log("MOCK FUNÇÃO")
+    render(<FormGraph FormGraphProps={(e) => { SidebarData({ ...e }) }} />);
     fireEvent.click(screen.getByText("Selecione as variáveis"));
 
     setTimeout(() => {
@@ -117,11 +146,11 @@ describe('Option', () => {
 
 describe('Radio', () => {
   test('Radio intervalo ', async () => {
-    const setGraphParameters = ()=> console.log("MOCK FUNÇÃO")
+    const setGraphParameters = () => console.log("MOCK FUNÇÃO")
     render(<RatioSelect RatioRange={(e) => setGraphParameters(e)} />);
     const TitleRadio = screen.getByText(/Selecione o intervalo:/i);
     expect(TitleRadio).not.toBeNull();
-   const TitleRadio1 = screen.getByText(/1 Hora/i);
+    const TitleRadio1 = screen.getByText(/1 Hora/i);
     expect(TitleRadio1).not.toBeNull();
     const TitleRadio2 = screen.getByText(/1 Dia/i);
     expect(TitleRadio2).not.toBeNull();
@@ -137,17 +166,38 @@ describe('Radio', () => {
 
 describe('Button', () => {
   test('Button gerar grafico ', async () => {
-    const SidebarData = ()=> console.log("MOCK FUNÇÃO")
-    render(<FormGraph FormGraphProps={(e)=>{SidebarData({...e})}} />);
-    const button = screen.getByText(/Gerar gráfico/i, { selector: 'button' });
+    const setDataForm = () => console.log("MOCK FUNÇÃO")
+    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
+    const button = screen.getByText(/Gerar Gráfico/i, { selector: 'button' });
     expect(button).not.toBeNull();
   });
 });
 
 
-describe('RatioSelect', () => { 
-  test('Deve renderizar os campos de Início e Fim', async() => { 
-    const setGraphParameters = ()=> console.log("MOCK FUNÇÃO")
+describe('closeButton', () => {
+  test('CloseButton está ativado nas abas', async () => {
+    const setDataForm = () => console.log("MOCK FUNÇÃO")
+    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
+    const button = screen.findByLabelText('button', { name: /Close/i });
+    expect(button).not.toBeNull();
+  });
+});
+
+// describe('Delete gráfico', () => {
+//   test('Excluir gráfico', async () => {
+//     const close = jest.fn();
+//     const SidebarData = () => console.log("MOCK FUNÇÃO")
+//     const { del } = render(<deletPostList delete={close} />);
+
+//     fireEvent.click(findByLabelText('button', { name: /Close/i ));
+
+//     expect(close).toHaveBeenCalled();
+//   });
+// });
+
+describe('RatioSelect', () => {
+  test('Deve renderizar os campos de Início e Fim', async () => {
+    const setGraphParameters = () => console.log("MOCK FUNÇÃO")
     render(<RatioSelect RatioRange={(e) => setGraphParameters(e)} />);
     const TitleRadio = screen.getByText(/Personalizado/i);
     fireEvent.click(TitleRadio);
@@ -156,30 +206,30 @@ describe('RatioSelect', () => {
   });
 });
 
-describe('Graph Tempo Personalizado', ()=>{
-  test('Deve renderizar o grafico com a opção de tempo personalizado', async()=>{
+describe('Graph Tempo Personalizado', () => {
+  test('Deve renderizar o grafico com a opção de tempo personalizado', async () => {
     const dataForm = {
-        variavel: ["Pikashu", "Outro"],
-        intervalo: 5,
-        startDate: "30-04-2022",
-        endDate: "30-06-2022",
-        granularity: "month"
+      variavel: ["Pikashu", "Outro"],
+      intervalo: 5,
+      startDate: "30-04-2022",
+      endDate: "30-06-2022",
+      granularity: "month"
     }
-    const graph = render(<Graph dataForm={dataForm}/>)
+    const graph = render(<Graph dataForm={dataForm} />)
     expect(graph).not.toBeNull();
   })
 })
 
-describe('Graph Tempo Predefinido', ()=>{
-  test('Deve renderizar o grafico com a opção de tempo predefinido', async()=>{
+describe('Graph Tempo Predefinido', () => {
+  test('Deve renderizar o grafico com a opção de tempo predefinido', async () => {
     const dataForm = {
-        variavel: ["Pikashu"],
-        intervalo: 2,
-        startDate: "30-04-2022",
-        endDate: "30-06-2022",
-        granularity: "month"
+      variavel: ["Pikashu"],
+      intervalo: 2,
+      startDate: "30-04-2022",
+      endDate: "30-06-2022",
+      granularity: "month"
     }
-    const graph = render(<Graph dataForm={dataForm}/>)
+    const graph = render(<Graph dataForm={dataForm} />)
     expect(graph).not.toBeNull();
   })
 })
