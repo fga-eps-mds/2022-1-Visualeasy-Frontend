@@ -16,14 +16,21 @@ import {
   CloseButton
 } from "@chakra-ui/react";
 
+import dynamic from 'next/dynamic'
 
 import FormGraph from "../FormGraph";
 import FormGraphinfo from "../FormShowInfo";
 
-import Graph from "../Graph";
+//import Graph from "";
 interface EnumServiceGetOrderBy {
   [index: number]: string;
 }
+
+const Graph = dynamic(
+  () => import('../Graph'),
+  { ssr: false }
+)
+
 
 interface dataFormProps {
   intervalo: number
