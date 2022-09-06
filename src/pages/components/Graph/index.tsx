@@ -17,8 +17,14 @@ import { CSVLink } from "react-csv";
 
 import { Line } from 'react-chartjs-2';
 
-import { Box, IconButton, Image, Stack } from "@chakra-ui/react"
+import { Box, IconButton, Image, Stack } from "@chakra-ui/react";
+
+import zoomPlugin from "chartjs-plugin-zoom";
+
+import { postAllData } from "../../api/api";
+
 ChartJS.register(
+  zoomPlugin,
   CategoryScale,
   LinearScale,
   PointElement,
@@ -27,8 +33,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-import { postAllData } from "../../api/api";
 
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -44,6 +48,7 @@ export default function Graph({ dataForm }: any) {
   const ref = useRef();
   const [listaVariaveis, setListaVariaveis] = useState([{}]);
   const [listaDados, setListaDados] = useState([{}]);
+
 
   useEffect(() => {
     const geraDadosGraficos = async () => {
@@ -67,7 +72,7 @@ export default function Graph({ dataForm }: any) {
           response = await postAllData("filtered", bodyRequest)
         }
 
-        const dados = response.variavels.map((element: any) => { return { nome: dataForm.variavel[i], data: element.date, valor: Number(element.valor) } })
+        const dados = response.variavels.map((element: any) => { return {data: element.date, valor: Number(element.valor) } })
         const dataset = {
           label: dataForm.variavel[i],
           data: dados,
@@ -93,6 +98,7 @@ export default function Graph({ dataForm }: any) {
   const data = {
     datasets: listaVariaveis,
   };
+  console.log(data);
   const downloadImage = useCallback(() => {
     const link = document.createElement("a");
     link.download = "chart.png";
@@ -122,6 +128,23 @@ export default function Graph({ dataForm }: any) {
         fill: true
       }
     },
+    plugins: {
+      zoom: {
+          zoom: {
+              wheel: {
+                  enabled: true,
+              },
+              // pinch: {
+              //     enabled: true
+              // },
+              mode: 'xy'
+          },
+          pan: {
+              enabled: true,
+              mode: 'xy'
+          }
+      }
+  },
   }
 
   const getFileName = () => {
