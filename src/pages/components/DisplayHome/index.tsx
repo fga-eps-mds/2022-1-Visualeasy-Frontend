@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Grid, GridItem, HStack } from "@chakra-ui/react";
 import Sidebar from "../Sidebar";
-import Graph from "../Graph";
 interface EnumServiceGetOrderBy {
   [index: number]: string;
 }
