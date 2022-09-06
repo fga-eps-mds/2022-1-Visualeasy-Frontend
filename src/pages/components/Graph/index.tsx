@@ -13,11 +13,15 @@ import {
 
 import { FiDownload } from 'react-icons/fi';
 
+import { AiOutlineShareAlt } from 'react-icons/ai';
+
 import { CSVLink } from "react-csv";
 
 import { Line } from 'react-chartjs-2';
 
-import { Box, IconButton, Image, Stack } from "@chakra-ui/react"
+import { useRouter } from 'next/router';
+
+import { Box, IconButton, Image, Stack, useClipboard } from "@chakra-ui/react"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -130,6 +134,14 @@ export default function Graph({ dataForm }: any) {
     return `${dformat}`;
   }
 
+    const [value, setValue] = React.useState('Hello world')
+    const { hasCopied, onCopy } = useClipboard(value)
+
+
+    const router = useRouter()
+    console.log(router.asPath, router.basePath);
+
+
 
 
   return (
@@ -166,6 +178,18 @@ export default function Graph({ dataForm }: any) {
               variant='outline'
             />
           </CSVLink>
+
+
+          <IconButton
+              aria-label='compartilhar'
+              borderColor="#000000"
+              border="1px"
+              _hover={{ bg: "#b3b3cc"}}
+              size="md"
+              icon={<AiOutlineShareAlt />}
+              variant='outline'
+              onClick={onCopy}
+            />
       </Stack>
     </Box>
   );
