@@ -27,7 +27,6 @@ export async function getServerSideProps(context) {
     graphName:query.graphName
   };
 
-console.log("person",person)
   return {
     props: {person}, // will be passed to the page component as props
   }}

@@ -46,7 +46,7 @@ function getRandomColor() {
 }
 
 export default function Graph({ dataForm }: any) {
-console.log("dataForm",dataForm)
+
   const ref = useRef();
   const [listaVariaveis, setListaVariaveis] = useState([{}]);
   const [listaDados, setListaDados] = useState([{}]);
