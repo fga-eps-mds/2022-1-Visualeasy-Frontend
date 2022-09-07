@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 
   Image,
@@ -19,6 +19,7 @@ import {
 
 import FormGraph from "../FormGraph";
 import FormGraphinfo from "../FormShowInfo";
+import { useRouter } from 'next/router';
 
 import Graph from "../Graph";
 interface EnumServiceGetOrderBy {
@@ -44,7 +45,12 @@ export default function Sidebar({ SidebarData }: any) {
 
   const addPostlist = (postitem) => setPostList([...postList, postitem]);
 
+   
+  useEffect(() => {
+    setPostList( [SidebarData])
 
+  }, [])
+  
   function deletPostList(deletitem) {
     var filtered = postList.filter((e) => (e.id !== deletitem))
     setPostList(filtered)

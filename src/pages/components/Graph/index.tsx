@@ -11,6 +11,8 @@ import {
 
 } from 'chart.js';
 
+import  absoluteUrl  from 'next-absolute-url'
+
 import { FiDownload } from 'react-icons/fi';
 
 import { AiOutlineShareAlt } from 'react-icons/ai';
@@ -44,7 +46,7 @@ function getRandomColor() {
 }
 
 export default function Graph({ dataForm }: any) {
-
+console.log("dataForm",dataForm)
   const ref = useRef();
   const [listaVariaveis, setListaVariaveis] = useState([{}]);
   const [listaDados, setListaDados] = useState([{}]);
@@ -134,12 +136,14 @@ export default function Graph({ dataForm }: any) {
     return `${dformat}`;
   }
 
-    const [value, setValue] = React.useState('Hello world')
+  let params = new URLSearchParams(dataForm).toString();
+  const { origin } = absoluteUrl()
+  const apiURL = `${origin}?${params}`
+  
+
+    const [value, setValue] = React.useState(apiURL);
     const { hasCopied, onCopy } = useClipboard(value)
 
-
-    const router = useRouter()
-    console.log(router.asPath, router.basePath);
 
 
 
