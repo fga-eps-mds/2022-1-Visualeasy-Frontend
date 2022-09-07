@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,16 +13,13 @@ import {
 
 import { FiDownload } from 'react-icons/fi';
 
-import { BiSelectMultiple } from 'react-icons/bi';
-
-import { Button, Checkbox, CheckboxGroup, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useDisclosure } from '@chakra-ui/react';
+import { CSVLink } from "react-csv";
 
 import { CSVLink } from 'react-csv';
 
 import { Line } from 'react-chartjs-2';
 
-import {Box} from '@chakra-ui/react';
-
+import { Box, IconButton, Image, Stack } from "@chakra-ui/react"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -34,40 +30,7 @@ ChartJS.register(
   Legend
 );
 
-// constante temporária p/ escolha dos gráficos
-const tabs = [
-  {
-    id: '1',
-    titulo: 'Gráfico 1',
-    variaveis: [
-      'Charmander',
-      'Pikachu'
-    ],
-    intervalo: 3,
-    mostrar: true
-  },
-  {
-    id: '2',
-    titulo: 'Gráfico 2',
-    variaveis: [
-      'Squirtle'
-    ],
-    intervalo: 5,
-    startDate: '2022-08-23T01:43',
-    endDate: '2022-08-24T01:43',
-    mostrar: false
-  },
-  {
-    id: '3',
-    titulo: 'Gráfico 3',
-    variaveis: [
-      'Bulbassauro',
-      'Charmander'
-    ],
-    intervalo: 2,
-    mostrar: false
-  }
-];
+import { postAllData } from "../../api/api";
 
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -78,28 +41,88 @@ function getRandomColor() {
   return color;
 }
 
-export default function Graph(dataBase) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [ graficos, setGraficos ] = useState([]);
+export default function Graph({ dataForm }: any) {
+
+  const ref = useRef();
+  const [listaVariaveis, setListaVariaveis] = useState([{}]);
+  const [listaDados, setListaDados] = useState([{}]);
+
+  useEffect(() => {
+    const geraDadosGraficos = async () => {
+      let listaRecebida = [];
+      let listaDados = [];
+
+      for (let i = 0; i < dataForm.variavel.length; i++) {
+        let response;
+
+        const bodyRequest = {
+          variavel: dataForm.variavel[i],
+          intervalo: dataForm.intervalo,
+          startDate: dataForm.startDate,
+          endDate: dataForm.endDate,
+          granularity: dataForm.granularity
+        };
+
+        if (dataForm.intervalo !== 5) {
+          response = await postAllData("filteredByPeriod", bodyRequest)
+        } else {
+          response = await postAllData("filtered", bodyRequest)
+        }
+
+        const dados = response.variavels.map((element: any) => { return { nome: dataForm.variavel[i], data: element.date, valor: Number(element.valor) } })
+        const dataset = {
+          label: dataForm.variavel[i],
+          data: dados,
+          lineTension: 0.5,
+          backgroundColor: `${getRandomColor()}`,
+        }
+
+        //for-of para gerar os dados para o csv
+        for (const element of dados) {
+          listaDados.push([element.nome, element.data, element.valor]);
+        }
+
+        listaRecebida.push(dataset);
+
+      }
+      setListaVariaveis(listaRecebida);
+      setListaDados(listaDados);
+    }
+
+    geraDadosGraficos()
+  }, [dataForm])
 
   const data = {
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: dataBase.dataBase.variavels,
-        lineTension: 0.5,  
-        backgroundColor: `${getRandomColor()}`,
-      },
-    ],
+    datasets: listaVariaveis,
+  };
+  const downloadImage = useCallback(() => {
+    const link = document.createElement("a");
+    link.download = "chart.png";
+    link.href = ref.current.toBase64Image();
+    link.click();
+  }, []);
+
+
+  const plugin = {
+    beforeDraw: (chartCtx) => {
+      const ctx = chartCtx.canvas.getContext('2d');
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-over';
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, chartCtx.width, chartCtx.height);
+      ctx.restore();
+    }
   };
 
   const options = {
-    type:'line',
-   
-    bezierCurve : false,
-    parsing: {
-      xAxisKey: 'data',
-      yAxisKey: 'valor'
+    type: "line",
+    bezierCurve: false,
+    parsing: { xAxisKey: 'data', yAxisKey: 'valor' },
+    elements: {
+      line: {
+        tension: 0.1,
+        fill: true
+      }
     },
     elements: {
       line: {
@@ -107,87 +130,51 @@ export default function Graph(dataBase) {
       }
     }
   }
-  
+
   const getFileName = () => {
     let d = new Date();
     let dformat = d.toLocaleString('pt-BR').replace(/\D/g, '');
     return `${dformat}`;
   }
 
-  const confirmarGraficos = () => {
-    tabs.forEach(tab => {
-      if(graficos.includes(tab.id)) {
-        tab.mostrar = true;
-      } else {
-        tab.mostrar = false;
-      }
-    });
-    onClose();
-  }
 
-  return (  
-    <Box height='400px' w='100%'>
 
-      { 
-        tabs.map(tab => {
-          if(tab.mostrar) {
-            return(
-              // Nessa parte só falta pensar e implementar uma maneira de atualizar os dados e os options de acordo com cada gráfico
-              // Mas isso depende de como esses dados virão dos componentes da sidebar/tabs.
-              <Line className='Grafico' key={tab.id} id={tab.id} data={data} options={options} />
-            )
-          }
-        })
-      }
-      
-      {dataBase.dataBase.variavels && 
-        <CSVLink
-          data={dataBase.dataBase.variavels}
-          filename={getFileName()}
-          target='_blank'
-          separator={';'}> 
-          <IconButton 
-            aria-label='download'
-            size='sm' 
-            icon={<FiDownload />} 
-            variant='outline'
-          />
-        </CSVLink>}
-        
-      <IconButton 
-        aria-label='expand' 
-        icon={<BiSelectMultiple />} 
-        variant='outline'
-        size='sm'
-        onClick={onOpen}
-        />
+  return (
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Selecione os gráficos que deseja visualizar</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
+    <Box height="400px" w="100%">
+      <Line plugins={[plugin]} ref={ref} className='Grafico' data={data} options={options} />
+      <Stack borderRadius="5px" border="1px" p="5px" marginTop="1.5rem" direction='row' spacing={5}>
+        <Box as='button'
+          borderColor="#FFFFFF"
+          border="1px"
+          borderRadius='md'
+          w='40px'
+          h='40px'
+          _hover={{ bg: "#b3b3cc"}}
+          placeholder='Download'
+          onClick={downloadImage}
+        >
+          <Image
+            objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
+        </Box>
 
-            <CheckboxGroup defaultValue={tabs.map(tab => tab.id)} onChange={(e) => setGraficos(e)} >
-              <Stack spacing={[1, 5]} direction={['column']}>
-                {
-                  tabs.map(tab => {
-                    return <Checkbox value={tab.id} key={tab.id}>{tab.titulo}</Checkbox>
-                  })
-                }
-              </Stack>
-            </CheckboxGroup>
-
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme='red' mr={3} onClick={confirmarGraficos}>
-              Confirmar
-            </Button>
-
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+          <CSVLink
+            data={listaDados || []}
+            filename={getFileName()}
+            target="_blank"
+            separator={";"}>
+            <IconButton
+              aria-label='download'
+              borderColor="#000000"
+              border="1px"
+              _hover={{ bg: "#b3b3cc"}}
+              size="md"
+              icon={<FiDownload />}
+              variant='outline'
+            />
+          </CSVLink>
+      </Stack>
     </Box>
   );
 };
+

@@ -12,6 +12,11 @@ jobs:
       run:  git fetch origin main
     - name: Instalar dependencias
       run:  npm install
+    - name: Create env file
+      run: |
+        touch .env.local
+        echo NEXT_PUBLIC_BASE_URL=${{ secrets.ENV_NEXT_PUBLIC_BASE_URL }} >> .env.local
+        cat .env.local
     - name: Instalar Jest
       run:  npm install -g jest
     - name: Executar testes
