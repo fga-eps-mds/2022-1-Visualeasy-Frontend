@@ -42,7 +42,10 @@ export default function Sidebar({ SidebarData }: any) {
   const [postList, setPostList] = useState([]);
 
 
-  const addPostlist = (postitem) => setPostList([...postList, postitem]);
+  const addPostlist = (postitem) => {
+    postitem.show = true;
+    setPostList([...postList, postitem]);
+  }
 
 
   function deletPostList(deletitem) {
@@ -100,20 +103,28 @@ export default function Sidebar({ SidebarData }: any) {
             ))}
           </TabPanels>
         </GridItem>
-        <TabPanels>
 
+        <TabPanels>
           <TabPanel>
             <GridItem pl='2' area={'main'}>
               {/* <Graph dataBase={dataForm} /> */}
             </GridItem>
           </TabPanel>
-          {postList.map((e, index) => (
-            <TabPanel key={index}>
-              <GridItem pl='2' area={'main'}>
-                <Graph dataForm={e} />
-              </GridItem>
-            </TabPanel>
-          ))
+          {postList.map((e, index) => {
+            console.log(index, e);
+            if(e.show) {
+              return (
+                <GridItem key={index}>
+                  <h3>{e.id}, {e.granularity}</h3>
+                  <Graph dataForm={e} postList={postList} />
+                </GridItem>
+              )
+            } else {
+              return (
+                <h3>{e.id}, {e.granularity}</h3>
+              )
+            }
+          })
           }
 
         </TabPanels>
