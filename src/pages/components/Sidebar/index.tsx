@@ -54,7 +54,7 @@ export default function Sidebar({ SidebarData }: any) {
     variavel: []
   })
 
-  const [ graficos, setGraficos ] = useState([]);
+  const [ displayedGraphs, setDisplayedGraphs ] = useState([]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -74,7 +74,7 @@ export default function Sidebar({ SidebarData }: any) {
 
   const confirmarGraficos = () => {
     postList.forEach(postItem => {
-      if(graficos.includes(postItem.id)) {
+      if(displayedGraphs.includes(postItem.id)) {
         postItem.show = true;
       } else {
         postItem.show = false;
@@ -176,11 +176,11 @@ export default function Sidebar({ SidebarData }: any) {
           <ModalCloseButton />
           <ModalBody>
 
-            <CheckboxGroup onChange={(e) => setGraficos(e)} >
+            <CheckboxGroup onChange={(e) => setDisplayedGraphs(e)} >
               <Stack spacing={[1, 5]} direction={['column']}>
                 {
-                  postList.map((tab, index) => {
-                    return <Checkbox value={tab.id} key={index}>{tab.graphName}</Checkbox>
+                  postList.map((postItem) => {
+                    return <Checkbox value={postItem.id} key={postItem.id}>{postItem.graphName}</Checkbox>
                   })
                 }
               </Stack>
