@@ -47,9 +47,11 @@ export default function Sidebar({ SidebarData }: any) {
 
    
   useEffect(() => {
-    setPostList( [SidebarData])
-
-  }, [])
+    if (SidebarData) {
+      
+      setPostList( [SidebarData])
+    }
+  }, [SidebarData])
   
   function deletPostList(deletitem) {
     var filtered = postList.filter((e) => (e.id !== deletitem))

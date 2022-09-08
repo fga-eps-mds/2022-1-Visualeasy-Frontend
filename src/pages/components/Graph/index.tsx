@@ -66,13 +66,12 @@ export default function Graph({ dataForm }: any) {
           endDate: dataForm.endDate,
           granularity: dataForm.granularity
         };
-
+        
         if (dataForm.intervalo !== 5) {
           response = await postAllData("filteredByPeriod", bodyRequest)
         } else {
           response = await postAllData("filtered", bodyRequest)
         }
-
         const dados = response.variavels.map((element: any) => { return { nome: dataForm.variavel[i], data: element.date, valor: Number(element.valor) } })
         const dataset = {
           label: dataForm.variavel[i],
