@@ -31,7 +31,7 @@ import {
   useDisclosure
 } from "@chakra-ui/react";
 
-import { BiSelectMultiple } from 'react-icons/bi';
+import { BiSelectMultiple, BiWindow } from 'react-icons/bi';
 
 import FormGraph from "../FormGraph";
 import FormGraphinfo from "../FormShowInfo";
@@ -55,6 +55,7 @@ export default function Sidebar({ SidebarData }: any) {
   })
 
   const [ displayedGraphs, setDisplayedGraphs ] = useState([]);
+  const [ currentGraph, setCurrentGraph ] = useState([]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -71,8 +72,9 @@ export default function Sidebar({ SidebarData }: any) {
     setPostList(filtered)
     // setPostList(postList.filter((e) => { e.id !== deletitem }));
   }
-
+  
   const confirmarGraficos = () => {
+    
     postList.forEach(postItem => {
       if(displayedGraphs.includes(postItem.id)) {
         postItem.show = true;
@@ -81,8 +83,9 @@ export default function Sidebar({ SidebarData }: any) {
       }
     });
     onClose();
+    setCurrentGraph([]);
   }
-
+  
   return (
     <div>
 
@@ -115,12 +118,11 @@ export default function Sidebar({ SidebarData }: any) {
             </Tab>
             {
               postList.map((e, index) => (
-                <Tab key={index}>
+                <Tab key={index} onClick={() => {setCurrentGraph(e.id)}}>
                   {e.graphName}
                   <CloseButton size='sm' onClick={() => { deletPostList(e.id) }} />
                 </Tab>
               ))
-
             }
           </TabList>
 
@@ -135,13 +137,22 @@ export default function Sidebar({ SidebarData }: any) {
                     aria-label='expand' 
                     icon={<BiSelectMultiple />} 
                     variant='outline'
-                    size='sm'
+                    size='lg'
                     onClick={onOpen}
                     />
+                <IconButton 
+                  aria-label='expand' 
+                  icon={<BiWindow />} 
+                  variant='outline'
+                  size='lg'
+                  onClick={() => {setCurrentGraph(e.id)}}
+                />
               </TabPanel>
             ))}
+            
           </TabPanels>
-        </GridItem>
+          
+        </GridItem> 
 
         <TabPanels>
           <TabPanel>
@@ -149,20 +160,38 @@ export default function Sidebar({ SidebarData }: any) {
                 {/* <Graph dataBase={dataForm} /> */}
             </GridItem>
           </TabPanel>
-            {postList.map((e, index) => {
-            if (e.show) {
-              return (
-                  <GridItem key={index} height="650px">
-                    <h3 align="center">{e.graphName}</h3>
-                    <Graph dataForm={e} postList={postList} />
-                  </GridItem>
-                )
-              } else {
+            {
+              postList.map((e, index) => {
+                console.log(e.id, currentGraph)
+              if(currentGraph.length != 0){
+                if(e.id == currentGraph){
+                  return (
+                    <GridItem key={index} height="650px">
+                      <h3 align="center">{e.graphName}</h3>
+                      <Graph dataForm={e} postList={postList} />
+                    </GridItem>
+                  )
+                }
+                else{
+                  return (
+                    <div key={index}></div>
+                  )
+                }
+            }
+              else if (e.show) {
                 return (
-                  <div key={index}></div>
-                )
-              }
+                    <GridItem key={index} height="650px">
+                      <h3 align="center">{e.graphName}</h3>
+                      <Graph dataForm={e} postList={postList} />
+                    </GridItem>
+                  )
+                } else {
+                  return (
+                    <div key={index}></div>
+                  )
+                }
             })
+
             }
 
           </TabPanels>
