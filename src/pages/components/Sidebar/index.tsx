@@ -13,9 +13,25 @@ import {
 
   Grid,
   GridItem,
-  CloseButton
+  CloseButton,
+
+  Modal, 
+  ModalBody, 
+  ModalCloseButton, 
+  ModalContent, 
+  ModalFooter, 
+  ModalHeader,
+  ModalOverlay,
+  Stack,
+  
+  Checkbox,
+  CheckboxGroup,
+  Button,
+  IconButton,
+  useDisclosure
 } from "@chakra-ui/react";
 
+import { BiSelectMultiple } from 'react-icons/bi';
 
 import FormGraph from "../FormGraph";
 import FormGraphinfo from "../FormShowInfo";
@@ -38,6 +54,9 @@ export default function Sidebar({ SidebarData }: any) {
     variavel: []
   })
 
+  const [ graficos, setGraficos ] = useState([]);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [postList, setPostList] = useState([]);
 
@@ -47,14 +66,26 @@ export default function Sidebar({ SidebarData }: any) {
     setPostList([...postList, postitem]);
   }
 
-
   function deletPostList(deletitem) {
     var filtered = postList.filter((e) => (e.id !== deletitem))
     setPostList(filtered)
     // setPostList(postList.filter((e) => { e.id !== deletitem }));
   }
 
+  const confirmarGraficos = () => {
+    postList.forEach(postItem => {
+      if(graficos.includes(postItem.id)) {
+        postItem.show = true;
+      } else {
+        postItem.show = false;
+      }
+    });
+    onClose();
+  }
+
   return (
+    <div>
+
     <Tabs isFitted defaultIndex={0} className="Tabs" variant='enclosed'>
       <Grid
         templateAreas={`"nav main"
@@ -92,6 +123,7 @@ export default function Sidebar({ SidebarData }: any) {
 
             }
           </TabList>
+
           <TabPanels>
             <TabPanel>
               <FormGraph FormGraphProps={addPostlist} disablebutton />
@@ -99,37 +131,70 @@ export default function Sidebar({ SidebarData }: any) {
             {postList.map((e, index) => (
               <TabPanel key={index}>
                 <FormGraphinfo getDataFrom={e} />
+                  <IconButton 
+                    aria-label='expand' 
+                    icon={<BiSelectMultiple />} 
+                    variant='outline'
+                    size='sm'
+                    onClick={onOpen}
+                    />
               </TabPanel>
             ))}
           </TabPanels>
         </GridItem>
 
         <TabPanels>
-
           <TabPanel>
             <GridItem pl='2' area={'main'}>
-              {/* <Graph dataBase={dataForm} /> */}
+                {/* <Graph dataBase={dataForm} /> */}
             </GridItem>
           </TabPanel>
-          {postList.map((e, index) => {
+            {postList.map((e, index) => {
             if (e.show) {
               return (
-                <GridItem key={index} height="650px" >
-                  <h3 align="center">{e.graphName}</h3>
-                  <Graph dataForm={e} postList={postList} />
-                </GridItem>
-              )
-            } else {
-              return (
-                <h3>{e.id}, {e.granularity}</h3>
-              )
+                  <GridItem key={index} height="650px">
+                    <h3 align="center">{e.graphName}</h3>
+                    <Graph dataForm={e} postList={postList} />
+                  </GridItem>
+                )
+              } else {
+                return (
+                  <div key={index}></div>
+                )
+              }
+            })
             }
-          })
-          }
 
-        </TabPanels>
+          </TabPanels>
+        </Grid>
+      </Tabs >
 
-      </Grid>
-    </Tabs >
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Selecione os gráficos que deseja visualizar</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+
+            <CheckboxGroup onChange={(e) => setGraficos(e)} >
+              <Stack spacing={[1, 5]} direction={['column']}>
+                {
+                  postList.map((tab, index) => {
+                    return <Checkbox value={tab.id} key={index}>{tab.graphName}</Checkbox>
+                  })
+                }
+              </Stack>
+            </CheckboxGroup>
+
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme='red' mr={3} onClick={confirmarGraficos} >
+              Confirmar
+            </Button>
+
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </div>
   );
 };
