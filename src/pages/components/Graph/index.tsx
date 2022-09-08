@@ -122,11 +122,6 @@ export default function Graph({ dataForm }: any) {
         fill: true
       }
     },
-    elements: {
-      line: {
-        tension: 0
-      }
-    }
   }
 
   const getFileName = () => {

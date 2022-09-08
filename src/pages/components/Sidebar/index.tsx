@@ -176,15 +176,17 @@ export default function Sidebar({ SidebarData }: any) {
           <ModalCloseButton />
           <ModalBody>
 
-            <CheckboxGroup onChange={(e) => setDisplayedGraphs(e)} >
-              <Stack spacing={[1, 5]} direction={['column']}>
+            <Stack spacing={[1, 5]} direction={['column']}>
                 {
                   postList.map((postItem) => {
-                    return <Checkbox value={postItem.id} key={postItem.id}>{postItem.graphName}</Checkbox>
+                    return <Checkbox onChange={(e) => setDisplayedGraphs(
+                      displayedGraphs.includes(postItem.id) ? 
+                      displayedGraphs.filter((data, idx) => idx !== displayedGraphs.indexOf(postItem.id)) :
+                      [...displayedGraphs, postItem.id]
+                      )} value={postItem.id} key={postItem.id} isChecked={displayedGraphs.includes(postItem.id)}>{postItem.graphName}</Checkbox>
                   })
                 }
-              </Stack>
-            </CheckboxGroup>
+            </Stack>
 
           </ModalBody>
           <ModalFooter>
