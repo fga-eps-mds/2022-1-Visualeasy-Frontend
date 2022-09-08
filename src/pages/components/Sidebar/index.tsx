@@ -105,17 +105,17 @@ export default function Sidebar({ SidebarData }: any) {
         </GridItem>
 
         <TabPanels>
+
           <TabPanel>
             <GridItem pl='2' area={'main'}>
               {/* <Graph dataBase={dataForm} /> */}
             </GridItem>
           </TabPanel>
           {postList.map((e, index) => {
-            console.log(index, e);
-            if(e.show) {
+            if (e.show) {
               return (
-                <GridItem key={index}>
-                  <h3>{e.id}, {e.granularity}</h3>
+                <GridItem key={index} height="650px" >
+                  <h3 align="center">{e.graphName}</h3>
                   <Graph dataForm={e} postList={postList} />
                 </GridItem>
               )
@@ -130,6 +130,6 @@ export default function Sidebar({ SidebarData }: any) {
         </TabPanels>
 
       </Grid>
-    </Tabs>
+    </Tabs >
   );
 };
