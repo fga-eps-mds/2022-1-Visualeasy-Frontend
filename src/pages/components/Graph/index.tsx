@@ -8,6 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  useToast,
 
 } from 'chart.js';
 
@@ -23,7 +24,7 @@ import { Line } from 'react-chartjs-2';
 
 import { useRouter } from 'next/router';
 
-import { Box, IconButton, Image, Stack, useClipboard } from "@chakra-ui/react"
+import { Box, IconButton, Button, Image, Stack, useClipboard } from "@chakra-ui/react"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -143,9 +144,12 @@ export default function Graph({ dataForm }: any) {
     const [value, setValue] = React.useState(apiURL);
     const { hasCopied, onCopy } = useClipboard(value)
 
+    function copiaLink() {
+      alert("Link copiado com sucesso!");
+      onCopy();
+    }
 
-
-
+    
 
   return (
 
@@ -182,7 +186,7 @@ export default function Graph({ dataForm }: any) {
             />
           </CSVLink>
 
-
+        
           <IconButton
               aria-label='compartilhar'
               borderColor="#000000"
@@ -191,8 +195,8 @@ export default function Graph({ dataForm }: any) {
               size="md"
               icon={<AiOutlineShareAlt />}
               variant='outline'
-              onClick={onCopy}
-            />
+              onClick={copiaLink}
+            ></IconButton>
       </Stack>
     </Box>
   );
