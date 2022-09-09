@@ -14,7 +14,7 @@ import {
 
 import {ptBR} from 'date-fns/locale';
 import 'chartjs-adapter-date-fns';
-
+import { format } from 'date-fns';
 import { FiDownload } from 'react-icons/fi';
 
 import { CSVLink } from "react-csv";
@@ -77,7 +77,23 @@ export default function Graph({ dataForm }: any) {
           response = await postAllData("filtered", bodyRequest)
         }
 
-        const dados = response.variavels.map((element: any) => { return {nome: dataForm.variavel[i], data: element.date, valor: Number(element.valor) } })
+        const dados = response.variavels.map((element: any) => {  
+          let dat = element.date.split(' ');
+          console.log("D", dat);
+          dat[0] = dat[0].split('-').reverse().join('-');
+          if(dat[1]){
+            dat[1] = dat[1].split(':');
+            if(!dat[1][1]){
+              dat[1].push('00')
+            }
+            dat[1] = dat[1].join(':');
+            console.log("E", dat[1]);
+          }
+          const res  = dat.join(' ');
+          console.log("Result", res);
+          return {nome: dataForm.variavel[i], 
+          data: Date.parse(res), 
+          valor: Number(element.valor) } })
         const dataset = {
           label: dataForm.variavel[i],
           data: dados,
@@ -87,7 +103,21 @@ export default function Graph({ dataForm }: any) {
 
         //for-of para gerar os dados para o csv
         for (const element of dados) {
-          listaDados.push([element.nome, element.data, element.valor]);
+          let dataCsv ;
+          if(dataForm.granularity === 'second'){
+            dataCsv = format(new Date(element.data), 'dd-MM-yyyy hh:mm:ss');
+          }else if(dataForm.granularity === 'minute' || dataForm.granularity === 'hour'){
+            dataCsv = format(new Date(element.data), 'dd-MM-yyyy hh:mm');
+          }else if(dataForm.granularity === 'day'){
+            dataCsv = format(new Date(element.data), 'dd-MM-yyyy');
+          }else if(dataForm.granularity === 'month'){
+            dataCsv = format(new Date(element.data), 'MM-yyyy');
+          }else if(dataForm.granularity === 'year'){
+            dataCsv = format(new Date(element.data), 'yyyy');
+          }else{
+            dataCsv = element.data;
+          }
+          listaDados.push([element.nome, dataCsv, element.valor]);
         }
 
         listaRecebida.push(dataset);
@@ -137,9 +167,14 @@ export default function Graph({ dataForm }: any) {
       xAxis:{
         type:'time',
        time:{
+          unit: dataForm.granularity,
           displayFormats: {
-            hour: 'dd-m-yyyy hh:mm:ss'
-        }
+            'second': 'dd-MM-yyyy hh:mm:ss',
+            'minute': 'dd-MM-yyyy hh:mm',
+            'hour': 'dd-MM-yyyy hh',
+            'day': 'dd-MM-yyyy',
+            'month': 'MM-yyyy',
+          }
         } 
       }
     }, 
@@ -154,14 +189,15 @@ export default function Graph({ dataForm }: any) {
               wheel: {
                   enabled: true,
               },
-              mode: 'xy'
+              mode: 'x'
           },
           pan: {
               enabled: true,
               mode: 'xy'
           }
       },
-  },
+    },
+    
   }
 
   const getFileName = () => {
@@ -170,7 +206,9 @@ export default function Graph({ dataForm }: any) {
     return `${dformat}`;
   }
 
-
+  const resetZoomChart = ()=>{
+    ChartJS.resetZoom();
+  }
 
   return (
 
@@ -207,6 +245,20 @@ export default function Graph({ dataForm }: any) {
             />
           </CSVLink>
       </Stack>
+      <Box as='button'
+          borderColor="#FFFFFF"
+          border="1px"
+          borderRadius='md'
+          w='40px'
+          h='40px'
+          _hover={{ bg: "#b3b3cc"}}
+          placeholder='Reset'
+          onClick={resetZoomChart()}
+        >
+          <Image
+            objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
+        </Box>
+      
     </Box>
   );
 };
