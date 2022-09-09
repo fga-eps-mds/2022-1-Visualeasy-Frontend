@@ -206,7 +206,7 @@ describe('RatioSelect', () => {
   });
 });
 
-describe('Graph Tempo Personalizado', () => {
+describe.skip('Graph Tempo Personalizado', () => {
   test('Deve renderizar o grafico com a opção de tempo personalizado', async () => {
     const dataForm = {
       variavel: ["Pikashu", "Outro"],
@@ -220,7 +220,7 @@ describe('Graph Tempo Personalizado', () => {
   })
 })
 
-describe('Graph Tempo Predefinido', () => {
+describe.skip('Graph Tempo Predefinido', () => {
   test('Deve renderizar o grafico com a opção de tempo predefinido', async () => {
     const dataForm = {
       variavel: ["Pikashu"],
