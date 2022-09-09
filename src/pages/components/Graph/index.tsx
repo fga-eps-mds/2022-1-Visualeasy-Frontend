@@ -72,7 +72,7 @@ export default function Graph({ dataForm }: any) {
           response = await postAllData("filtered", bodyRequest)
         }
 
-        const dados = response.variavels.map((element: any) => { return {data: element.date, valor: Number(element.valor) } })
+        const dados = response.variavels.map((element: any) => { return {nome: dataForm.variavel[i], data: element.date, valor: Number(element.valor) } })
         const dataset = {
           label: dataForm.variavel[i],
           data: dados,
@@ -134,16 +134,13 @@ export default function Graph({ dataForm }: any) {
               wheel: {
                   enabled: true,
               },
-              // pinch: {
-              //     enabled: true
-              // },
               mode: 'xy'
           },
           pan: {
               enabled: true,
               mode: 'xy'
           }
-      }
+      },
   },
   }
 
