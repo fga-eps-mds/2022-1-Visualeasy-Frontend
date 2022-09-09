@@ -12,7 +12,7 @@ export async function getServerSideProps(context) {
   let query = context.query
 
   const tidp = query.variavel
-  if (query) {
+  if (tidp) {
   var array = tidp?.split(',').map((n)=> {
     return n;
   })
