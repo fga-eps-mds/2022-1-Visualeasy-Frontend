@@ -25,17 +25,17 @@ import {
   Stack,
   
   Checkbox,
-  CheckboxGroup,
   Button,
   IconButton,
   useDisclosure
 } from "@chakra-ui/react";
 
 import { BiSelectMultiple, BiWindow } from 'react-icons/bi';
+import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
+
 
 import FormGraph from "../FormGraph";
 import FormGraphinfo from "../FormShowInfo";
-import { useRouter } from 'next/router';
 
 import Graph from "../Graph";
 interface EnumServiceGetOrderBy {
@@ -59,6 +59,8 @@ export default function Sidebar({ SidebarData }: any) {
   const [ currentGraph, setCurrentGraph ] = useState([]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showSidebar, setShowSidebar] = useState('block')
+  const [templateColumns, setTemplateColumns] = useState('27vw 70vw')
 
   const [postList, setPostList] = useState([]);
 
@@ -96,6 +98,20 @@ export default function Sidebar({ SidebarData }: any) {
     setCurrentGraph([]);
   }
   
+
+  const handleClickSidebar=() => {
+    showSidebar === 'block' ?
+      (
+        setShowSidebar('none'),
+        setTemplateColumns('90vw 5vw')
+      ):
+      (
+        setShowSidebar('block'),
+        setTemplateColumns('27vw 70vw')
+      )
+  }
+  
+
   return (
     <div>
 
@@ -105,14 +121,14 @@ export default function Sidebar({ SidebarData }: any) {
                   "nav main"
                   "nav main"`}
         gridTemplateRows={'50px 1fr 30px'}
-        gridTemplateColumns={'340px 1fr'}
+        gridTemplateColumns={templateColumns}
         h="100vh"
         gap='1'
         color='blackAlpha.700'
         fontWeight='bold'
 
       >
-        <GridItem pl='2' p={2} bg='#F6F6f6' area={'nav'}>
+        <GridItem display={showSidebar} pl='2' p={2} bg='#F6F6f6' area={'nav'}>
           <Box marginBottom="10px">
             <Center>
               <Image
@@ -133,9 +149,9 @@ export default function Sidebar({ SidebarData }: any) {
                   <CloseButton size='sm' onClick={() => { deletPostList(e.id) }} />
                 </Tab>
               ))
+
             }
           </TabList>
-
           <TabPanels>
             <TabPanel>
               <FormGraph FormGraphProps={addPostlist} disablebutton />
@@ -143,13 +159,13 @@ export default function Sidebar({ SidebarData }: any) {
             {postList.map((e, index) => (
               <TabPanel key={index}>
                 <FormGraphinfo getDataFrom={e} />
-                  <IconButton 
-                    aria-label='expand' 
-                    icon={<BiSelectMultiple />} 
-                    variant='outline'
-                    size='lg'
-                    onClick={onOpen}
-                    />
+                <IconButton 
+                  aria-label='expand' 
+                  icon={<BiSelectMultiple />} 
+                  variant='outline'
+                  size='lg'
+                  onClick={onOpen}
+                />
                 <IconButton 
                   aria-label='expand' 
                   icon={<BiWindow />} 
@@ -159,18 +175,17 @@ export default function Sidebar({ SidebarData }: any) {
                 />
               </TabPanel>
             ))}
-            
           </TabPanels>
-          
-        </GridItem> 
-
+        </GridItem>
         <TabPanels>
+
           <TabPanel>
             <GridItem pl='2' area={'main'}>
-                {/* <Graph dataBase={dataForm} /> */}
+              {/* <Graph dataBase={dataForm} /> */}
+              
             </GridItem>
           </TabPanel>
-            {
+          {
               postList.map((e, index) => {
                 console.log(e.id, currentGraph)
               if(currentGraph.length != 0){
@@ -178,7 +193,18 @@ export default function Sidebar({ SidebarData }: any) {
                   return (
                     <GridItem key={index} height="650px">
                       <h3 align="center">{e.graphName}</h3>
+                      <>
                       <Graph dataForm={e} postList={postList} />
+
+                      <IconButton 
+                    aria-label={"expand-graph"}
+                    icon={(showSidebar === 'block') ? <AiFillCaretLeft/> : <AiFillCaretRight/>}
+                    size='sm'
+                    marginLeft='0px'
+                    bottom='15vh'
+                    backgroundColor='transparent'
+                    onClick={handleClickSidebar} />
+                  </>
                     </GridItem>
                   )
                 }
@@ -192,7 +218,18 @@ export default function Sidebar({ SidebarData }: any) {
                 return (
                     <GridItem key={index} height="650px">
                       <h3 align="center">{e.graphName}</h3>
+                      <>
                       <Graph dataForm={e} postList={postList} />
+
+                      <IconButton 
+                    aria-label={"expand-graph"}
+                    icon={(showSidebar === 'block') ? <AiFillCaretLeft/> : <AiFillCaretRight/>}
+                    size='sm'
+                    marginLeft='0px'
+                    bottom='15vh'
+                    backgroundColor='transparent'
+                    onClick={handleClickSidebar} />
+                  </>
                     </GridItem>
                   )
                 } else {
@@ -203,7 +240,7 @@ export default function Sidebar({ SidebarData }: any) {
             })
 
             }
-
+            
           </TabPanels>
         </Grid>
       </Tabs >
