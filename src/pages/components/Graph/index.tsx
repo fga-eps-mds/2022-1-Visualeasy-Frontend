@@ -126,7 +126,7 @@ export default function Graph({ dataForm }: any) {
 
   const getFileName = () => {
     let d = new Date();
-    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, "");
+    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, '');
     return `${dformat}`;
   }
 
@@ -143,7 +143,7 @@ export default function Graph({ dataForm }: any) {
           borderRadius='md'
           w='40px'
           h='40px'
-          _hover={{ bg: "#b3b3cc"}}
+          _hover={{ bg: "#b3b3cc" }}
           placeholder='Download'
           onClick={downloadImage}
         >
@@ -151,21 +151,21 @@ export default function Graph({ dataForm }: any) {
             objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
         </Box>
 
-          <CSVLink
-            data={listaDados || []}
-            filename={getFileName()}
-            target="_blank"
-            separator={";"}>
-            <IconButton
-              aria-label='download'
-              borderColor="#000000"
-              border="1px"
-              _hover={{ bg: "#b3b3cc"}}
-              size="md"
-              icon={<FiDownload />}
-              variant='outline'
-            />
-          </CSVLink>
+        <CSVLink
+          data={listaDados || []}
+          filename={getFileName()}
+          target="_blank"
+          separator={";"}>
+          <IconButton
+            aria-label='download'
+            borderColor="#000000"
+            border="1px"
+            _hover={{ bg: "#b3b3cc" }}
+            size="md"
+            icon={<FiDownload />}
+            variant='outline'
+          />
+        </CSVLink>
       </Stack>
     </Box>
   );
