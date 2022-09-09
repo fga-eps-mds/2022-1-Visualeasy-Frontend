@@ -206,9 +206,11 @@ export default function Graph({ dataForm }: any) {
     return `${dformat}`;
   }
 
-  const resetZoomChart = ()=>{
-    ChartJS.resetZoom();
-  }
+  // function resetZoomChart (){
+  //   const ctx = chartCtx.canvas.getContext('2d');
+  //     ctx.save();
+  //   ctx.resetZoom();
+  // }
 
   return (
 
@@ -245,7 +247,7 @@ export default function Graph({ dataForm }: any) {
             />
           </CSVLink>
       </Stack>
-      <Box as='button'
+      {/* <Box as='button'
           borderColor="#FFFFFF"
           border="1px"
           borderRadius='md'
@@ -257,7 +259,7 @@ export default function Graph({ dataForm }: any) {
         >
           <Image
             objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
-        </Box>
+        </Box> */}
       
     </Box>
   );
