@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 
   Image,
@@ -35,6 +35,7 @@ import { BiSelectMultiple, BiWindow } from 'react-icons/bi';
 
 import FormGraph from "../FormGraph";
 import FormGraphinfo from "../FormShowInfo";
+import { useRouter } from 'next/router';
 
 import Graph from "../Graph";
 interface EnumServiceGetOrderBy {
@@ -65,8 +66,17 @@ export default function Sidebar({ SidebarData }: any) {
   const addPostlist = (postitem) => {
     postitem.show = true;
     setPostList([...postList, postitem]);
+
   }
 
+   
+  useEffect(() => {
+    if (SidebarData) {
+      
+      setPostList( [SidebarData])
+    }
+  }, [SidebarData])
+  
   function deletPostList(deletitem) {
     var filtered = postList.filter((e) => (e.id !== deletitem))
     setPostList(filtered)
