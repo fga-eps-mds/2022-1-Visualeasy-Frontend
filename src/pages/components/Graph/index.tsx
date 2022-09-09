@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
+  TimeScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -10,6 +11,9 @@ import {
   Legend,
 
 } from 'chart.js';
+
+import {ptBR} from 'date-fns/locale';
+import 'chartjs-adapter-date-fns';
 
 import { FiDownload } from 'react-icons/fi';
 
@@ -26,6 +30,7 @@ import { postAllData } from "../../api/api";
 ChartJS.register(
   zoomPlugin,
   CategoryScale,
+  TimeScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -128,6 +133,21 @@ export default function Graph({ dataForm }: any) {
         fill: true
       }
     },
+   scales:{
+      xAxis:{
+        type:'time',
+       time:{
+          displayFormats: {
+            hour: 'dd-m-yyyy hh:mm:ss'
+        }
+        } 
+      }
+    }, 
+    adapters: {
+      date: {
+          locale: ptBR
+      }
+  },
     plugins: {
       zoom: {
           zoom: {
