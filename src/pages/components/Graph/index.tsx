@@ -8,7 +8,6 @@ import {
   Title,
   Tooltip,
   Legend,
-  useToast,
 
 } from 'chart.js';
 
@@ -24,7 +23,7 @@ import { Line } from 'react-chartjs-2';
 
 import { useRouter } from 'next/router';
 
-import { Box, IconButton, Button, Image, Stack, useClipboard } from "@chakra-ui/react"
+import { Box, IconButton, Image, Stack, useClipboard } from "@chakra-ui/react"
 ChartJS.register(
   CategoryScale,
   LinearScale,
