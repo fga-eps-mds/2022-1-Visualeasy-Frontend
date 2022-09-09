@@ -131,7 +131,7 @@ export default function Graph({ dataForm }: any) {
 
   const getFileName = () => {
     let d = new Date();
-    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, "");
+    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, '');
     return `${dformat}`;
   }
 
@@ -161,7 +161,7 @@ export default function Graph({ dataForm }: any) {
           borderRadius='md'
           w='40px'
           h='40px'
-          _hover={{ bg: "#b3b3cc"}}
+          _hover={{ bg: "#b3b3cc" }}
           placeholder='Download'
           onClick={downloadImage}
         >
