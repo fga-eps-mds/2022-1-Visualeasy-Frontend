@@ -11,13 +11,19 @@ import {
 
 } from 'chart.js';
 
+import  absoluteUrl  from 'next-absolute-url'
+
 import { FiDownload } from 'react-icons/fi';
+
+import { AiOutlineShareAlt } from 'react-icons/ai';
 
 import { CSVLink } from "react-csv";
 
 import { Line } from 'react-chartjs-2';
 
-import { Box, IconButton, Image, Stack } from "@chakra-ui/react"
+import { useRouter } from 'next/router';
+
+import { Box, IconButton, Image, Stack, useClipboard } from "@chakra-ui/react"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -60,13 +66,12 @@ export default function Graph({ dataForm }: any) {
           endDate: dataForm.endDate,
           granularity: dataForm.granularity
         };
-
+        
         if (dataForm.intervalo !== 5) {
           response = await postAllData("filteredByPeriod", bodyRequest)
         } else {
           response = await postAllData("filtered", bodyRequest)
         }
-
         const dados = response.variavels.map((element: any) => { return { nome: dataForm.variavel[i], data: element.date, valor: Number(element.valor) } })
         const dataset = {
           label: dataForm.variavel[i],
@@ -126,11 +131,24 @@ export default function Graph({ dataForm }: any) {
 
   const getFileName = () => {
     let d = new Date();
-    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, "");
+    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, '');
     return `${dformat}`;
   }
 
+  let params = new URLSearchParams(dataForm).toString();
+  const { origin } = absoluteUrl()
+  const apiURL = `${origin}?${params}`
+  
 
+    const [value, setValue] = React.useState(apiURL);
+    const { hasCopied, onCopy } = useClipboard(value)
+
+    function copiaLink() {
+      alert("Link copiado com sucesso!");
+      onCopy();
+    }
+
+    
 
   return (
 
@@ -143,7 +161,7 @@ export default function Graph({ dataForm }: any) {
           borderRadius='md'
           w='40px'
           h='40px'
-          _hover={{ bg: "#b3b3cc"}}
+          _hover={{ bg: "#b3b3cc" }}
           placeholder='Download'
           onClick={downloadImage}
         >
@@ -166,6 +184,18 @@ export default function Graph({ dataForm }: any) {
               variant='outline'
             />
           </CSVLink>
+
+        
+          <IconButton
+              aria-label='compartilhar'
+              borderColor="#000000"
+              border="1px"
+              _hover={{ bg: "#b3b3cc"}}
+              size="md"
+              icon={<AiOutlineShareAlt />}
+              variant='outline'
+              onClick={copiaLink}
+            ></IconButton>
       </Stack>
     </Box>
   );
