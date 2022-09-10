@@ -18,6 +18,7 @@ const customJestConfig = {
     coveragePathIgnorePatterns: [
         './src/pages/_app.tsx', './src/pages/_document.tsx',
     ],
+    testFailureExitCode: 0,
     reporters: [
         'default', [
             'jest-sonar',

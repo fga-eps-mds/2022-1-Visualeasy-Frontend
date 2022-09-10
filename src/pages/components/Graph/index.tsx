@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
+  TimeScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -11,15 +12,31 @@ import {
 
 } from 'chart.js';
 
+import  absoluteUrl  from 'next-absolute-url'
+
+import {ptBR} from 'date-fns/locale';
+import 'chartjs-adapter-date-fns';
+import { format } from 'date-fns';
 import { FiDownload } from 'react-icons/fi';
+
+import { AiOutlineShareAlt } from 'react-icons/ai';
 
 import { CSVLink } from "react-csv";
 
 import { Line } from 'react-chartjs-2';
 
-import { Box, IconButton, Image, Stack } from "@chakra-ui/react"
+import { useRouter } from 'next/router';
+
+import { Box, IconButton, Image, Stack, useClipboard } from "@chakra-ui/react";
+
+import zoomPlugin from "chartjs-plugin-zoom";
+
+import { postAllData } from "../../api/api";
+
 ChartJS.register(
+  zoomPlugin,
   CategoryScale,
+  TimeScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -27,8 +44,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-import { postAllData } from "../../api/api";
 
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -45,6 +60,7 @@ export default function Graph({ dataForm }: any) {
   const [listaVariaveis, setListaVariaveis] = useState([{}]);
   const [listaDados, setListaDados] = useState([{}]);
 
+
   useEffect(() => {
     const geraDadosGraficos = async () => {
       let listaRecebida = [];
@@ -60,14 +76,30 @@ export default function Graph({ dataForm }: any) {
           endDate: dataForm.endDate,
           granularity: dataForm.granularity
         };
-
+        
         if (dataForm.intervalo !== 5) {
           response = await postAllData("filteredByPeriod", bodyRequest)
         } else {
           response = await postAllData("filtered", bodyRequest)
         }
 
-        const dados = response.variavels.map((element: any) => { return { nome: dataForm.variavel[i], data: element.date, valor: Number(element.valor) } })
+        const dados = response.variavels.map((element: any) => {  
+          let dat = element.date.split(' ');
+          console.log("D", dat);
+          dat[0] = dat[0].split('-').reverse().join('-');
+          if(dat[1]){
+            dat[1] = dat[1].split(':');
+            if(!dat[1][1]){
+              dat[1].push('00')
+            }
+            dat[1] = dat[1].join(':');
+            console.log("E", dat[1]);
+          }
+          const res  = dat.join(' ');
+          console.log("Result", res);
+          return {nome: dataForm.variavel[i], 
+          data: Date.parse(res), 
+          valor: Number(element.valor) } })
         const dataset = {
           label: dataForm.variavel[i],
           data: dados,
@@ -77,7 +109,21 @@ export default function Graph({ dataForm }: any) {
 
         //for-of para gerar os dados para o csv
         for (const element of dados) {
-          listaDados.push([element.nome, element.data, element.valor]);
+          let dataCsv ;
+          if(dataForm.granularity === 'second'){
+            dataCsv = format(new Date(element.data), 'dd-MM-yyyy hh:mm:ss');
+          }else if(dataForm.granularity === 'minute' || dataForm.granularity === 'hour'){
+            dataCsv = format(new Date(element.data), 'dd-MM-yyyy hh:mm');
+          }else if(dataForm.granularity === 'day'){
+            dataCsv = format(new Date(element.data), 'dd-MM-yyyy');
+          }else if(dataForm.granularity === 'month'){
+            dataCsv = format(new Date(element.data), 'MM-yyyy');
+          }else if(dataForm.granularity === 'year'){
+            dataCsv = format(new Date(element.data), 'yyyy');
+          }else{
+            dataCsv = element.data;
+          }
+          listaDados.push([element.nome, dataCsv, element.valor]);
         }
 
         listaRecebida.push(dataset);
@@ -93,6 +139,7 @@ export default function Graph({ dataForm }: any) {
   const data = {
     datasets: listaVariaveis,
   };
+  console.log(data);
   const downloadImage = useCallback(() => {
     const link = document.createElement("a");
     link.download = "chart.png";
@@ -122,15 +169,67 @@ export default function Graph({ dataForm }: any) {
         fill: true
       }
     },
+   scales:{
+      xAxis:{
+        type:'time',
+       time:{
+          unit: dataForm.granularity,
+          displayFormats: {
+            'second': 'dd-MM-yyyy hh:mm:ss',
+            'minute': 'dd-MM-yyyy hh:mm',
+            'hour': 'dd-MM-yyyy hh',
+            'day': 'dd-MM-yyyy',
+            'month': 'MM-yyyy',
+          }
+        } 
+      }
+    }, 
+    adapters: {
+      date: {
+          locale: ptBR
+      }
+  },
+    plugins: {
+      zoom: {
+          zoom: {
+              wheel: {
+                  enabled: true,
+              },
+              mode: 'x'
+          },
+          pan: {
+              enabled: true,
+              mode: 'xy'
+          }
+      },
+    },
+    
   }
 
   const getFileName = () => {
     let d = new Date();
-    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, "");
+    let dformat = d.toLocaleString('pt-BR').replace(/\D/g, '');
     return `${dformat}`;
   }
 
+  let params = new URLSearchParams(dataForm).toString();
+  const { origin } = absoluteUrl()
+  const apiURL = `${origin}?${params}`
+  
 
+    const [value, setValue] = React.useState(apiURL);
+    const { hasCopied, onCopy } = useClipboard(value)
+
+    function copiaLink() {
+      alert("Link copiado com sucesso!");
+      onCopy();
+    }
+
+      // function resetZoomChart (){
+  //   const ctx = chartCtx.canvas.getContext('2d');
+  //     ctx.save();
+  //   ctx.resetZoom();
+  // }
 
   return (
 
@@ -143,7 +242,7 @@ export default function Graph({ dataForm }: any) {
           borderRadius='md'
           w='40px'
           h='40px'
-          _hover={{ bg: "#b3b3cc"}}
+          _hover={{ bg: "#b3b3cc" }}
           placeholder='Download'
           onClick={downloadImage}
         >
@@ -166,7 +265,33 @@ export default function Graph({ dataForm }: any) {
               variant='outline'
             />
           </CSVLink>
+
+        
+          <IconButton
+              aria-label='compartilhar'
+              borderColor="#000000"
+              border="1px"
+              _hover={{ bg: "#b3b3cc"}}
+              size="md"
+              icon={<AiOutlineShareAlt />}
+              variant='outline'
+              onClick={copiaLink}
+            ></IconButton>
       </Stack>
+      {/* <Box as='button'
+          borderColor="#FFFFFF"
+          border="1px"
+          borderRadius='md'
+          w='40px'
+          h='40px'
+          _hover={{ bg: "#b3b3cc"}}
+          placeholder='Reset'
+          onClick={resetZoomChart()}
+        >
+          <Image
+            objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
+        </Box> */}
+      
     </Box>
   );
 };

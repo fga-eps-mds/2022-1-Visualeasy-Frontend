@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Grid, GridItem, HStack } from "@chakra-ui/react";
 import Sidebar from "../Sidebar";
-import Graph from "../Graph";
 interface EnumServiceGetOrderBy {
   [index: number]: string;
 }
@@ -13,13 +12,13 @@ interface dataFormProps {
   endDate?: string
 }
 
-export default function DisplayHome() {
+export default function DisplayHome({displayHomeData }: any) {
   const [dataForm, setDataForm] = useState<dataFormProps>({
     intervalo: 0,
     variavel: []
   })
 
   return (
-    <Sidebar SidebarData={(e) => { setDataForm(e) }} />
+    <Sidebar SidebarData={displayHomeData} />
   );
 };
