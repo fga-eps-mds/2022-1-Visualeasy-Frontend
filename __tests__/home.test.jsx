@@ -85,7 +85,7 @@ afterAll(() => server.close())
 
 
 describe('DisplayHome', () => {
-  test.skip('DisplayHome deve existir', () => {
+  test('DisplayHome deve existir', () => {
     const displayHome = render(<DisplayHome />);
     expect(displayHome).not.toBeNull();
   });
@@ -110,7 +110,7 @@ describe('Document', () => {
 });
 
 describe('Logo', () => {
-  test.skip('Logo must have src = "/logo-retangular.png" and alt = "Logo"', () => {
+  test('Logo must have src = "/logo-retangular.png" and alt = "Logo"', () => {
     const sidebar = render(<Sidebar />);
     const logo = sidebar.container.querySelector('#logo-retangular');
     // expect(logo).toHaveAttribute('src', '/_next/static/media/logo-retangular.8228d07f.png');
@@ -119,7 +119,7 @@ describe('Logo', () => {
 });
 
 describe('Tabs', () => {
-  test.skip('Tabs ', async () => {
+  test('Tabs ', async () => {
     const setDataForm = () => console.log("MOCK FUNÇÃO")
     render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
     const button = screen.getByText(/Gráfico 1/i, { selector: 'button' });
@@ -128,7 +128,7 @@ describe('Tabs', () => {
 });
 
 describe('Option', () => {
-  test.skip('Options should exists', async () => {
+  test('Options should exists', async () => {
     const SidebarData = () => console.log("MOCK FUNÇÃO")
     render(<FormGraph FormGraphProps={(e) => { SidebarData({ ...e }) }} />);
     fireEvent.click(screen.getByText("Selecione as variáveis"));
@@ -165,7 +165,7 @@ describe('Radio', () => {
 
 
 describe('Button', () => {
-  test.skip('Button gerar grafico ', async () => {
+  test('Button gerar grafico ', async () => {
     const setDataForm = () => console.log("MOCK FUNÇÃO")
     render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
     const button = screen.getByText(/Gerar Gráfico/i, { selector: 'button' });
@@ -175,7 +175,7 @@ describe('Button', () => {
 
 
 describe('closeButton', () => {
-  test.skip('CloseButton está ativado nas abas', async () => {
+  test('CloseButton está ativado nas abas', async () => {
     const setDataForm = () => console.log("MOCK FUNÇÃO")
     render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
     const button = screen.findByLabelText('button', { name: /Close/i });
@@ -206,7 +206,7 @@ describe('RatioSelect', () => {
   });
 });
 
-describe.skip('Graph Tempo Personalizado', () => {
+describe('Graph Tempo Personalizado', () => {
   test('Deve renderizar o grafico com a opção de tempo personalizado', async () => {
     const dataForm = {
       variavel: ["Pikashu", "Outro"],
@@ -220,7 +220,7 @@ describe.skip('Graph Tempo Personalizado', () => {
   })
 })
 
-describe.skip('Graph Tempo Predefinido', () => {
+describe('Graph Tempo Predefinido', () => {
   test('Deve renderizar o grafico com a opção de tempo predefinido', async () => {
     const dataForm = {
       variavel: ["Pikashu"],
