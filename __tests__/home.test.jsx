@@ -18,6 +18,16 @@ import renderer from 'react-test-renderer';
 const url = "http://localhost";
 
 const chakraWrapper = ({ children }) => <ChakraProvider>{children}</ChakraProvider>
+const person =
+{
+  id: 1,
+  intervalo: 1,
+  startDate:"30-04-2022",
+  endDate:"30-06-2022",
+  granularity:"month",
+  variavel: ["Pikashu"],
+  graphName:"Grafico 1"
+};
 
 const variavelNameGet = rest.get(`${url}/variavel`, (req, res, ctx) => {
   return res(
@@ -124,7 +134,7 @@ describe('Logo', () => {
 describe('Tabs', () => {
   test('Tabs ', async () => {
     const setDataForm = () => console.log("MOCK FUNÇÃO")
-    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />, {wrapper: chakraWrapper});
+    render(<Sidebar SidebarData={person} />, {wrapper: chakraWrapper});
     const button = screen.getByText(/Gráfico 1/i, { selector: 'button' });
     expect(button).not.toBeNull();
   });
@@ -170,7 +180,7 @@ describe('Radio', () => {
 describe('Button', () => {
   test('Button gerar grafico ', async () => {
     const setDataForm = () => console.log("MOCK FUNÇÃO")
-    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />, {wrapper: chakraWrapper});
+    render(<Sidebar SidebarData={person} />, {wrapper: chakraWrapper});
     const button = screen.getByText(/Gerar Gráfico/i, { selector: 'button' });
     expect(button).not.toBeNull();
   });
@@ -180,7 +190,7 @@ describe('Button', () => {
 describe('closeButton', () => {
   test('CloseButton está ativado nas abas', async () => {
     const setDataForm = () => console.log("MOCK FUNÇÃO")
-    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />, {wrapper: chakraWrapper});
+    render(<Sidebar SidebarData={person} />, {wrapper: chakraWrapper});
     const button = screen.findByLabelText('button', { name: /Close/i });
     expect(button).not.toBeNull();
   });
