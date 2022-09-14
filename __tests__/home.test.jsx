@@ -1,6 +1,7 @@
 // __tests__/index.test.jsx
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { ChakraProvider } from '@chakra-ui/react'
 import DisplayHome from '../src/pages/index'
 import Graph from '../src/pages/components/Graph';
 import Sidebar from '../src/pages/components/Sidebar';
@@ -15,6 +16,8 @@ import renderer from 'react-test-renderer';
 
 
 const url = "http://localhost";
+
+const chakraWrapper = ({ children }) => <ChakraProvider>{children}</ChakraProvider>
 
 const variavelNameGet = rest.get(`${url}/variavel`, (req, res, ctx) => {
   return res(
@@ -86,7 +89,7 @@ afterAll(() => server.close())
 
 describe('DisplayHome', () => {
   test('DisplayHome deve existir', () => {
-    const displayHome = render(<DisplayHome />);
+    const displayHome = render(<DisplayHome />, {wrapper: chakraWrapper});
     expect(displayHome).not.toBeNull();
   });
 });
@@ -111,7 +114,7 @@ describe('Document', () => {
 
 describe('Logo', () => {
   test('Logo must have src = "/logo-retangular.png" and alt = "Logo"', () => {
-    const sidebar = render(<Sidebar />);
+    const sidebar = render(<Sidebar />, {wrapper: chakraWrapper});
     const logo = sidebar.container.querySelector('#logo-retangular');
     // expect(logo).toHaveAttribute('src', '/_next/static/media/logo-retangular.8228d07f.png');
     expect(logo).toHaveAttribute('alt', 'Logo');
@@ -121,7 +124,7 @@ describe('Logo', () => {
 describe('Tabs', () => {
   test('Tabs ', async () => {
     const setDataForm = () => console.log("MOCK FUNÇÃO")
-    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
+    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />, {wrapper: chakraWrapper});
     const button = screen.getByText(/Gráfico 1/i, { selector: 'button' });
     expect(button).not.toBeNull();
   });
@@ -130,7 +133,7 @@ describe('Tabs', () => {
 describe('Option', () => {
   test('Options should exists', async () => {
     const SidebarData = () => console.log("MOCK FUNÇÃO")
-    render(<FormGraph FormGraphProps={(e) => { SidebarData({ ...e }) }} />);
+    render(<FormGraph FormGraphProps={(e) => { SidebarData({ ...e }) }} />, {wrapper: chakraWrapper});
     fireEvent.click(screen.getByText("Selecione as variáveis"));
 
     setTimeout(() => {
@@ -167,7 +170,7 @@ describe('Radio', () => {
 describe('Button', () => {
   test('Button gerar grafico ', async () => {
     const setDataForm = () => console.log("MOCK FUNÇÃO")
-    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
+    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />, {wrapper: chakraWrapper});
     const button = screen.getByText(/Gerar Gráfico/i, { selector: 'button' });
     expect(button).not.toBeNull();
   });
@@ -177,23 +180,11 @@ describe('Button', () => {
 describe('closeButton', () => {
   test('CloseButton está ativado nas abas', async () => {
     const setDataForm = () => console.log("MOCK FUNÇÃO")
-    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
+    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />, {wrapper: chakraWrapper});
     const button = screen.findByLabelText('button', { name: /Close/i });
     expect(button).not.toBeNull();
   });
 });
-
-// describe('Delete gráfico', () => {
-//   test('Excluir gráfico', async () => {
-//     const close = jest.fn();
-//     const SidebarData = () => console.log("MOCK FUNÇÃO")
-//     const { del } = render(<deletPostList delete={close} />);
-
-//     fireEvent.click(findByLabelText('button', { name: /Close/i ));
-
-//     expect(close).toHaveBeenCalled();
-//   });
-// });
 
 describe('RatioSelect', () => {
   test('Deve renderizar os campos de Início e Fim', async () => {
@@ -215,7 +206,7 @@ describe('Graph Tempo Personalizado', () => {
       endDate: "30-06-2022",
       granularity: "month"
     }
-    const graph = render(<Graph dataForm={dataForm} />)
+    const graph = render(<Graph dataForm={dataForm} />, {wrapper: chakraWrapper})
     expect(graph).not.toBeNull();
   })
 })
@@ -229,7 +220,7 @@ describe('Graph Tempo Predefinido', () => {
       endDate: "30-06-2022",
       granularity: "month"
     }
-    const graph = render(<Graph dataForm={dataForm} />)
+    const graph = render(<Graph dataForm={dataForm} />, {wrapper: chakraWrapper})
     expect(graph).not.toBeNull();
   })
 })
