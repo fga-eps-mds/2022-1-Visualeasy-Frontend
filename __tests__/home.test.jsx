@@ -14,9 +14,9 @@ import { setupServer } from "msw/node"
 import renderer from 'react-test-renderer';
 
 
-const url = `http://localhost:8080/variavel`
+const url = "http://localhost";
 
-const variavelNameGet = rest.get(url, (req, res, ctx) => {
+const variavelNameGet = rest.get(`${url}/variavel`, (req, res, ctx) => {
   return res(
     ctx.status(200),
     ctx.json({
@@ -35,7 +35,7 @@ const variavelNameGet = rest.get(url, (req, res, ctx) => {
     }))
 })
 
-const postAllData = rest.post(`${url}/filtered`, (req, res, ctx) => {
+const postAllData = rest.post(`${url}/variavel/filtered`, (req, res, ctx) => {
   return res(
     ctx.status(200),
     ctx.json({
@@ -54,7 +54,7 @@ const postAllData = rest.post(`${url}/filtered`, (req, res, ctx) => {
   )
 })
 
-const postAllDataPredefinido = rest.post(`${url}/filteredByPeriod`, (req, res, ctx) => {
+const postAllDataPredefinido = rest.post(`${url}/variavel/filteredByPeriod`, (req, res, ctx) => {
   return res(
     ctx.status(200),
     ctx.json({
