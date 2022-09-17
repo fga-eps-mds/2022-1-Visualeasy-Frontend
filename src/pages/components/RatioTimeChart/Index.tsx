@@ -9,7 +9,6 @@ const RatioSelect=({RatioRange})=> {
 
     useEffect(() => {
       RatioRange({intervalo: parseInt(SelectRatio), startDate, endDate, granularity: SelectRatioGranularity})
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [SelectRatio, SelectRatioGranularity ,startDate, endDate]);
     
     return(

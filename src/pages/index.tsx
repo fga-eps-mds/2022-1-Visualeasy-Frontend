@@ -28,7 +28,7 @@ export async function getServerSideProps(context) {
   };
 
   return {
-    props: {person}, // will be passed to the page component as props
+    props: {person},
   }}
   return{props:{}}
 }

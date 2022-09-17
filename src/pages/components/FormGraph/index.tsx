@@ -64,9 +64,6 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
             ...FormGraphData
         });
 
-        // Se o valor de intervalo for entre 1 e 4, chamar a rota /variavel/filteredByPeriod.
-        // Se o valor de intervalo for 5, chamar a rota /variavel/filtered, enviando startDate e endDate
-
     }
     return (
         <VStack w='100%'>
