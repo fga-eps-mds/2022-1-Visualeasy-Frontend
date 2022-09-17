@@ -1,4 +1,4 @@
-import { VStack, Input, Button } from "@chakra-ui/react";
+import { VStack, Input, Button, Text } from "@chakra-ui/react";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
 import { useState, useEffect } from "react";
 import { listaNomeVariaveis } from "../../api/api";
@@ -22,7 +22,7 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
     const [variablesName, setVariablesName] = useState([{}])
     const [graphName, setgraphName] = useState("Gráfico")
     const [variavelSelect, setvariavelSelect] = useState([])
-
+    const [hasError, setHasError] = useState(false)
 
     useEffect(() => {
         getListaNomes()
@@ -48,6 +48,15 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
     }
 
     function Gerar() {
+        console.log("TESTEE", variavelSelect, typeof(graphName));  // GraphParameters, variablesName, graphName, variavelSelect
+
+        if(variavelSelect.length === 0 || graphName === '') {
+            setHasError(true);
+            return;
+        } else {
+            setHasError(false);
+        }
+
         const variavel = [] = Object.keys(newArr)
             .map(function (key) {
                 return newArr[key];
@@ -85,7 +94,15 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
                 chakraStyles={selectStyles}
                 options={variablesName}
             />
+        
             <RatioSelect RatioRange={(e) => setGraphParameters(e)} />
+
+            {
+                hasError ?
+                    <Text>Preencha todos os campos!</Text>
+                :
+                    <></>
+            }
             {disablebutton ?
                 (<Button colorScheme='red' size='lg' onClick={() => Gerar()}>Gerar gráfico</Button>
                 ) : (
