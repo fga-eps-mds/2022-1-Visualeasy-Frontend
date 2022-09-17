@@ -1,6 +1,7 @@
-import { VStack, Input, Button, Text } from "@chakra-ui/react";
+import { VStack, Input, Button, Text, HStack } from "@chakra-ui/react";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
 import { useState, useEffect } from "react";
+import { AiFillWarning } from "react-icons/ai";
 import { listaNomeVariaveis } from "../../api/api";
 import RatioSelect from "../RatioTimeChart/Index";
 
@@ -48,7 +49,6 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
     }
 
     function Gerar() {
-        console.log("TESTEE", variavelSelect, typeof(graphName));  // GraphParameters, variablesName, graphName, variavelSelect
 
         if(variavelSelect.length === 0 || graphName === '') {
             setHasError(true);
@@ -99,7 +99,12 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
 
             {
                 hasError ?
-                    <Text>Preencha todos os campos!</Text>
+                    <HStack color={"red"}>
+                        <AiFillWarning />
+                        <Text color="red" fontSize="16px">
+                            Preencha todos os campos
+                        </Text>
+                    </HStack>
                 :
                     <></>
             }
