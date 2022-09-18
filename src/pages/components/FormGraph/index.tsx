@@ -51,8 +51,8 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
 
     function Gerar() {
         setIsLoading(true);
-        
-        if(variavelSelect.length === 0 || graphName === '') {
+
+        if (variavelSelect.length === 0 || graphName === '') {
             setHasError(true);
             setIsLoading(false);
             return;
@@ -76,10 +76,6 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
             ...FormGraphData
         });
 
-        setIsLoading(false);
-        // Se o valor de intervalo for entre 1 e 4, chamar a rota /variavel/filteredByPeriod.
-        // Se o valor de intervalo for 5, chamar a rota /variavel/filtered, enviando startDate e endDate
-
     }
     return (
         <VStack w='100%'>
@@ -98,7 +94,7 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
                 chakraStyles={selectStyles}
                 options={variablesName}
             />
-        
+
             <RatioSelect RatioRange={(e) => setGraphParameters(e)} />
 
             {
@@ -109,28 +105,28 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
                             Preencha todos os campos
                         </Text>
                     </HStack>
-                :
+                    :
                     <></>
             }
             {disablebutton ?
-                    <Button colorScheme='red' size='lg' onClick={() => Gerar()} disabled={isLoading}>
-                        Gerar gráfico
-                        {
-                            isLoading ?
+                <Button colorScheme='red' size='lg' onClick={() => Gerar()} disabled={isLoading}>
+                    Gerar gráfico
+                    {
+                        isLoading ?
                             <Spinner
-                            thickness='4px'
-                            speed='0.65s'
-                            emptyColor='gray.200'
-                            color='blue.500'
-                            size='md'
-                            />  
+                                thickness='4px'
+                                speed='0.65s'
+                                emptyColor='gray.200'
+                                color='blue.500'
+                                size='md'
+                            />
                             :
                             <div></div>
-                        }
-                    </Button>
-                : 
-                    <></>
-                
+                    }
+                </Button>
+                :
+                <></>
+
             }
 
         </VStack>

@@ -11,7 +11,6 @@ export interface Variavel extends Array<Variavel> { }
 
 const paramstype = {
     variavel: "Bulbassauro",
-    // intervalo: 1
     startDate: '2022-06-30T06:18:50',
     endDate: '2022-06-30T06:26:14'
 }

@@ -25,8 +25,6 @@ import { CSVLink } from "react-csv";
 
 import { Line } from 'react-chartjs-2';
 
-import { useRouter } from 'next/router';
-
 import { Box, IconButton, Image, Stack, useClipboard } from "@chakra-ui/react";
 
 import zoomPlugin from "chartjs-plugin-zoom";
@@ -107,7 +105,6 @@ export default function Graph({ dataForm }: any) {
           backgroundColor: `${getRandomColor()}`,
         }
 
-        //for-of para gerar os dados para o csv
         for (const element of dados) {
           let dataCsv ;
           if(dataForm.granularity === 'second'){
@@ -225,11 +222,12 @@ export default function Graph({ dataForm }: any) {
       onCopy();
     }
 
-      // function resetZoomChart (){
-  //   const ctx = chartCtx.canvas.getContext('2d');
-  //     ctx.save();
-  //   ctx.resetZoom();
-  // }
+  /* Implementação do botão de zoom
+  function resetZoomChart (){
+     const ctx = chartCtx.canvas.getContext('2d');
+       ctx.save();
+     ctx.resetZoom();
+  } */
 
   return (
 
