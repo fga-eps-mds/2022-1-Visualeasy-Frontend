@@ -45,6 +45,11 @@ O projeto é separado em diferentes pacotes, sendo que cada microserviço está 
  ```terminal
   npm run test
  ```
+   &emsp;&emsp; Para rodar os testes com snapshots:
+
+ ```terminal
+  yarn tun test -u
+ ```
  
  &emsp;&emsp; Para listar os containers que estão em execução:
  
