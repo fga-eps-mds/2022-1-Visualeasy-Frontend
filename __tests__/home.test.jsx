@@ -1,5 +1,3 @@
-// __tests__/index.test.jsx
-
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import DisplayHome from '../src/pages/index'
 import Graph from '../src/pages/components/Graph';
@@ -113,7 +111,6 @@ describe('Logo', () => {
   test('Logo must have src = "/logo-retangular.png" and alt = "Logo"', () => {
     const sidebar = render(<Sidebar />);
     const logo = sidebar.container.querySelector('#logo-retangular');
-    // expect(logo).toHaveAttribute('src', '/_next/static/media/logo-retangular.8228d07f.png');
     expect(logo).toHaveAttribute('alt', 'Logo');
   });
 });
@@ -182,18 +179,6 @@ describe('closeButton', () => {
     expect(button).not.toBeNull();
   });
 });
-
-// describe('Delete gráfico', () => {
-//   test('Excluir gráfico', async () => {
-//     const close = jest.fn();
-//     const SidebarData = () => console.log("MOCK FUNÇÃO")
-//     const { del } = render(<deletPostList delete={close} />);
-
-//     fireEvent.click(findByLabelText('button', { name: /Close/i ));
-
-//     expect(close).toHaveBeenCalled();
-//   });
-// });
 
 describe('RatioSelect', () => {
   test('Deve renderizar os campos de Início e Fim', async () => {

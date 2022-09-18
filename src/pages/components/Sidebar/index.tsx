@@ -38,7 +38,6 @@ import dynamic from 'next/dynamic'
 import FormGraph from "../FormGraph";
 import FormGraphinfo from "../FormShowInfo";
 
-//import Graph from "";
 interface EnumServiceGetOrderBy {
   [index: number]: string;
 }
@@ -89,7 +88,6 @@ export default function Sidebar({ SidebarData }: any) {
   function deletPostList(deletitem) {
     var filtered = postList.filter((e) => (e.id !== deletitem))
     setPostList(filtered)
-    // setPostList(postList.filter((e) => { e.id !== deletitem }));
   }
   
   const confirmarGraficos = () => {
@@ -188,8 +186,6 @@ export default function Sidebar({ SidebarData }: any) {
 
           <TabPanel>
             <GridItem pl='2' area={'main'}>
-              {/* <Graph dataBase={dataForm} /> */}
-              
             </GridItem>
           </TabPanel>
           {
