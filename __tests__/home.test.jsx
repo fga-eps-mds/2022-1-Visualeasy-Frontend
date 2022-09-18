@@ -147,7 +147,6 @@ describe('Logo', () => {
   test('Logo must have src = "/logo-retangular.png" and alt = "Logo"', () => {
     const sidebar = render(<Sidebar />, { wrapper: chakraWrapper });
     const logo = sidebar.container.querySelector('#logo-retangular');
-    // expect(logo).toHaveAttribute('src', '/_next/static/media/logo-retangular.8228d07f.png');
     expect(logo).toHaveAttribute('alt', 'Logo');
   });
 });
