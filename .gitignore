@@ -9,6 +9,7 @@ yarn.lock
 
 # testing
 /coverage
+/__tests__/__snapshots__
 
 # next.js
 /.next/
