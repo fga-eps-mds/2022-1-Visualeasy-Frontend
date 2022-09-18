@@ -83,7 +83,7 @@ export default function Graph({ dataForm }: any) {
 
         const dados = response.variavels.map((element: any) => {  
           let dat = element.date.split(' ');
-          console.log("D", dat);
+          // console.log("D", dat);
           dat[0] = dat[0].split('-').reverse().join('-');
           if(dat[1]){
             dat[1] = dat[1].split(':');
@@ -91,10 +91,10 @@ export default function Graph({ dataForm }: any) {
               dat[1].push('00')
             }
             dat[1] = dat[1].join(':');
-            console.log("E", dat[1]);
+            //console.log("E", dat[1]);
           }
           const res  = dat.join(' ');
-          console.log("Result", res);
+          // console.log("Result", res);
           return {nome: dataForm.variavel[i], 
           data: Date.parse(res), 
           valor: Number(element.valor) } })
@@ -136,7 +136,7 @@ export default function Graph({ dataForm }: any) {
   const data = {
     datasets: listaVariaveis,
   };
-  console.log(data);
+  // console.log(data);
   const downloadImage = useCallback(() => {
     const link = document.createElement("a");
     link.download = "chart.png";

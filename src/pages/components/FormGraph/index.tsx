@@ -1,6 +1,7 @@
-import { VStack, Input, Button } from "@chakra-ui/react";
+import { VStack, Input, Button, Text, HStack, Spinner } from "@chakra-ui/react";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
 import { useState, useEffect } from "react";
+import { AiFillWarning } from "react-icons/ai";
 import { listaNomeVariaveis } from "../../api/api";
 import RatioSelect from "../RatioTimeChart/Index";
 
@@ -22,7 +23,8 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
     const [variablesName, setVariablesName] = useState([{}])
     const [graphName, setgraphName] = useState("Gráfico")
     const [variavelSelect, setvariavelSelect] = useState([])
-
+    const [hasError, setHasError] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         getListaNomes()
@@ -48,6 +50,16 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
     }
 
     function Gerar() {
+        setIsLoading(true);
+
+        if (variavelSelect.length === 0 || graphName === '') {
+            setHasError(true);
+            setIsLoading(false);
+            return;
+        } else {
+            setHasError(false);
+        }
+
         const variavel = [] = Object.keys(newArr)
             .map(function (key) {
                 return newArr[key];
@@ -82,12 +94,39 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
                 chakraStyles={selectStyles}
                 options={variablesName}
             />
+
             <RatioSelect RatioRange={(e) => setGraphParameters(e)} />
-            {disablebutton ?
-                (<Button colorScheme='red' size='lg' onClick={() => Gerar()}>Gerar gráfico</Button>
-                ) : (
+
+            {
+                hasError ?
+                    <HStack color={"red"}>
+                        <AiFillWarning />
+                        <Text color="red" fontSize="16px">
+                            Preencha todos os campos
+                        </Text>
+                    </HStack>
+                    :
                     <></>
-                )
+            }
+            {disablebutton ?
+                <Button colorScheme='red' size='lg' onClick={() => Gerar()} disabled={isLoading}>
+                    Gerar gráfico
+                    {
+                        isLoading ?
+                            <Spinner
+                                thickness='4px'
+                                speed='0.65s'
+                                emptyColor='gray.200'
+                                color='blue.500'
+                                size='md'
+                            />
+                            :
+                            <div></div>
+                    }
+                </Button>
+                :
+                <></>
+
             }
 
         </VStack>
