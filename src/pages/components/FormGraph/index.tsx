@@ -1,4 +1,4 @@
-import { VStack, Input, Button, Text, HStack } from "@chakra-ui/react";
+import { VStack, Input, Button, Text, HStack, Spinner } from "@chakra-ui/react";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
 import { useState, useEffect } from "react";
 import { AiFillWarning } from "react-icons/ai";
@@ -24,6 +24,7 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
     const [graphName, setgraphName] = useState("Gráfico")
     const [variavelSelect, setvariavelSelect] = useState([])
     const [hasError, setHasError] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         getListaNomes()
@@ -49,9 +50,11 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
     }
 
     function Gerar() {
-
+        setIsLoading(true);
+        
         if(variavelSelect.length === 0 || graphName === '') {
             setHasError(true);
+            setIsLoading(false);
             return;
         } else {
             setHasError(false);
@@ -73,6 +76,7 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
             ...FormGraphData
         });
 
+        setIsLoading(false);
         // Se o valor de intervalo for entre 1 e 4, chamar a rota /variavel/filteredByPeriod.
         // Se o valor de intervalo for 5, chamar a rota /variavel/filtered, enviando startDate e endDate
 
@@ -109,10 +113,24 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
                     <></>
             }
             {disablebutton ?
-                (<Button colorScheme='red' size='lg' onClick={() => Gerar()}>Gerar gráfico</Button>
-                ) : (
+                    <Button colorScheme='red' size='lg' onClick={() => Gerar()} disabled={isLoading}>
+                        Gerar gráfico
+                        {
+                            isLoading ?
+                            <Spinner
+                            thickness='4px'
+                            speed='0.65s'
+                            emptyColor='gray.200'
+                            color='blue.500'
+                            size='md'
+                            />  
+                            :
+                            <div></div>
+                        }
+                    </Button>
+                : 
                     <></>
-                )
+                
             }
 
         </VStack>
