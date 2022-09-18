@@ -1,20 +1,20 @@
 // __tests__/index.test.jsx
 
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, queryByTitle, queryByText } from '@testing-library/react'
 import { ChakraProvider } from '@chakra-ui/react'
 import DisplayHome from '../src/pages/index'
-import {listaNomeVariaveis , postAllData as apiPost} from 'src/pages/api/api.ts'
+import { listaNomeVariaveis, postAllData as apiPost } from 'src/pages/api/api.ts'
 import Graph from '../src/pages/components/Graph';
 import Sidebar from '../src/pages/components/Sidebar';
 import RatioSelect from '../src/pages/components/RatioTimeChart/Index';
 import FormGraph from '../src/pages/components/FormShowInfo';
 import MyApp from '../src/pages/_app'
-import {getServerSideProps} from '../src/pages/index'
+import { getServerSideProps } from '../src/pages/index'
 import Document from '../src/pages/_document'
 import '@testing-library/jest-dom'
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import renderer from 'react-test-renderer';
+import * as renderer from 'react-test-renderer';
 
 import axios from "axios";
 
@@ -32,22 +32,22 @@ const person =
 {
   id: 1,
   intervalo: 1,
-  startDate:"30-04-2022",
-  endDate:"30-06-2022",
-  granularity:"month",
+  startDate: "30-04-2022",
+  endDate: "30-06-2022",
+  granularity: "month",
   variavel: ["Pikashu"],
-  graphName:"Grafico 1"
+  graphName: "Grafico 1"
 };
 
 const query =
 {
   id: 1,
   intervalo: 1,
-  startDate:"30-04-2022",
-  endDate:"30-06-2022",
-  granularity:"month",
+  startDate: "30-04-2022",
+  endDate: "30-06-2022",
+  granularity: "month",
   variavel: "Pikashu",
-  graphName:"Grafico 1"
+  graphName: "Grafico 1"
 };
 
 const variavelNameGet = rest.get(`${url}/variavel`, (req, res, ctx) => {
@@ -120,32 +120,32 @@ afterAll(() => server.close())
 
 describe('DisplayHome', () => {
   test('DisplayHome deve existir', () => {
-    const displayHome = render(<DisplayHome />, {wrapper: chakraWrapper});
+    const displayHome = render(<DisplayHome />, { wrapper: chakraWrapper });
     expect(displayHome).not.toBeNull();
   });
 });
 
 describe('MyApp', () => {
   it('MyApp deve existir"', () => {
-    const myApp =()=>{
+    const myApp = () => {
       render(<MyApp />)
-    } ;
+    };
     expect(myApp).not.toBeNull();
   });
 });
 
 describe('Document', () => {
   it('Document deve existir"', () => {
-    const myApp =()=>{
+    const myApp = () => {
       render(<Document />)
-    } ;
+    };
     expect(myApp).not.toBeNull();
   });
 });
 
 describe('Logo', () => {
   test('Logo must have src = "/logo-retangular.png" and alt = "Logo"', () => {
-    const sidebar = render(<Sidebar />, {wrapper: chakraWrapper});
+    const sidebar = render(<Sidebar />, { wrapper: chakraWrapper });
     const logo = sidebar.container.querySelector('#logo-retangular');
     // expect(logo).toHaveAttribute('src', '/_next/static/media/logo-retangular.8228d07f.png');
     expect(logo).toHaveAttribute('alt', 'Logo');
@@ -154,7 +154,7 @@ describe('Logo', () => {
 
 describe('Tabs', () => {
   test('Tabs ', async () => {
-    render(<Sidebar SidebarData={person} />, {wrapper: chakraWrapper});
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
     const button = screen.getByText(/Gráfico 1/i, { selector: 'button' });
     expect(button).not.toBeNull();
   });
@@ -163,7 +163,7 @@ describe('Tabs', () => {
 describe('Option', () => {
   test('Options should exists', async () => {
     const SidebarData = () => console.log("MOCK FUNÇÃO")
-    render(<FormGraph FormGraphProps={(e) => { SidebarData({ ...e }) }} />, {wrapper: chakraWrapper});
+    render(<FormGraph FormGraphProps={(e) => { SidebarData({ ...e }) }} />, { wrapper: chakraWrapper });
     fireEvent.click(screen.getByText("Selecione as variáveis"));
 
     setTimeout(() => {
@@ -197,17 +197,69 @@ describe('Radio', () => {
 
 describe('Button', () => {
   test('Button gerar grafico ', async () => {
-    render(<Sidebar SidebarData={person} />, {wrapper: chakraWrapper});
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
     const button = screen.getByText(/Gerar Gráfico/i, { selector: 'button' });
     expect(button).not.toBeNull();
   });
+
+  test('Button gerar grafico ', async () => {
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
+    const button = screen.getByText(/Gerar Gráfico/i, { selector: 'button' });
+    expect(button).not.toBeNull();
+    expect(screen.getByText(/Gerar Gráfico/i).closest('button')).not.toBeDisabled();
+  });
+
 });
 
 describe('closeButton', () => {
   test('CloseButton está ativado nas abas', async () => {
-    render(<Sidebar SidebarData={person} />, {wrapper: chakraWrapper});
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
     const button = screen.findByLabelText('button', { name: /Close/i });
     expect(button).not.toBeNull();
+  });
+});
+
+describe('Botão Modal', () => {
+
+  test('Abrir modal para visualizar multiplos gráficos. ', async () => {
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
+    const button = screen.queryByTitle(/abre-modal/i, { selector: 'button' });
+    fireEvent.click(button);
+    expect(button).not.toBeNull();
+    expect(button).toMatchSnapshot();
+
+    setTimeout(() => {
+      const button = screen.getByText(/Confirmar/i, { selector: 'button' });
+      expect(button).not.toBeNull();
+    }, 1000);
+
+
+  });
+
+  test('fechar visualização de multiplos gráficos ', async () => {
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
+    const button = screen.queryByTitle(/fecha-multi-graficos/i, { selector: 'button' });
+    expect(button).not.toBeNull();
+    expect(button).toMatchSnapshot();
+  });
+});
+
+describe('TabPanel', () => {
+
+  test('Teste de Painel. ', async () => {
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
+    const tab = screen.queryByTitle(/painel-grafico/i, { selector: 'tabpainel' });
+    fireEvent.click(tab);
+    expect(tab).toHaveFocus();
+    expect(tab).toMatchSnapshot();
+
+    setTimeout(() => {
+      const button = screen.queryByTitle(/grid-atual/i, { selector: 'grid' });
+      fireEvent.click(button);
+      expect(button).toBeNull();
+    }, 1000);
+
+
   });
 });
 
@@ -348,3 +400,5 @@ describe('Exceptions', () => {
     expect(test).toStrictEqual(Promise.resolve({}));
   });
 });
+
+
