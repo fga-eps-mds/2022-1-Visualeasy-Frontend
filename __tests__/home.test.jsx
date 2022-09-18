@@ -244,25 +244,6 @@ describe('Botão Modal', () => {
   });
 });
 
-describe('TabPanel', () => {
-
-  test('Teste de Painel. ', async () => {
-    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
-    const tab = screen.queryByTitle(/painel-grafico/i, { selector: 'tabpainel' });
-    fireEvent.click(tab);
-    expect(tab).toHaveFocus();
-    expect(tab).toMatchSnapshot();
-
-    setTimeout(() => {
-      const button = screen.queryByTitle(/grid-atual/i, { selector: 'grid' });
-      fireEvent.click(button);
-      expect(button).toBeNull();
-    }, 1000);
-
-
-  });
-});
-
 describe('RatioSelect', () => {
   test('Deve renderizar os campos de Início e Fim', async () => {
     const setGraphParameters = () => console.log("MOCK FUNÇÃO")
