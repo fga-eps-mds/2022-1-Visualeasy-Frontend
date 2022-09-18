@@ -15,6 +15,7 @@ import '@testing-library/jest-dom'
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import renderer from 'react-test-renderer';
+
 import axios from "axios";
 
 const url = "http://localhost";
@@ -196,7 +197,6 @@ describe('Radio', () => {
 
 describe('Button', () => {
   test('Button gerar grafico ', async () => {
-    const setDataForm = () => console.log("MOCK FUNÇÃO")
     render(<Sidebar SidebarData={person} />, {wrapper: chakraWrapper});
     const button = screen.getByText(/Gerar Gráfico/i, { selector: 'button' });
     expect(button).not.toBeNull();
@@ -229,12 +229,13 @@ describe('Graph Tempo Personalizado', () => {
       intervalo: 5,
       startDate: "30-04-2022",
       endDate: "30-06-2022",
-      granularity: "month"
+      granularity: "year"
     }
     const graph = renderer.create(<Graph dataForm={dataForm} />).toJSON();
     expect(graph).toMatchSnapshot();
   })
 })
+
 
 describe('Graph Tempo Predefinido', () => {
   test('Deve renderizar o grafico com a opção de tempo predefinido', async () => {
@@ -245,11 +246,67 @@ describe('Graph Tempo Predefinido', () => {
       endDate: "30-06-2022",
       granularity: "month"
     }
-
     const graph = renderer.create(<Graph dataForm={dataForm} />).toJSON();
     expect(graph).toMatchSnapshot();
   })
 })
+
+describe('Graph Tempo Personalizado Vazio', () => {
+  test('Deve renderizar o grafico com a opção de tempo personalizado sem granularidade', async () => {
+    const dataForm = {
+      variavel: ["Picachu"],
+      intervalo: 2,
+      startDate: "30-04-2022",
+      endDate: "30-06-2022",
+      granularity: ""
+    }
+    const graph = renderer.create(<Graph dataForm={dataForm} />).toJSON();
+    expect(graph).toMatchSnapshot();
+  })
+})
+
+describe('Graph Tempo Personalizado Segundo', () => {
+  test('Deve renderizar o grafico com a opção de tempo personalizado em segundos', async () => {
+    const dataForm = {
+      variavel: ["Picachu"],
+      intervalo: 2,
+      startDate: "30-04-2022",
+      endDate: "30-06-2022",
+      granularity: "second"
+    }
+    const graph = renderer.create(<Graph dataForm={dataForm} />).toJSON();
+    expect(graph).toMatchSnapshot();
+  })
+})
+
+describe('Graph Tempo Personalizado Minuto', () => {
+  test('Deve renderizar o grafico com a opção de tempo personalizado em minutos', async () => {
+    const dataForm = {
+      variavel: ["Picachu"],
+      intervalo: 2,
+      startDate: "30-04-2022",
+      endDate: "30-06-2022",
+      granularity: "minute"
+    }
+    const graph = renderer.create(<Graph dataForm={dataForm} />).toJSON();
+    expect(graph).toMatchSnapshot();
+  })
+})
+
+describe('Graph Tempo Personalizado Dias', () => {
+  test('Deve renderizar o grafico com a opção de tempo personalizado em dias', async () => {
+    const dataForm = {
+      variavel: ["Picachu"],
+      intervalo: 2,
+      startDate: "30-04-2022",
+      endDate: "30-06-2022",
+      granularity: "day"
+    }
+    const graph = renderer.create(<Graph dataForm={dataForm} />).toJSON();
+    expect(graph).toMatchSnapshot();
+  })
+})
+
 
 describe('getServerSideProps', () => {
   test('Deve retornar person', async () => {
