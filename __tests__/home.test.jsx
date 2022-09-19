@@ -222,7 +222,7 @@ describe('Botão Modal', () => {
 
   test('Abrir modal para visualizar multiplos gráficos. ', async () => {
     render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
-    const button = screen.queryByTitle(/abre-modal/i, { selector: 'button' });
+    const button = screen.queryByTitle(/multi-view/i, { selector: 'button' });
     fireEvent.click(button);
     expect(button).not.toBeNull();
     expect(button).toMatchSnapshot();
@@ -237,7 +237,7 @@ describe('Botão Modal', () => {
 
   test('fechar visualização de multiplos gráficos ', async () => {
     render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
-    const button = screen.queryByTitle(/fecha-multi-graficos/i, { selector: 'button' });
+    const button = screen.queryByTitle(/sigle-view/i, { selector: 'button' });
     expect(button).not.toBeNull();
     expect(button).toMatchSnapshot();
   });

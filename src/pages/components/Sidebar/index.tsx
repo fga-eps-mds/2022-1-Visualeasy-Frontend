@@ -169,7 +169,7 @@ export default function Sidebar({ SidebarData }: any) {
                     aria-label='expand'
                     icon={<BiSelectMultiple />}
                     variant='outline'
-                    title='abre-modal'
+                    title='multi-view'
                     size='lg'
                     onClick={onOpen}
                   />
@@ -178,8 +178,8 @@ export default function Sidebar({ SidebarData }: any) {
                     icon={<BiWindow />}
                     variant='outline'
                     size='lg'
-                    title='fecha-multi-graficos'
-                    onClick={() => { setCurrentGraph(e.id), setIsMultiple(false)}}
+                    title='sigle-view'
+                    onClick={() => { setCurrentGraph(e.id); setIsMultiple(false) }}
                   />
                 </TabPanel>
               ))}
