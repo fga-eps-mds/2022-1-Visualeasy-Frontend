@@ -58,6 +58,7 @@ export default function FormGraph({ FormGraphProps, disablebutton }: any) {
             return;
         } else {
             setHasError(false);
+            setIsLoading(false);
         }
 
         const variavel = [] = Object.keys(newArr)
