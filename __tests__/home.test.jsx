@@ -1,20 +1,56 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+// __tests__/index.test.jsx
+
+import { fireEvent, render, screen, waitFor, queryByTitle, queryByText } from '@testing-library/react'
+import { ChakraProvider } from '@chakra-ui/react'
 import DisplayHome from '../src/pages/index'
+import { listaNomeVariaveis, postAllData as apiPost } from 'src/pages/api/api.ts'
 import Graph from '../src/pages/components/Graph';
 import Sidebar from '../src/pages/components/Sidebar';
 import RatioSelect from '../src/pages/components/RatioTimeChart/Index';
 import FormGraph from '../src/pages/components/FormShowInfo';
 import MyApp from '../src/pages/_app'
+import { getServerSideProps } from '../src/pages/index'
 import Document from '../src/pages/_document'
 import '@testing-library/jest-dom'
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import renderer from 'react-test-renderer';
+import * as renderer from 'react-test-renderer';
 
+import axios from "axios";
 
-const url = `http://localhost:8080/variavel`
+const url = "http://localhost";
 
-const variavelNameGet = rest.get(url, (req, res, ctx) => {
+const chakraWrapper = ({ children }) => <ChakraProvider>{children}</ChakraProvider>
+const DATE_TO_USE = new Date('2022-03-16T07:42:10');
+const _Date = Date;
+global.Date = jest.fn(() => DATE_TO_USE);
+global.Date.UTC = _Date.UTC;
+global.Date.parse = _Date.parse;
+global.Date.now = _Date.now;
+
+const person =
+{
+  id: 1,
+  intervalo: 1,
+  startDate: "30-04-2022",
+  endDate: "30-06-2022",
+  granularity: "month",
+  variavel: ["Pikashu"],
+  graphName: "Grafico 1"
+};
+
+const query =
+{
+  id: 1,
+  intervalo: 1,
+  startDate: "30-04-2022",
+  endDate: "30-06-2022",
+  granularity: "month",
+  variavel: "Pikashu",
+  graphName: "Grafico 1"
+};
+
+const variavelNameGet = rest.get(`${url}/variavel`, (req, res, ctx) => {
   return res(
     ctx.status(200),
     ctx.json({
@@ -33,7 +69,7 @@ const variavelNameGet = rest.get(url, (req, res, ctx) => {
     }))
 })
 
-const postAllData = rest.post(`${url}/filtered`, (req, res, ctx) => {
+const postAllData = rest.post(`${url}/variavel/filtered`, (req, res, ctx) => {
   return res(
     ctx.status(200),
     ctx.json({
@@ -52,7 +88,7 @@ const postAllData = rest.post(`${url}/filtered`, (req, res, ctx) => {
   )
 })
 
-const postAllDataPredefinido = rest.post(`${url}/filteredByPeriod`, (req, res, ctx) => {
+const postAllDataPredefinido = rest.post(`${url}/variavel/filteredByPeriod`, (req, res, ctx) => {
   return res(
     ctx.status(200),
     ctx.json({
@@ -84,32 +120,32 @@ afterAll(() => server.close())
 
 describe('DisplayHome', () => {
   test('DisplayHome deve existir', () => {
-    const displayHome = render(<DisplayHome />);
+    const displayHome = render(<DisplayHome />, { wrapper: chakraWrapper });
     expect(displayHome).not.toBeNull();
   });
 });
 
 describe('MyApp', () => {
   it('MyApp deve existir"', () => {
-    const myApp =()=>{
+    const myApp = () => {
       render(<MyApp />)
-    } ;
+    };
     expect(myApp).not.toBeNull();
   });
 });
 
 describe('Document', () => {
   it('Document deve existir"', () => {
-    const myApp =()=>{
+    const myApp = () => {
       render(<Document />)
-    } ;
+    };
     expect(myApp).not.toBeNull();
   });
 });
 
 describe('Logo', () => {
   test('Logo must have src = "/logo-retangular.png" and alt = "Logo"', () => {
-    const sidebar = render(<Sidebar />);
+    const sidebar = render(<Sidebar />, { wrapper: chakraWrapper });
     const logo = sidebar.container.querySelector('#logo-retangular');
     expect(logo).toHaveAttribute('alt', 'Logo');
   });
@@ -117,8 +153,7 @@ describe('Logo', () => {
 
 describe('Tabs', () => {
   test('Tabs ', async () => {
-    const setDataForm = () => console.log("MOCK FUNÇÃO")
-    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
     const button = screen.getByText(/Gráfico 1/i, { selector: 'button' });
     expect(button).not.toBeNull();
   });
@@ -127,7 +162,7 @@ describe('Tabs', () => {
 describe('Option', () => {
   test('Options should exists', async () => {
     const SidebarData = () => console.log("MOCK FUNÇÃO")
-    render(<FormGraph FormGraphProps={(e) => { SidebarData({ ...e }) }} />);
+    render(<FormGraph FormGraphProps={(e) => { SidebarData({ ...e }) }} />, { wrapper: chakraWrapper });
     fireEvent.click(screen.getByText("Selecione as variáveis"));
 
     setTimeout(() => {
@@ -139,7 +174,6 @@ describe('Option', () => {
     }, 1000);
   });
 });
-
 
 describe('Radio', () => {
   test('Radio intervalo ', async () => {
@@ -160,23 +194,52 @@ describe('Radio', () => {
   });
 });
 
-
 describe('Button', () => {
   test('Button gerar grafico ', async () => {
-    const setDataForm = () => console.log("MOCK FUNÇÃO")
-    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
     const button = screen.getByText(/Gerar Gráfico/i, { selector: 'button' });
+    expect(button).not.toBeNull();
+  });
+
+  test('Button gerar grafico ', async () => {
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
+    const button = screen.getByText(/Gerar Gráfico/i, { selector: 'button' });
+    expect(button).not.toBeNull();
+    expect(screen.getByText(/Gerar Gráfico/i).closest('button')).not.toBeDisabled();
+  });
+
+});
+
+describe('closeButton', () => {
+  test('CloseButton está ativado nas abas', async () => {
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
+    const button = screen.findByLabelText('button', { name: /Close/i });
     expect(button).not.toBeNull();
   });
 });
 
+describe('Botão Modal', () => {
 
-describe('closeButton', () => {
-  test('CloseButton está ativado nas abas', async () => {
-    const setDataForm = () => console.log("MOCK FUNÇÃO")
-    render(<Sidebar SidebarData={(e) => { setDataForm(e) }} />);
-    const button = screen.findByLabelText('button', { name: /Close/i });
+  test('Abrir modal para visualizar multiplos gráficos. ', async () => {
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
+    const button = screen.queryByTitle(/abre-modal/i, { selector: 'button' });
+    fireEvent.click(button);
     expect(button).not.toBeNull();
+    expect(button).toMatchSnapshot();
+
+    setTimeout(() => {
+      const button = screen.getByText(/Confirmar/i, { selector: 'button' });
+      expect(button).not.toBeNull();
+    }, 1000);
+
+
+  });
+
+  test('fechar visualização de multiplos gráficos ', async () => {
+    render(<Sidebar SidebarData={person} />, { wrapper: chakraWrapper });
+    const button = screen.queryByTitle(/fecha-multi-graficos/i, { selector: 'button' });
+    expect(button).not.toBeNull();
+    expect(button).toMatchSnapshot();
   });
 });
 
@@ -198,12 +261,13 @@ describe('Graph Tempo Personalizado', () => {
       intervalo: 5,
       startDate: "30-04-2022",
       endDate: "30-06-2022",
-      granularity: "month"
+      granularity: "year"
     }
-    const graph = render(<Graph dataForm={dataForm} />)
-    expect(graph).not.toBeNull();
+    const graph = renderer.create(<Graph dataForm={dataForm} />).toJSON();
+    expect(graph).toMatchSnapshot();
   })
 })
+
 
 describe('Graph Tempo Predefinido', () => {
   test('Deve renderizar o grafico com a opção de tempo predefinido', async () => {
@@ -214,7 +278,107 @@ describe('Graph Tempo Predefinido', () => {
       endDate: "30-06-2022",
       granularity: "month"
     }
-    const graph = render(<Graph dataForm={dataForm} />)
-    expect(graph).not.toBeNull();
+    const graph = renderer.create(<Graph dataForm={dataForm} />).toJSON();
+    expect(graph).toMatchSnapshot();
   })
 })
+
+describe('Graph Tempo Personalizado Vazio', () => {
+  test('Deve renderizar o grafico com a opção de tempo personalizado sem granularidade', async () => {
+    const dataForm = {
+      variavel: ["Picachu"],
+      intervalo: 2,
+      startDate: "30-04-2022",
+      endDate: "30-06-2022",
+      granularity: ""
+    }
+    const graph = renderer.create(<Graph dataForm={dataForm} />).toJSON();
+    expect(graph).toMatchSnapshot();
+  })
+})
+
+describe('Graph Tempo Personalizado Segundo', () => {
+  test('Deve renderizar o grafico com a opção de tempo personalizado em segundos', async () => {
+    const dataForm = {
+      variavel: ["Picachu"],
+      intervalo: 2,
+      startDate: "30-04-2022",
+      endDate: "30-06-2022",
+      granularity: "second"
+    }
+    const graph = renderer.create(<Graph dataForm={dataForm} />).toJSON();
+    expect(graph).toMatchSnapshot();
+  })
+})
+
+describe('Graph Tempo Personalizado Minuto', () => {
+  test('Deve renderizar o grafico com a opção de tempo personalizado em minutos', async () => {
+    const dataForm = {
+      variavel: ["Picachu"],
+      intervalo: 2,
+      startDate: "30-04-2022",
+      endDate: "30-06-2022",
+      granularity: "minute"
+    }
+    const graph = renderer.create(<Graph dataForm={dataForm} />).toJSON();
+    expect(graph).toMatchSnapshot();
+  })
+})
+
+describe('Graph Tempo Personalizado Dias', () => {
+  test('Deve renderizar o grafico com a opção de tempo personalizado em dias', async () => {
+    const dataForm = {
+      variavel: ["Picachu"],
+      intervalo: 2,
+      startDate: "30-04-2022",
+      endDate: "30-06-2022",
+      granularity: "day"
+    }
+    const graph = renderer.create(<Graph dataForm={dataForm} />).toJSON();
+    expect(graph).toMatchSnapshot();
+  })
+})
+
+
+describe('getServerSideProps', () => {
+  test('Deve retornar person', async () => {
+    const context = {
+      query: query
+    }
+    const props = getServerSideProps(context);
+    expect(props).not.toBeNull();
+  })
+  test('Deve retornar props vazia', async () => {
+    const context = {
+      query: {}
+    }
+    const props = getServerSideProps(context);
+    expect(props).not.toBeNull();
+  })
+})
+
+describe('Exceptions', () => {
+  test('listaNomeVariaveis Exception', async () => {
+    jest.spyOn(axios, 'get').mockImplementation((req) => {
+      throw "Exception Occurred";
+    });
+    const test = listaNomeVariaveis();
+    expect(test).toStrictEqual(Promise.resolve({}));
+  });
+  test('apiPost Exception', async () => {
+    jest.spyOn(axios, 'post').mockImplementation((req) => {
+      throw "Exception Occurred";
+    });
+    const test = apiPost();
+    expect(test).toStrictEqual(Promise.resolve({}));
+  });
+  test('apiPost Promise error', async () => {
+    jest.spyOn(axios, 'post').mockImplementation((req) => {
+      return Promise.reject();
+    });
+    const test = apiPost()
+    expect(test).toStrictEqual(Promise.resolve({}));
+  });
+});
+
+
