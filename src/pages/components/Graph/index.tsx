@@ -12,9 +12,9 @@ import {
 
 } from 'chart.js';
 
-import  absoluteUrl  from 'next-absolute-url'
+import absoluteUrl from 'next-absolute-url'
 
-import {ptBR} from 'date-fns/locale';
+import { ptBR } from 'date-fns/locale';
 import 'chartjs-adapter-date-fns';
 import { format } from 'date-fns';
 import { FiDownload } from 'react-icons/fi';
@@ -74,30 +74,30 @@ export default function Graph({ dataForm }: any) {
           endDate: dataForm.endDate,
           granularity: dataForm.granularity
         };
-        
+
         if (dataForm.intervalo !== 5) {
           response = await postAllData("filteredByPeriod", bodyRequest)
         } else {
           response = await postAllData("filtered", bodyRequest)
         }
 
-        const dados = response.variavels.map((element: any) => {  
+        const dados = response.variavels.map((element: any) => {
           let dat = element.date.split(' ');
-          // console.log("D", dat);
           dat[0] = dat[0].split('-').reverse().join('-');
-          if(dat[1]){
+          if (dat[1]) {
             dat[1] = dat[1].split(':');
-            if(!dat[1][1]){
+            if (!dat[1][1]) {
               dat[1].push('00')
             }
             dat[1] = dat[1].join(':');
-            //console.log("E", dat[1]);
           }
-          const res  = dat.join(' ');
-          // console.log("Result", res);
-          return {nome: dataForm.variavel[i], 
-          data: Date.parse(res), 
-          valor: Number(element.valor) } })
+          const res = dat.join(' ');
+          return {
+            nome: dataForm.variavel[i],
+            data: Date.parse(res),
+            valor: Number(element.valor)
+          }
+        })
         const dataset = {
           label: dataForm.variavel[i],
           data: dados,
@@ -106,18 +106,18 @@ export default function Graph({ dataForm }: any) {
         }
 
         for (const element of dados) {
-          let dataCsv ;
-          if(dataForm.granularity === 'second'){
+          let dataCsv;
+          if (dataForm.granularity === 'second') {
             dataCsv = format(new Date(element.data), 'dd-MM-yyyy hh:mm:ss');
-          }else if(dataForm.granularity === 'minute' || dataForm.granularity === 'hour'){
+          } else if (dataForm.granularity === 'minute' || dataForm.granularity === 'hour') {
             dataCsv = format(new Date(element.data), 'dd-MM-yyyy hh:mm');
-          }else if(dataForm.granularity === 'day'){
+          } else if (dataForm.granularity === 'day') {
             dataCsv = format(new Date(element.data), 'dd-MM-yyyy');
-          }else if(dataForm.granularity === 'month'){
+          } else if (dataForm.granularity === 'month') {
             dataCsv = format(new Date(element.data), 'MM-yyyy');
-          }else if(dataForm.granularity === 'year'){
+          } else if (dataForm.granularity === 'year') {
             dataCsv = format(new Date(element.data), 'yyyy');
-          }else{
+          } else {
             dataCsv = element.data;
           }
           listaDados.push([element.nome, dataCsv, element.valor]);
@@ -136,7 +136,6 @@ export default function Graph({ dataForm }: any) {
   const data = {
     datasets: listaVariaveis,
   };
-  // console.log(data);
   const downloadImage = useCallback(() => {
     const link = document.createElement("a");
     link.download = "chart.png";
@@ -166,10 +165,10 @@ export default function Graph({ dataForm }: any) {
         fill: true
       }
     },
-   scales:{
-      xAxis:{
-        type:'time',
-       time:{
+    scales: {
+      xAxis: {
+        type: 'time',
+        time: {
           unit: dataForm.granularity,
           displayFormats: {
             'second': 'dd-MM-yyyy hh:mm:ss',
@@ -178,29 +177,29 @@ export default function Graph({ dataForm }: any) {
             'day': 'dd-MM-yyyy',
             'month': 'MM-yyyy',
           }
-        } 
+        }
       }
-    }, 
+    },
     adapters: {
       date: {
-          locale: ptBR
+        locale: ptBR
       }
-  },
+    },
     plugins: {
       zoom: {
-          zoom: {
-              wheel: {
-                  enabled: true,
-              },
-              mode: 'x'
+        zoom: {
+          wheel: {
+            enabled: true,
           },
-          pan: {
-              enabled: true,
-              mode: 'xy'
-          }
+          mode: 'x'
+        },
+        pan: {
+          enabled: true,
+          mode: 'xy'
+        }
       },
     },
-    
+
   }
 
   const getFileName = () => {
@@ -212,15 +211,15 @@ export default function Graph({ dataForm }: any) {
   let params = new URLSearchParams(dataForm).toString();
   const { origin } = absoluteUrl()
   const apiURL = `${origin}?${params}`
-  
 
-    const [value, setValue] = React.useState(apiURL);
-    const { hasCopied, onCopy } = useClipboard(value)
 
-    function copiaLink() {
-      alert("Link copiado com sucesso!");
-      onCopy();
-    }
+  const [value, setValue] = React.useState(apiURL);
+  const { hasCopied, onCopy } = useClipboard(value)
+
+  function copiaLink() {
+    alert("Link copiado com sucesso!");
+    onCopy();
+  }
 
   /* Implementação do botão de zoom
   function resetZoomChart (){
@@ -248,33 +247,33 @@ export default function Graph({ dataForm }: any) {
             objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
         </Box>
 
-          <CSVLink
-            data={listaDados || []}
-            filename={getFileName()}
-            target="_blank"
-            separator={";"}>
-            <IconButton
-              aria-label='download'
-              borderColor="#000000"
-              border="1px"
-              _hover={{ bg: "#b3b3cc"}}
-              size="md"
-              icon={<FiDownload />}
-              variant='outline'
-            />
-          </CSVLink>
-
-        
+        <CSVLink
+          data={listaDados || []}
+          filename={getFileName()}
+          target="_blank"
+          separator={";"}>
           <IconButton
-              aria-label='compartilhar'
-              borderColor="#000000"
-              border="1px"
-              _hover={{ bg: "#b3b3cc"}}
-              size="md"
-              icon={<AiOutlineShareAlt />}
-              variant='outline'
-              onClick={copiaLink}
-            ></IconButton>
+            aria-label='download'
+            borderColor="#000000"
+            border="1px"
+            _hover={{ bg: "#b3b3cc" }}
+            size="md"
+            icon={<FiDownload />}
+            variant='outline'
+          />
+        </CSVLink>
+
+
+        <IconButton
+          aria-label='compartilhar'
+          borderColor="#000000"
+          border="1px"
+          _hover={{ bg: "#b3b3cc" }}
+          size="md"
+          icon={<AiOutlineShareAlt />}
+          variant='outline'
+          onClick={copiaLink}
+        ></IconButton>
       </Stack>
       {/* <Box as='button'
           borderColor="#FFFFFF"
@@ -289,7 +288,7 @@ export default function Graph({ dataForm }: any) {
           <Image
             objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
         </Box> */}
-      
+
     </Box>
   );
 };

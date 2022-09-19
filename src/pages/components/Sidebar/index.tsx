@@ -70,6 +70,7 @@ export default function Sidebar({ SidebarData }: any) {
 
   const [postList, setPostList] = useState([]);
 
+  const [isMultiple, setIsMultiple] = useState(false)
 
   const addPostlist = (postitem) => {
     postitem.show = true;
@@ -100,7 +101,7 @@ export default function Sidebar({ SidebarData }: any) {
       }
     });
     onClose();
-    setCurrentGraph([]);
+    setIsMultiple(true);
   }
 
 
@@ -168,7 +169,7 @@ export default function Sidebar({ SidebarData }: any) {
                     aria-label='expand'
                     icon={<BiSelectMultiple />}
                     variant='outline'
-                    title='abre-modal'
+                    title='multi-view'
                     size='lg'
                     onClick={onOpen}
                   />
@@ -177,8 +178,8 @@ export default function Sidebar({ SidebarData }: any) {
                     icon={<BiWindow />}
                     variant='outline'
                     size='lg'
-                    title='fecha-multi-graficos'
-                    onClick={() => { setCurrentGraph(e.id) }}
+                    title='sigle-view'
+                    onClick={() => { setCurrentGraph(e.id); setIsMultiple(false) }}
                   />
                 </TabPanel>
               ))}
@@ -192,7 +193,7 @@ export default function Sidebar({ SidebarData }: any) {
             </TabPanel>
             {
               postList.map((e, index) => {
-                if (currentGraph.length != 0) {
+                if (!isMultiple) {
                   if (e.id == currentGraph) {
                     return (
                       <GridItem key={index} height="650px">

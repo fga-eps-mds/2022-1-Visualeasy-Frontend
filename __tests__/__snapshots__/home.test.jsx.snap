@@ -6,7 +6,7 @@ exports[`Botão Modal Abrir modal para visualizar multiplos gráficos.  1`] = `
   aria-label="expand"
   class="chakra-button css-1r29pb7"
   data-aria-hidden="true"
-  title="abre-modal"
+  title="multi-view"
   type="button"
 >
   <svg
@@ -34,7 +34,7 @@ exports[`Botão Modal fechar visualização de multiplos gráficos  1`] = `
 <button
   aria-label="expand"
   class="chakra-button css-1r29pb7"
-  title="fecha-multi-graficos"
+  title="sigle-view"
   type="button"
 >
   <svg
