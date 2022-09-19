@@ -18,11 +18,7 @@ body:
     attributes:
       label: Versão do node Visualeasy
       description: Qual é a versão do node visualeasy que você usou (se relevante)
-  # - type: input
-  #   id: version-visualeasy-x
-  #   attributes:
-  #     label: Visualeasy X version
-  #     description: Qual é a versão do Visualeasy que você usou (se relevante)
+  
   - type: dropdown
     id: version-python
     attributes:
