@@ -192,7 +192,6 @@ export default function Sidebar({ SidebarData }: any) {
             </TabPanel>
             {
               postList.map((e, index) => {
-                console.log(e.id, currentGraph)
                 if (currentGraph.length != 0) {
                   if (e.id == currentGraph) {
                     return (
