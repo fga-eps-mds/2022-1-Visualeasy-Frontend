@@ -27,7 +27,7 @@ Primeiramente é necessário ter o docker instalado, caso não tenha acesse o [I
 Para rodar o projeto adequadamente é preciso criar o arquivo `.env.local` na raiz do projeto possuindo as informações do seguinte campo:
 
 ```js
-NEXT_PUBLIC_BASE_URL=
+NEXT_PUBLIC_BASE_URL=""
 ```
 
 * ### Organização do projeto
