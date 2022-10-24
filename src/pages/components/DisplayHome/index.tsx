@@ -12,7 +12,7 @@ interface DataFormProps {
 }
 
 export default function DisplayHome({displayHomeData }: any) {
-  const [dataForm, setDataForm] = useState<DataFormProps>({
+  const [] = useState<DataFormProps>({
     intervalo: 0,
     variavel: []
   })
