@@ -4,7 +4,7 @@ interface EnumServiceGetOrderBy {
   [index: number]: string;
 }
 
-interface dataFormProps {
+interface DataFormProps {
   intervalo: number
   variavel: EnumServiceGetOrderBy[]
   startDate?: string
@@ -12,7 +12,7 @@ interface dataFormProps {
 }
 
 export default function DisplayHome({displayHomeData }: any) {
-  const [dataForm, setDataForm] = useState<dataFormProps>({
+  const [dataForm, setDataForm] = useState<DataFormProps>({
     intervalo: 0,
     variavel: []
   })
