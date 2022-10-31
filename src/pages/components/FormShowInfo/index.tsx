@@ -95,5 +95,5 @@ export default function FormGraph({ FormGraphProps, disablebutton, getDataFrom }
 
         </VStack>
     );
-};
+}
 

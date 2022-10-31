@@ -291,5 +291,5 @@ export default function Graph({ dataForm }: any) {
 
     </Box>
   );
-};
+}
 

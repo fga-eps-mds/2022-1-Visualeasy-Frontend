@@ -280,4 +280,4 @@ export default function Sidebar({ SidebarData }: any) {
       </Modal>
     </div>
   );
-};
+}
