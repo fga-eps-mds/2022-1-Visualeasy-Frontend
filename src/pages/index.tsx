@@ -1,7 +1,7 @@
 import DisplayHome from "./components/DisplayHome"
-const Home = ({person}) => {
+const Home = ({ person }) => {
   return (
-    <DisplayHome displayHomeData = {person}/>
+    <DisplayHome displayHomeData={person} />
   )
 }
 
@@ -13,22 +13,23 @@ export async function getServerSideProps(context) {
 
   const tidp = query.variavel
   if (tidp) {
-  var array = tidp?.split(',').map((n)=> {
-    return n;
-  })
-  const person =
-  {
-    id: query.id,
-    intervalo: Number(query.intervalo),
-    startDate:query.startDate,
-    endDate:query.endDate,
-    granularity:query.granularity,
-    variavel:array,
-    graphName:query.graphName
-  };
+    var array = tidp?.split(',').map((n) => {
+      return n;
+    })
+    const person =
+    {
+      id: query.id,
+      intervalo: Number(query.intervalo),
+      startDate: query.startDate,
+      endDate: query.endDate,
+      granularity: query.granularity,
+      variavel: array,
+      graphName: query.graphName
+    };
 
-  return {
-    props: {person},
-  }}
-  return{props:{}}
+    return {
+      props: { person },
+    }
+  }
+  return { props: {} }
 }

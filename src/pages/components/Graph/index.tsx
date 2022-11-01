@@ -47,9 +47,9 @@ function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
   const array = new Uint16Array(6);
-  const random = crypto.getRandomValues(array) 
+  const random = crypto.getRandomValues(array)
   for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(random[i]/100000 * 16)];
+    color += letters[Math.floor(random[i] / 100000 * 16)];
   }
   return color;
 }
@@ -223,13 +223,6 @@ export default function Graph({ dataForm }: any) {
     onCopy();
   }
 
-  /* Implementação do botão de zoom
-  function resetZoomChart (){
-     const ctx = chartCtx.canvas.getContext('2d');
-       ctx.save();
-     ctx.resetZoom();
-  } */
-
   return (
 
     <Box height="400px" w="100%">
@@ -277,20 +270,6 @@ export default function Graph({ dataForm }: any) {
           onClick={copiaLink}
         ></IconButton>
       </Stack>
-      {/* <Box as='button'
-          borderColor="#FFFFFF"
-          border="1px"
-          borderRadius='md'
-          w='40px'
-          h='40px'
-          _hover={{ bg: "#b3b3cc"}}
-          placeholder='Reset'
-          onClick={resetZoomChart()}
-        >
-          <Image
-            objectFit='cover' id='screenshot-icon' src='images/screenshot-icon.svg' />
-        </Box> */}
-
     </Box>
   );
 }
