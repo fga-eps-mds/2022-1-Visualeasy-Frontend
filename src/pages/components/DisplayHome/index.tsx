@@ -11,7 +11,7 @@ interface DataFormProps {
   endDate?: string
 }
 
-export default function DisplayHome({displayHomeData }: any) {
+export default function DisplayHome({ displayHomeData }: any) {
   useState<DataFormProps>({
     intervalo: 0,
     variavel: []
