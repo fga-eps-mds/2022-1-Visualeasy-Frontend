@@ -46,7 +46,6 @@ ChartJS.register(
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
-  const crypto = window.crypto;
   var array = new Uint16Array(6);
   const random = crypto.getRandomValues(array) 
   for (var i = 0; i < 6; i++) {
