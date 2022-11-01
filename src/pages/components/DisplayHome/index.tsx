@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Grid, GridItem, HStack } from "@chakra-ui/react";
 import Sidebar from "../Sidebar";
 interface EnumServiceGetOrderBy {
   [index: number]: string;
 }
 
-interface dataFormProps {
+interface DataFormProps {
   intervalo: number
   variavel: EnumServiceGetOrderBy[]
   startDate?: string
@@ -13,7 +12,7 @@ interface dataFormProps {
 }
 
 export default function DisplayHome({displayHomeData }: any) {
-  const [dataForm, setDataForm] = useState<dataFormProps>({
+  useState<DataFormProps>({
     intervalo: 0,
     variavel: []
   })
