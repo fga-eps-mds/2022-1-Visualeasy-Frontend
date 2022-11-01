@@ -14,7 +14,8 @@ import Document from '../src/pages/_document'
 import '@testing-library/jest-dom'
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import * as renderer from 'react-test-renderer';
+import * as renderer from 'react-test-renderer'
+import crypto from 'crypto'
 
 import axios from "axios";
 
@@ -27,6 +28,8 @@ global.Date = jest.fn(() => DATE_TO_USE);
 global.Date.UTC = _Date.UTC;
 global.Date.parse = _Date.parse;
 global.Date.now = _Date.now;
+
+
 
 const person =
 {
@@ -110,6 +113,12 @@ const postAllDataPredefinido = rest.post(`${url}/variavel/filteredByPeriod`, (re
 const handlers = [variavelNameGet, postAllData, postAllDataPredefinido]
 
 const server = new setupServer(...handlers);
+
+Object.defineProperty(global.self, 'crypto', {
+  value: {
+    getRandomValues: (arr) => crypto.randomBytes(arr.length)
+  }
+});
 
 beforeAll(() => server.listen({
   onUnhandleRequest: 'error'
